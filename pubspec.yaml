@@ -32,7 +32,11 @@ dependencies:
   google_fonts: ^1.1.2
   otp_text_field: ^1.0.2
   styled_text:
-  carousel_slider: ^3.0.
+  smooth_star_rating: 1.1.1
+  percent_indicator: "^2.1.7+2"
+  google_nav_bar: ^4.0.2
+
+
 
 dev_dependencies:
   flutter_test:

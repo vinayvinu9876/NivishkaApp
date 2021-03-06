@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nivishka_android/util/index.dart';
 import 'package:styled_text/styled_text.dart';
+import 'package:smooth_star_rating/smooth_star_rating.dart';
+import 'package:percent_indicator/percent_indicator.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -12,10 +15,58 @@ class _Home extends State<Home> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+
+    int _selectedIndex = 0;
+
     return SafeArea(
         top: true,
         bottom: true,
         child: Scaffold(
+            bottomNavigationBar: Container(
+              decoration: BoxDecoration(color: Colors.white, boxShadow: [
+                BoxShadow(blurRadius: 20, color: Colors.black.withOpacity(.1))
+              ]),
+              child: SafeArea(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+                  child: GNav(
+                      rippleColor: Colors.grey[300],
+                      hoverColor: Colors.grey[100],
+                      gap: 8,
+                      activeColor: Colors.black,
+                      iconSize: 24,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      duration: Duration(milliseconds: 400),
+                      tabBackgroundColor: Colors.grey[100],
+                      tabs: [
+                        GButton(
+                          icon: Icons.home,
+                          text: 'Home',
+                        ),
+                        GButton(
+                          icon: Icons.ac_unit,
+                          text: 'Likes',
+                        ),
+                        GButton(
+                          icon: Icons.search,
+                          text: 'Search',
+                        ),
+                        GButton(
+                          icon: Icons.access_time_rounded,
+                          text: 'Profile',
+                        ),
+                      ],
+                      selectedIndex: _selectedIndex,
+                      onTabChange: (index) {
+                        setState(() {
+                          _selectedIndex = index;
+                        });
+                      }),
+                ),
+              ),
+            ),
             body: Container(
                 height: height,
                 width: width,
@@ -26,7 +77,126 @@ class _Home extends State<Home> {
                   category(),
                   SizedBox(height: 10),
                   bestPicks(),
+                  SizedBox(height: 10),
+                  flashSale(),
+                  SizedBox(height: 10),
                 ]))));
+  }
+
+  Widget flashSale() {
+    return Container(
+        height: 180,
+        padding: EdgeInsets.only(left: 15, top: 5, bottom: 5),
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              StyledText(
+                  text: "<p>Flash Sale</p> <red>( 10 mins remaining )</red>",
+                  styles: {
+                    "p": GoogleFonts.poppins(fontSize: 12, color: Colors.black),
+                    "red": GoogleFonts.poppins(
+                      fontSize: 10,
+                      color: Colors.red,
+                    )
+                  }),
+              SizedBox(height: 10),
+              Container(
+                  height: 100,
+                  width: MediaQuery.of(context).size.width,
+                  child: ListView(scrollDirection: Axis.horizontal, children: [
+                    flashWidget(
+                      desc: "Cleaning Service Tube Light hello",
+                      imgUrl:
+                          "https://res.cloudinary.com/urbanclap/image/upload/q_auto,f_auto,fl_progressive:steep,w_617/t_high_res_template,q_auto:low,f_auto/categories/category_v2/category_be519380.png",
+                      val: 100,
+                      total: 160,
+                      sold: 120,
+                    ),
+                    flashWidget(
+                      desc: "Haircut at home @low cost",
+                      imgUrl:
+                          "https://www.businessinsider.in/thumb.cms?msid=75749662&width=1200&height=900",
+                      val: 500,
+                      total: 100,
+                      sold: 20,
+                    ),
+                    SizedBox(width: 5),
+                  ])),
+            ]));
+  }
+
+  Widget flashWidget({
+    @required String desc,
+    @required String imgUrl,
+    @required double val,
+    @required int total,
+    @required int sold,
+  }) {
+    return Container(
+        width: 220,
+        margin: EdgeInsets.only(left: 7, right: 7),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.grey[200],
+        ),
+        child: Row(children: [
+          Expanded(
+              flex: 4,
+              child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(5),
+                        bottomLeft: Radius.circular(5),
+                      ),
+                      image: DecorationImage(
+                          fit: BoxFit.cover, image: NetworkImage("$imgUrl"))))),
+          Expanded(
+            flex: 6,
+            child: Container(
+                padding: EdgeInsets.all(10),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                          height: 31,
+                          child: Text("$desc",
+                              style: GoogleFonts.poppins(
+                                  fontSize: 8, color: Colors.grey[700]))),
+                      SizedBox(height: 1),
+                      Container(
+                          child: Text("₹ $val INR",
+                              style: GoogleFonts.poppins(
+                                fontSize: 10,
+                                fontWeight: FontWeight.w500,
+                              ))),
+                      SizedBox(height: 3),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            LinearPercentIndicator(
+                              width: 70.0,
+                              lineHeight: 7.0,
+                              percent: (sold / total),
+                              progressColor: blue,
+                            ),
+                            Text("$sold Sold",
+                                style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w500, fontSize: 8))
+                          ]),
+                      SizedBox(height: 3),
+                      Text("On Stock $total",
+                          style: GoogleFonts.poppins(
+                            color: Colors.blue[800],
+                            fontSize: 8,
+                            fontWeight: FontWeight.w600,
+                          ))
+                    ])),
+          )
+        ]));
   }
 
   Widget bestPicks() {
@@ -73,47 +243,87 @@ class _Home extends State<Home> {
                 left: 5,
               ),
               child: ListView(scrollDirection: Axis.horizontal, children: [
-                Container(
-                    height: 130,
-                    width: 140,
-                    margin: EdgeInsets.only(left: 15, right: 15),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Column(children: [
-                      Container(
-                          height: 90,
-                          width: 140,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(10),
-                                topLeft: Radius.circular(10)),
-                            image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: NetworkImage(
-                                    "https://de927adv5b23k.cloudfront.net/wp-content/uploads/2019/03/27192455/salon-hygiene-checklist.png")),
-                          )),
-                      Container(
-                          height: 90,
-                          width: 140,
-                          padding: EdgeInsets.only(
-                              top: 5, left: 7, right: 7, bottom: 5),
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                    "Massage Services at your home with full features",
-                                    style: GoogleFonts.poppins(fontSize: 8)),
-                                SizedBox(height: 5),
-                                Text("Rs. 10,000",
-                                    style: GoogleFonts.poppins(
-                                      color: lightblue,
-                                      fontSize: 10,
-                                    )),                         ]))
-                    ]))
+                bestPickWidget(
+                  imgUrl:
+                      "https://de927adv5b23k.cloudfront.net/wp-content/uploads/2019/03/27192455/salon-hygiene-checklist.png",
+                  description:
+                      "Massage Services at your home with full features",
+                  price: "10,000",
+                  rating: 4,
+                ),
+                bestPickWidget(
+                  imgUrl:
+                      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMCvgKB2KLCgfjE1f4dtb9gIKrZYenPwfLZQ&usqp=CAU",
+                  description:
+                      "Plumbing Services at your home before you start facing problems",
+                  price: "5,000",
+                  rating: 5,
+                ),
+                bestPickWidget(
+                  imgUrl:
+                      "https://res.cloudinary.com/urbanclap/image/upload/q_auto,f_auto,fl_progressive:steep,w_617/t_high_res_template,q_auto:low,f_auto/categories/category_v2/category_ba329560.png",
+                  description: "Lazy to clean ? Call me right now",
+                  price: "2,000",
+                  rating: 5,
+                ),
               ]))
+        ]));
+  }
+
+  Widget bestPickWidget(
+      {@required String imgUrl,
+      @required String description,
+      @required String price,
+      @required double rating}) {
+    return Container(
+        height: 130,
+        width: 140,
+        margin: EdgeInsets.only(left: 10, right: 10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(children: [
+          Container(
+              height: 90,
+              width: 140,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(10),
+                    topLeft: Radius.circular(10)),
+                image: DecorationImage(
+                    fit: BoxFit.cover, image: NetworkImage("$imgUrl")),
+              )),
+          Container(
+              height: 90,
+              width: 140,
+              padding: EdgeInsets.only(top: 5, left: 7, right: 7, bottom: 5),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                        height: 30,
+                        child: Text("$description",
+                            style: GoogleFonts.poppins(fontSize: 8))),
+                    SizedBox(height: 5),
+                    Text("Rs. $price",
+                        style: GoogleFonts.poppins(
+                          color: lightblue,
+                          fontSize: 10,
+                        )),
+                    SizedBox(height: 5),
+                    SmoothStarRating(
+                        allowHalfRating: false,
+                        onRated: (v) {},
+                        starCount: 5,
+                        rating: rating,
+                        size: 15.0,
+                        isReadOnly: true,
+                        color: blue,
+                        borderColor: blue,
+                        spacing: 0.0)
+                  ]))
         ]));
   }
 
@@ -144,7 +354,7 @@ class _Home extends State<Home> {
                       ])),
               SizedBox(height: 15),
               Container(
-                  height: 70,
+                  height: 90,
                   width: MediaQuery.of(context).size.width,
                   child: ListView(scrollDirection: Axis.horizontal, children: [
                     categoryIndividual(
@@ -197,26 +407,44 @@ class _Home extends State<Home> {
 
   Widget categoryIndividual({@required String imgurl, @required String name}) {
     return Container(
-        margin: EdgeInsets.only(
-          left: 10,
-          right: 10,
-        ),
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              CircleAvatar(
-                radius: 25,
-                backgroundImage: NetworkImage("$imgurl"),
-              ),
-              SizedBox(height: 0),
-              Text("$name",
-                  style: GoogleFonts.poppins(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 8,
-                  ))
-            ]));
+        height: 90,
+        width: 100,
+        child: Stack(children: [
+          Padding(
+              padding: EdgeInsets.only(top: 10),
+              child: Card(
+                  elevation: 2,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Container(
+                      height: 80,
+                      width: 70,
+                      padding: EdgeInsets.all(8),
+                      child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Text("$name",
+                              style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 8,
+                                  color: Colors.black)))))),
+          Container(
+              height: 50,
+              width: 60,
+              margin: EdgeInsets.only(left: 25),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 2,
+                    )
+                  ],
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage("$imgurl"),
+                  )))
+        ]));
   }
 
   Widget promo() {
@@ -227,7 +455,7 @@ class _Home extends State<Home> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Promo",
+              Text("Promos specially for you",
                   style: GoogleFonts.poppins(
                     color: Colors.grey[800],
                     fontSize: 10,
@@ -375,7 +603,7 @@ class _Home extends State<Home> {
   Widget topAppBar() {
     double width = MediaQuery.of(context).size.width;
     return Container(
-        height: 180,
+        height: 145,
         width: width,
         child: Stack(children: [
           Container(
@@ -390,76 +618,53 @@ class _Home extends State<Home> {
           ),
           Container(
               width: width,
-              height: 100,
+              height: 170,
               padding:
                   EdgeInsets.only(top: 10, bottom: 10, right: 10, left: 10),
-              child: Column(children: [
-                SizedBox(height: 10),
-                Container(
-                    height: 40,
-                    child: TextField(
-                      decoration: InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.menu,
-                            color: blue,
-                          ),
-                          suffixIcon: Icon(Icons.shopping_bag, color: blue),
-                          fillColor: Colors.white,
-                          filled: true,
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          hintStyle: GoogleFonts.poppins(
-                              color: Colors.grey[400], fontSize: 10),
-                          hintText: 'I am looking for'),
-                    ))
-              ])),
-          Container(
-              margin: EdgeInsets.only(left: 15, top: 75),
-              child: Text("Choose Style",
-                  style: GoogleFonts.poppins(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
-                  ))),
-          Container(
-              height: 70,
-              margin: EdgeInsets.only(top: 105),
-              padding: EdgeInsets.only(left: 15, right: 15),
-              child: Container(
-                  padding: EdgeInsets.only(left: 10, right: 10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    boxShadow: [
-                      new BoxShadow(
-                        color: Colors.grey,
-                        blurRadius: 15.0,
-                      )
-                    ],
-                    color: Colors.white,
-                  ),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        appBarIcon(
-                            imgSrc:
-                                "https://media.istockphoto.com/vectors/stand-hairdryer-color-icon-hood-hair-dryer-and-comfortable-chair-vector-id1208889195",
-                            name: "Men Salon"),
-                        appBarIcon(
-                            imgSrc:
-                                "https://static2.bigstockphoto.com/4/2/2/large2/224515747.jpg",
-                            name: "Women Salon"),
-                        appBarIcon(
-                            imgSrc:
-                                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaoXyHlkYvJlM-QAxo_lrnkjnBRXi2cX63sA&usqp=CAU",
-                            name: "Massage"),
-                        appBarIcon(
-                            imgSrc:
-                                "https://cdn10.bostonmagazine.com/wp-content/uploads/2015/06/shutterstock_fresh-faced-bride.jpg",
-                            name: "Bridal MakeUp")
-                      ])))
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                        margin: EdgeInsets.only(top: 20, left: 10),
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Hello ,",
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 12,
+                                  )),
+                              Text("Vinay P",
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                  ))
+                            ])),
+                    Container(
+                        height: 40,
+                        margin: EdgeInsets.only(left: 5, top: 15),
+                        child: TextField(
+                          decoration: InputDecoration(
+                              prefixIcon: Icon(
+                                Icons.menu,
+                                color: blue,
+                              ),
+                              suffixIcon: Icon(Icons.shopping_bag, color: blue),
+                              fillColor: Colors.white,
+                              filled: true,
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              hintStyle: GoogleFonts.poppins(
+                                  color: Colors.grey[400], fontSize: 10),
+                              hintText: 'Tell me what you want'),
+                        ))
+                  ])),
         ]));
   }
 
