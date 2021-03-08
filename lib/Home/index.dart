@@ -3,7 +3,6 @@ import 'package:nivishka_android/util/index.dart';
 import 'package:styled_text/styled_text.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -13,74 +12,23 @@ class Home extends StatefulWidget {
 class _Home extends State<Home> {
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
-
-    int _selectedIndex = 0;
-
     return SafeArea(
         top: true,
         bottom: true,
         child: Scaffold(
-            bottomNavigationBar: Container(
-              decoration: BoxDecoration(color: Colors.white, boxShadow: [
-                BoxShadow(blurRadius: 20, color: Colors.black.withOpacity(.1))
-              ]),
-              child: SafeArea(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
-                  child: GNav(
-                      rippleColor: Colors.grey[300],
-                      hoverColor: Colors.grey[100],
-                      gap: 8,
-                      activeColor: Colors.black,
-                      iconSize: 24,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                      duration: Duration(milliseconds: 400),
-                      tabBackgroundColor: Colors.grey[100],
-                      tabs: [
-                        GButton(
-                          icon: Icons.home,
-                          text: 'Home',
-                        ),
-                        GButton(
-                          icon: Icons.ac_unit,
-                          text: 'Likes',
-                        ),
-                        GButton(
-                          icon: Icons.search,
-                          text: 'Search',
-                        ),
-                        GButton(
-                          icon: Icons.access_time_rounded,
-                          text: 'Profile',
-                        ),
-                      ],
-                      selectedIndex: _selectedIndex,
-                      onTabChange: (index) {
-                        setState(() {
-                          _selectedIndex = index;
-                        });
-                      }),
-                ),
-              ),
-            ),
+            bottomNavigationBar: CustomBottomNavBar(),
             body: Container(
-                height: height,
-                width: width,
                 child: ListView(children: [
-                  topAppBar(),
-                  SizedBox(height: 10),
-                  promo(),
-                  category(),
-                  SizedBox(height: 10),
-                  bestPicks(),
-                  SizedBox(height: 10),
-                  flashSale(),
-                  SizedBox(height: 10),
-                ]))));
+              topAppBar(),
+              SizedBox(height: 10),
+              promo(),
+              category(),
+              SizedBox(height: 10),
+              bestPicks(),
+              SizedBox(height: 10),
+              flashSale(),
+              SizedBox(height: 10),
+            ]))));
   }
 
   Widget flashSale() {
@@ -346,11 +294,15 @@ class _Home extends State<Home> {
                               fontSize: 10,
                               fontWeight: FontWeight.bold,
                             )),
-                        Text("See All",
-                            style: GoogleFonts.poppins(
-                              color: blue,
-                              fontSize: 10,
-                            ))
+                        InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(context, "/allCategories");
+                            },
+                            child: Text("See All",
+                                style: GoogleFonts.poppins(
+                                  color: blue,
+                                  fontSize: 10,
+                                )))
                       ])),
               SizedBox(height: 15),
               Container(
@@ -467,22 +419,26 @@ class _Home extends State<Home> {
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: [
-                      Container(
-                          height: 70,
-                          width: 70,
-                          margin: EdgeInsets.only(right: 10),
-                          padding: EdgeInsets.only(top: 30, left: 30),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              gradient: LinearGradient(
-                                  begin: Alignment.center,
-                                  end: Alignment.bottomRight,
-                                  colors: gradient)),
-                          child: Text("See All Promo",
-                              style: GoogleFonts.poppins(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  fontSize: 8))),
+                      InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(context, "/promoList");
+                          },
+                          child: Container(
+                              height: 70,
+                              width: 70,
+                              margin: EdgeInsets.only(right: 10),
+                              padding: EdgeInsets.only(top: 30, left: 30),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  gradient: LinearGradient(
+                                      begin: Alignment.center,
+                                      end: Alignment.bottomRight,
+                                      colors: gradient)),
+                              child: Text("See All Promo",
+                                  style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      fontSize: 8)))),
                       promoBox(
                         imgurl:
                             "https://i0.wp.com/cdn.whatsuplife.in/kolkata/blog/2017/08/featured-8.jpg",

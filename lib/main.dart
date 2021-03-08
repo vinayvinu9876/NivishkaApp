@@ -7,6 +7,8 @@ import 'package:nivishka_android/Signup/index.dart';
 import 'package:nivishka_android/Login/EnterPhone.dart';
 import 'package:nivishka_android/OTPScreen/index.dart';
 import 'package:nivishka_android/Home/index.dart';
+import 'package:nivishka_android/AllCategories/index.dart';
+import 'package:nivishka_android/PromoList/index.dart';
 
 var kReleaseMode = false;
 
@@ -36,6 +38,8 @@ class MyApp extends StatelessWidget {
         "/signup": (context) => Signup(),
         "/otp_screen": (context) => OTPScreen(),
         "/home": (context) => Home(),
+        "/allCategories": (context) => AllCategories(),
+        "/promoList": (context) => PromoList(),
       },
     );
   }
