@@ -9,6 +9,9 @@ import 'package:nivishka_android/OTPScreen/index.dart';
 import 'package:nivishka_android/Home/index.dart';
 import 'package:nivishka_android/AllCategories/index.dart';
 import 'package:nivishka_android/PromoList/index.dart';
+import 'package:nivishka_android/PromoDescription/index.dart';
+import 'package:nivishka_android/BestPicks/index.dart';
+import 'package:nivishka_android/FlashSale/index.dart';
 
 var kReleaseMode = false;
 
@@ -40,6 +43,9 @@ class MyApp extends StatelessWidget {
         "/home": (context) => Home(),
         "/allCategories": (context) => AllCategories(),
         "/promoList": (context) => PromoList(),
+        "/promoDesc": (context) => PromoDescription(),
+        "/bestPicks": (context) => BestPicks(),
+        "/flashSale": (context) => FlashSale(),
       },
     );
   }

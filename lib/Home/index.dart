@@ -82,69 +82,75 @@ class _Home extends State<Home> {
     @required int total,
     @required int sold,
   }) {
-    return Container(
-        width: 220,
-        margin: EdgeInsets.only(left: 7, right: 7),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.grey[200],
-        ),
-        child: Row(children: [
-          Expanded(
-              flex: 4,
-              child: Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(5),
-                        bottomLeft: Radius.circular(5),
-                      ),
-                      image: DecorationImage(
-                          fit: BoxFit.cover, image: NetworkImage("$imgUrl"))))),
-          Expanded(
-            flex: 6,
-            child: Container(
-                padding: EdgeInsets.all(10),
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                          height: 31,
-                          child: Text("$desc",
+    return InkWell(
+        onTap: () {
+          Navigator.pushNamed(context, "/flashSale");
+        },
+        child: Container(
+            width: 220,
+            margin: EdgeInsets.only(left: 7, right: 7),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.grey[200],
+            ),
+            child: Row(children: [
+              Expanded(
+                  flex: 4,
+                  child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(5),
+                            bottomLeft: Radius.circular(5),
+                          ),
+                          image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: NetworkImage("$imgUrl"))))),
+              Expanded(
+                flex: 6,
+                child: Container(
+                    padding: EdgeInsets.all(10),
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                              height: 31,
+                              child: Text("$desc",
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 8, color: Colors.grey[700]))),
+                          SizedBox(height: 1),
+                          Container(
+                              child: Text("₹ $val INR",
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w500,
+                                  ))),
+                          SizedBox(height: 3),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                LinearPercentIndicator(
+                                  width: 70.0,
+                                  lineHeight: 7.0,
+                                  percent: (sold / total),
+                                  progressColor: blue,
+                                ),
+                                Text("$sold Sold",
+                                    style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 8))
+                              ]),
+                          SizedBox(height: 3),
+                          Text("On Stock $total",
                               style: GoogleFonts.poppins(
-                                  fontSize: 8, color: Colors.grey[700]))),
-                      SizedBox(height: 1),
-                      Container(
-                          child: Text("₹ $val INR",
-                              style: GoogleFonts.poppins(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w500,
-                              ))),
-                      SizedBox(height: 3),
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            LinearPercentIndicator(
-                              width: 70.0,
-                              lineHeight: 7.0,
-                              percent: (sold / total),
-                              progressColor: blue,
-                            ),
-                            Text("$sold Sold",
-                                style: GoogleFonts.poppins(
-                                    fontWeight: FontWeight.w500, fontSize: 8))
-                          ]),
-                      SizedBox(height: 3),
-                      Text("On Stock $total",
-                          style: GoogleFonts.poppins(
-                            color: Colors.blue[800],
-                            fontSize: 8,
-                            fontWeight: FontWeight.w600,
-                          ))
-                    ])),
-          )
-        ]));
+                                color: Colors.blue[800],
+                                fontSize: 8,
+                                fontWeight: FontWeight.w600,
+                              ))
+                        ])),
+              )
+            ])));
   }
 
   Widget bestPicks() {
@@ -176,12 +182,16 @@ class _Home extends State<Home> {
                             color: Colors.white,
                             fontSize: 14,
                             fontWeight: FontWeight.bold)),
-                    Text("See All",
-                        style: GoogleFonts.poppins(
-                          color: Colors.blue[800],
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                        ))
+                    InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(context, "/bestPicks");
+                        },
+                        child: Text("See All",
+                            style: GoogleFonts.poppins(
+                              color: Colors.blue[800],
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            )))
                   ])),
           Container(
               height: 180,
@@ -223,56 +233,59 @@ class _Home extends State<Home> {
       @required String description,
       @required String price,
       @required double rating}) {
-    return Container(
-        height: 130,
-        width: 140,
-        margin: EdgeInsets.only(left: 10, right: 10),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Column(children: [
-          Container(
-              height: 90,
-              width: 140,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(10),
-                    topLeft: Radius.circular(10)),
-                image: DecorationImage(
-                    fit: BoxFit.cover, image: NetworkImage("$imgUrl")),
-              )),
-          Container(
-              height: 90,
-              width: 140,
-              padding: EdgeInsets.only(top: 5, left: 7, right: 7, bottom: 5),
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                        height: 30,
-                        child: Text("$description",
-                            style: GoogleFonts.poppins(fontSize: 8))),
-                    SizedBox(height: 5),
-                    Text("Rs. $price",
-                        style: GoogleFonts.poppins(
-                          color: lightblue,
-                          fontSize: 10,
-                        )),
-                    SizedBox(height: 5),
-                    SmoothStarRating(
-                        allowHalfRating: false,
-                        onRated: (v) {},
-                        starCount: 5,
-                        rating: rating,
-                        size: 15.0,
-                        isReadOnly: true,
-                        color: blue,
-                        borderColor: blue,
-                        spacing: 0.0)
-                  ]))
-        ]));
+    return InkWell(
+        onTap: () {},
+        child: Container(
+            height: 130,
+            width: 140,
+            margin: EdgeInsets.only(left: 10, right: 10),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Column(children: [
+              Container(
+                  height: 90,
+                  width: 140,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(10),
+                        topLeft: Radius.circular(10)),
+                    image: DecorationImage(
+                        fit: BoxFit.cover, image: NetworkImage("$imgUrl")),
+                  )),
+              Container(
+                  height: 90,
+                  width: 140,
+                  padding:
+                      EdgeInsets.only(top: 5, left: 7, right: 7, bottom: 5),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                            height: 30,
+                            child: Text("$description",
+                                style: GoogleFonts.poppins(fontSize: 8))),
+                        SizedBox(height: 5),
+                        Text("Rs. $price",
+                            style: GoogleFonts.poppins(
+                              color: lightblue,
+                              fontSize: 10,
+                            )),
+                        SizedBox(height: 5),
+                        SmoothStarRating(
+                            allowHalfRating: false,
+                            onRated: (v) {},
+                            starCount: 5,
+                            rating: rating,
+                            size: 15.0,
+                            isReadOnly: true,
+                            color: blue,
+                            borderColor: blue,
+                            spacing: 0.0)
+                      ]))
+            ])));
   }
 
   Widget category() {
@@ -482,78 +495,84 @@ class _Home extends State<Home> {
       @required String bigText,
       @required String smallText,
       @required buttonName}) {
-    return Container(
-        height: 70,
-        width: 150,
-        margin: EdgeInsets.only(right: 10),
-        child: Row(children: [
-          Container(
-              height: 70,
-              width: 50,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    bottomLeft: Radius.circular(10),
-                  ),
-                  image: DecorationImage(
-                      fit: BoxFit.cover, image: NetworkImage("$imgurl")))),
-          Container(
-              height: 70,
-              width: 100,
-              padding: EdgeInsets.only(left: 10, right: 5, bottom: 5, top: 5),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(10),
-                    bottomRight: Radius.circular(10),
-                  ),
-                  gradient: LinearGradient(
-                    begin: Alignment.center,
-                    end: Alignment.bottomRight,
-                    colors: gradient,
-                  )),
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                        decoration: BoxDecoration(
-                          border: Border(
-                              bottom:
-                                  BorderSide(width: 1.0, color: Colors.white)),
-                        ),
-                        child: Text("$heading",
-                            style: GoogleFonts.poppins(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.white))),
-                    SizedBox(height: 2),
-                    StyledText(
-                      text: '<big>$bigText</big> <small>$smallText</small>',
-                      styles: {
-                        'big': GoogleFonts.poppins(
-                            color: Colors.white, fontWeight: FontWeight.bold),
-                        'small': GoogleFonts.poppins(
-                            color: Colors.white,
-                            fontSize: 8,
-                            fontWeight: FontWeight.normal)
-                      },
-                    ),
-                    SizedBox(height: 4),
-                    Container(
-                        height: 12,
-                        width: 40,
-                        padding: EdgeInsets.only(left: 2),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(2),
-                        ),
-                        child: Center(
-                            child: Text("$buttonName",
+    return InkWell(
+        onTap: () {
+          Navigator.pushNamed(context, "/promoDesc");
+        },
+        child: Container(
+            height: 70,
+            width: 150,
+            margin: EdgeInsets.only(right: 10),
+            child: Row(children: [
+              Container(
+                  height: 70,
+                  width: 50,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        bottomLeft: Radius.circular(10),
+                      ),
+                      image: DecorationImage(
+                          fit: BoxFit.cover, image: NetworkImage("$imgurl")))),
+              Container(
+                  height: 70,
+                  width: 100,
+                  padding:
+                      EdgeInsets.only(left: 10, right: 5, bottom: 5, top: 5),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(10),
+                        bottomRight: Radius.circular(10),
+                      ),
+                      gradient: LinearGradient(
+                        begin: Alignment.center,
+                        end: Alignment.bottomRight,
+                        colors: gradient,
+                      )),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                            decoration: BoxDecoration(
+                              border: Border(
+                                  bottom: BorderSide(
+                                      width: 1.0, color: Colors.white)),
+                            ),
+                            child: Text("$heading",
                                 style: GoogleFonts.poppins(
-                                  fontSize: 5,
-                                ))))
-                  ]))
-        ]));
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white))),
+                        SizedBox(height: 2),
+                        StyledText(
+                          text: '<big>$bigText</big> <small>$smallText</small>',
+                          styles: {
+                            'big': GoogleFonts.poppins(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                            'small': GoogleFonts.poppins(
+                                color: Colors.white,
+                                fontSize: 8,
+                                fontWeight: FontWeight.normal)
+                          },
+                        ),
+                        SizedBox(height: 4),
+                        Container(
+                            height: 12,
+                            width: 40,
+                            padding: EdgeInsets.only(left: 2),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(2),
+                            ),
+                            child: Center(
+                                child: Text("$buttonName",
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 5,
+                                    ))))
+                      ]))
+            ])));
   }
 
   Widget topAppBar() {
