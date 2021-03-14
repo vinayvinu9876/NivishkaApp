@@ -14,7 +14,6 @@ class _EnterPhone extends State<EnterPhone> {
         top: true,
         bottom: true,
         child: Scaffold(
-            resizeToAvoidBottomPadding: false,
             body: Container(
                 decoration: BoxDecoration(
                     gradient: LinearGradient(

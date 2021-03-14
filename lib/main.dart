@@ -12,6 +12,7 @@ import 'package:nivishka_android/PromoList/index.dart';
 import 'package:nivishka_android/PromoDescription/index.dart';
 import 'package:nivishka_android/BestPicks/index.dart';
 import 'package:nivishka_android/FlashSale/index.dart';
+import 'package:nivishka_android/CategoryDescription/index.dart';
 
 var kReleaseMode = false;
 
@@ -27,7 +28,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Nivishka',
+      locale: DevicePreview.locale(context), // Add the locale here
+      builder: DevicePreview.appBuilder,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -46,6 +49,7 @@ class MyApp extends StatelessWidget {
         "/promoDesc": (context) => PromoDescription(),
         "/bestPicks": (context) => BestPicks(),
         "/flashSale": (context) => FlashSale(),
+        "/categoryDescription": (context) => CategoryDescription(),
       },
     );
   }

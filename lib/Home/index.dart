@@ -162,10 +162,10 @@ class _Home extends State<Home> {
         child: Stack(children: [
           Container(
               height: 180,
-              width: width * 0.25,
+              width: 185,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                      bottomRight: Radius.circular(width * 0.6)),
+                  borderRadius:
+                      BorderRadius.only(bottomRight: Radius.circular(180)),
                   gradient: LinearGradient(
                     begin: Alignment.topRight,
                     end: Alignment.topCenter,
@@ -371,45 +371,49 @@ class _Home extends State<Home> {
   }
 
   Widget categoryIndividual({@required String imgurl, @required String name}) {
-    return Container(
-        height: 90,
-        width: 100,
-        child: Stack(children: [
-          Padding(
-              padding: EdgeInsets.only(top: 10),
-              child: Card(
-                  elevation: 2,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Container(
-                      height: 80,
-                      width: 70,
-                      padding: EdgeInsets.all(8),
-                      child: Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Text("$name",
-                              style: GoogleFonts.poppins(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 8,
-                                  color: Colors.black)))))),
-          Container(
-              height: 50,
-              width: 60,
-              margin: EdgeInsets.only(left: 25),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      blurRadius: 2,
-                    )
-                  ],
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: NetworkImage("$imgurl"),
-                  )))
-        ]));
+    return InkWell(
+        onTap: () {
+          Navigator.pushNamed(context, "/categoryDescription");
+        },
+        child: Container(
+            height: 90,
+            width: 100,
+            child: Stack(children: [
+              Padding(
+                  padding: EdgeInsets.only(top: 10),
+                  child: Card(
+                      elevation: 2,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Container(
+                          height: 80,
+                          width: 70,
+                          padding: EdgeInsets.all(8),
+                          child: Align(
+                              alignment: Alignment.bottomCenter,
+                              child: Text("$name",
+                                  style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 8,
+                                      color: Colors.black)))))),
+              Container(
+                  height: 50,
+                  width: 60,
+                  margin: EdgeInsets.only(left: 25),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey,
+                          blurRadius: 2,
+                        )
+                      ],
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: NetworkImage("$imgurl"),
+                      )))
+            ])));
   }
 
   Widget promo() {
