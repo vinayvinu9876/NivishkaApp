@@ -38,7 +38,8 @@ dependencies:
   carousel_slider: ^3.0.0
   timeline_tile: ^2.0.0
   flutter_svg: 
-  timelines: 
+  timelines:
+  scroll_to_index: any 
 
 
 

@@ -415,20 +415,25 @@ class _CategoryDescription extends State<CategoryDescription> {
   }
 
   Widget categorySelect({@required String image, @required String name}) {
-    return Container(
-        height: 100,
-        width: 80,
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              CircleAvatar(radius: 25, backgroundImage: NetworkImage("$image")),
-              SizedBox(height: 5),
-              Text("$name",
-                  style: GoogleFonts.poppins(
-                      color: Colors.black,
-                      fontSize: 8,
-                      fontWeight: FontWeight.w600))
-            ]));
+    return InkWell(
+        onTap: () {
+          Navigator.pushNamed(context, "/serviceListing");
+        },
+        child: Container(
+            height: 100,
+            width: 80,
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                      radius: 25, backgroundImage: NetworkImage("$image")),
+                  SizedBox(height: 5),
+                  Text("$name",
+                      style: GoogleFonts.poppins(
+                          color: Colors.black,
+                          fontSize: 8,
+                          fontWeight: FontWeight.w600))
+                ])));
   }
 }

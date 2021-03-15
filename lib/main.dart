@@ -13,6 +13,9 @@ import 'package:nivishka_android/PromoDescription/index.dart';
 import 'package:nivishka_android/BestPicks/index.dart';
 import 'package:nivishka_android/FlashSale/index.dart';
 import 'package:nivishka_android/CategoryDescription/index.dart';
+import 'package:nivishka_android/ServiceListing/index.dart';
+import 'package:nivishka_android/Receipt/index.dart';
+import 'package:nivishka_android/ServiceLocationSelect/index.dart';
 
 var kReleaseMode = false;
 
@@ -50,6 +53,9 @@ class MyApp extends StatelessWidget {
         "/bestPicks": (context) => BestPicks(),
         "/flashSale": (context) => FlashSale(),
         "/categoryDescription": (context) => CategoryDescription(),
+        "/serviceListing": (context) => ServiceListing(),
+        "/receipt": (context) => Receipt(),
+        "/serviceLocationSelect": (context) => ServiceLocationSelect(),
       },
     );
   }
