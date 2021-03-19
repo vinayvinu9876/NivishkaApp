@@ -16,6 +16,10 @@ import 'package:nivishka_android/CategoryDescription/index.dart';
 import 'package:nivishka_android/ServiceListing/index.dart';
 import 'package:nivishka_android/Receipt/index.dart';
 import 'package:nivishka_android/ServiceLocationSelect/index.dart';
+import 'package:nivishka_android/SelectLocation/index.dart';
+import 'package:nivishka_android/SelectLocation/SelectOtherLocation.dart';
+import 'package:nivishka_android/SelectDate/index.dart';
+import 'package:nivishka_android/BookingHistory/index.dart';
 
 var kReleaseMode = false;
 
@@ -39,7 +43,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: "/home",
+      initialRoute: "/bookingHistory",
       routes: {
         "/splashScreen": (context) => SplashScreen(),
         "/enterPhone": (context) => EnterPhone(),
@@ -56,6 +60,10 @@ class MyApp extends StatelessWidget {
         "/serviceListing": (context) => ServiceListing(),
         "/receipt": (context) => Receipt(),
         "/serviceLocationSelect": (context) => ServiceLocationSelect(),
+        "/selectLocation": (context) => SelectLocation(),
+        "/selectOtherLocation": (context) => SelectOtherLocation(),
+        "/selectDate": (context) => SelectDate(),
+        "/bookingHistory": (context) => BookingHistory(),
       },
     );
   }
