@@ -21,6 +21,8 @@ import 'package:nivishka_android/SelectLocation/SelectOtherLocation.dart';
 import 'package:nivishka_android/SelectDate/index.dart';
 import 'package:nivishka_android/BookingHistory/index.dart';
 import 'package:nivishka_android/Profile/index.dart';
+import 'package:nivishka_android/Wallet/index.dart';
+import 'package:nivishka_android/TopUpWallet/index.dart';
 
 var kReleaseMode = false;
 
@@ -66,6 +68,8 @@ class MyApp extends StatelessWidget {
         "/selectDate": (context) => SelectDate(),
         "/bookingHistory": (context) => BookingHistory(),
         "/profile": (context) => Profile(),
+        "/wallet": (context) => Wallet(),
+        "/topupwallet": (context) => TopUpWallet()
       },
     );
   }
