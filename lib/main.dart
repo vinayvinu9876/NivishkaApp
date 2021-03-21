@@ -20,6 +20,7 @@ import 'package:nivishka_android/SelectLocation/index.dart';
 import 'package:nivishka_android/SelectLocation/SelectOtherLocation.dart';
 import 'package:nivishka_android/SelectDate/index.dart';
 import 'package:nivishka_android/BookingHistory/index.dart';
+import 'package:nivishka_android/Profile/index.dart';
 
 var kReleaseMode = false;
 
@@ -43,7 +44,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: "/bookingHistory",
+      initialRoute: "/profile",
       routes: {
         "/splashScreen": (context) => SplashScreen(),
         "/enterPhone": (context) => EnterPhone(),
@@ -64,6 +65,7 @@ class MyApp extends StatelessWidget {
         "/selectOtherLocation": (context) => SelectOtherLocation(),
         "/selectDate": (context) => SelectDate(),
         "/bookingHistory": (context) => BookingHistory(),
+        "/profile": (context) => Profile(),
       },
     );
   }
