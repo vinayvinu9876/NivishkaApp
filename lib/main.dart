@@ -23,6 +23,7 @@ import 'package:nivishka_android/BookingHistory/index.dart';
 import 'package:nivishka_android/Profile/index.dart';
 import 'package:nivishka_android/Wallet/index.dart';
 import 'package:nivishka_android/TopUpWallet/index.dart';
+import 'package:nivishka_android/ReferAndEarn/index.dart';
 
 var kReleaseMode = false;
 
@@ -69,7 +70,8 @@ class MyApp extends StatelessWidget {
         "/bookingHistory": (context) => BookingHistory(),
         "/profile": (context) => Profile(),
         "/wallet": (context) => Wallet(),
-        "/topupwallet": (context) => TopUpWallet()
+        "/topupwallet": (context) => TopUpWallet(),
+        "/referAndEarn": (context) => ReferAndEarn(),
       },
     );
   }

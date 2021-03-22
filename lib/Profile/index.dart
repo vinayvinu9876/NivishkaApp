@@ -96,13 +96,17 @@ class _Profile extends State<Profile> {
                                     text: "Share Nivishka App"),
                                 iconText(
                                     icon: Icons.loyalty,
-                                    text: "Refer and Earn"),
+                                    text: "Refer and Earn",
+                                    ontap: () => Navigator.pushNamed(
+                                        context, "/referAndEarn")),
                                 iconText(
                                     icon: Icons.card_giftcard,
                                     text: "My Gift Cards"),
                                 iconText(
                                     icon: Icons.account_balance_wallet,
-                                    text: "My Wallet"),
+                                    text: "My Wallet",
+                                    ontap: () => Navigator.pushNamed(
+                                        context, "/wallet")),
                                 iconText(
                                     icon: Icons.schedule,
                                     text: "Scheduled Booking"),
@@ -123,24 +127,27 @@ class _Profile extends State<Profile> {
                 ]))));
   }
 
-  Widget iconText({@required IconData icon, @required String text}) {
-    return Container(
-        padding: EdgeInsets.only(left: 10, right: 10, top: 12, bottom: 12),
-        decoration: BoxDecoration(
-            border: Border(
-                bottom: BorderSide(width: 1.0, color: Colors.grey[300]))),
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Icon(icon, size: 20, color: Colors.black38),
-              SizedBox(width: 10),
-              Text("$text",
-                  style: GoogleFonts.poppins(
-                    color: Colors.black87,
-                    fontSize: 10,
-                    fontWeight: FontWeight.w600,
-                  ))
-            ]));
+  Widget iconText(
+      {@required IconData icon, @required String text, Function ontap}) {
+    return InkWell(
+        onTap: ontap,
+        child: Container(
+            padding: EdgeInsets.only(left: 10, right: 10, top: 12, bottom: 12),
+            decoration: BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(width: 1.0, color: Colors.grey[300]))),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(icon, size: 20, color: Colors.black38),
+                  SizedBox(width: 10),
+                  Text("$text",
+                      style: GoogleFonts.poppins(
+                        color: Colors.black87,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w600,
+                      ))
+                ])));
   }
 }

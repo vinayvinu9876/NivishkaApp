@@ -73,6 +73,12 @@ class _Signup extends State<Signup> {
                                   placeholder: "Ex: 9108205639",
                                   textLimit: 10),
                               SizedBox(height: 25),
+                              SizedBox(height: 10),
+                              field(
+                                  fieldName: "Refferal Code (optional)",
+                                  placeholder: "Ex : ABC3432DS",
+                                  textLimit: 10),
+                              SizedBox(height: 25),
                               gradientButton(
                                 height: 40,
                                 width: MediaQuery.of(context).size.width * 0.4,
