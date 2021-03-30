@@ -15,11 +15,12 @@ class _SplashScreen extends State<SplashScreen> {
       body: Container(
           height: height,
           width: width,
+          color: Colors.white,
           child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Image(height: 150, image: AssetImage("images/logo.png")),
+                Image(height: 150, image: AssetImage("images/logo2.png")),
                 SizedBox(height: 15),
                 Text("Nishvika Services",
                     style: GoogleFonts.poppins(

@@ -20,7 +20,7 @@ class _ChooseLoginSignup extends State<ChooseLoginSignup> {
               gradient: LinearGradient(
             begin: Alignment.topRight,
             end: Alignment.bottomLeft,
-            colors: gradient,
+            colors: [Colors.black, Colors.black],
           )),
           height: height,
           child: Column(
@@ -35,10 +35,15 @@ class _ChooseLoginSignup extends State<ChooseLoginSignup> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Image(
-                                height: 100,
-                                image: AssetImage("images/logo.png")),
+                              height: 140,
+                              width: 140,
+                              image: AssetImage("images/logo2.png"),
+                            ),
+                            //Image(
+                            //height: 100,
+                            //image: AssetImage("images/logo1.jpeg")),
                             SizedBox(height: 10),
-                            Text("Nivishka",
+                            /*Text("Nivishka",
                                 style: GoogleFonts.dancingScript(
                                   color: Colors.white,
                                   fontSize: 18,
@@ -48,7 +53,7 @@ class _ChooseLoginSignup extends State<ChooseLoginSignup> {
                             SizedBox(height: 5),
                             Text("Making it Easy",
                                 style: GoogleFonts.poppins(
-                                    color: Colors.white60, fontSize: 12)),
+                                    color: Colors.white60, fontSize: 12)),*/
                           ]))),
               Expanded(
                   flex: 4,
@@ -61,12 +66,13 @@ class _ChooseLoginSignup extends State<ChooseLoginSignup> {
                           children: [
                             shadowButton(
                                 height: 40,
-                                width: width * 0.3,
+                                width: width * 0.6,
                                 color: Colors.white70,
                                 shadowColor: Colors.grey,
                                 text: "Sign Up",
                                 fontSize: 14,
-                                fontColor: blue,
+                                fontColor: Colors.green[800],
+                                fontWeight: FontWeight.bold,
                                 ontap: () {
                                   Navigator.pushNamed(context, "/signup");
                                 }),
@@ -77,17 +83,18 @@ class _ChooseLoginSignup extends State<ChooseLoginSignup> {
                             SizedBox(height: 20),
                             gradientButton(
                               height: 40,
-                              width: width * 0.3,
+                              width: width * 0.6,
                               gradient: LinearGradient(
                                 begin: Alignment.bottomRight,
                                 end: Alignment.bottomLeft,
-                                colors: gradient,
+                                colors: [Colors.green[800], Colors.green],
                               ),
                               border:
                                   Border.all(color: Colors.white30, width: 1.0),
                               text: "Login",
                               fontSize: 14,
-                              fontColor: Colors.white70,
+                              fontColor: Colors.white,
+                              fontWeight: FontWeight.bold,
                               ontap: () =>
                                   {Navigator.pushNamed(context, "/enterPhone")},
                             ),
