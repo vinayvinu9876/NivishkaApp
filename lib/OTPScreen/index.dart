@@ -88,9 +88,8 @@ class _OTPScreen extends State<OTPScreen> {
                                 fontSize: 12,
                                 fontColor: Colors.black,
                                 fontWeight: FontWeight.bold,
-                                ontap: () => {
-                                  Navigator.pushNamed(context, "/enterPhone")
-                                },
+                                ontap: () =>
+                                    {Navigator.pushNamed(context, "/home")},
                               ),
                               SizedBox(height: 20),
                               Center(

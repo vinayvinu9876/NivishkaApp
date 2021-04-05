@@ -14,6 +14,7 @@ class _SelectLocation extends State<SelectLocation> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+    print("Device height = $height width = $width");
     return SafeArea(
         bottom: true,
         top: true,
@@ -36,202 +37,155 @@ class _SelectLocation extends State<SelectLocation> {
                 child: Container(
                     child: Stack(children: [
                   Container(
-                      height: height * 0.61, width: width, child: MapSample()),
+                      height: height < 600 ? height * 0.3 : height * 0.51,
+                      width: width,
+                      child: MapSample()),
                   Align(
                       alignment: Alignment.bottomCenter,
-                      child: Card(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15)),
-                          child: Container(
-                              height: height * 0.45,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(15)),
-                              child: ListView(children: [
-                                SizedBox(height: 20),
-                                Container(
-                                    padding:
-                                        EdgeInsets.only(left: 15, right: 15),
-                                    child: TextField(
-                                        style:
-                                            GoogleFonts.poppins(fontSize: 12),
-                                        decoration: InputDecoration(
-                                            suffix: Text("Change",
-                                                style: GoogleFonts.poppins(
-                                                    fontSize: 10,
-                                                    color: Colors.blue[800],
-                                                    fontWeight:
-                                                        FontWeight.bold)),
-                                            contentPadding: EdgeInsets.only(
-                                                left: 15,
-                                                right: 10,
-                                                bottom: 5,
-                                                top: 5),
-                                            border: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Colors.grey[100]),
-                                                borderRadius:
-                                                    BorderRadius.circular(10)),
-                                            labelText: "Your Location",
-                                            labelStyle: GoogleFonts.poppins(
-                                                color: Colors.grey[400],
-                                                fontSize: 12)))),
-                                SizedBox(height: 15),
-                                Container(
-                                    padding:
-                                        EdgeInsets.only(left: 15, right: 15),
-                                    child: TextField(
-                                        style:
-                                            GoogleFonts.poppins(fontSize: 12),
-                                        decoration: InputDecoration(
-                                            contentPadding: EdgeInsets.only(
-                                                left: 15,
-                                                right: 10,
-                                                bottom: 5,
-                                                top: 5),
-                                            border: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Colors.grey[100]),
-                                                borderRadius:
-                                                    BorderRadius.circular(10)),
-                                            labelText: "Flat/Building/Street",
-                                            labelStyle: GoogleFonts.poppins(
-                                                color: Colors.grey[400],
-                                                fontSize: 12)))),
-                                SizedBox(height: 15),
-                                Container(
-                                    padding:
-                                        EdgeInsets.only(left: 15, right: 15),
-                                    child: TextField(
-                                        style:
-                                            GoogleFonts.poppins(fontSize: 12),
-                                        decoration: InputDecoration(
-                                            contentPadding: EdgeInsets.only(
-                                                left: 15,
-                                                right: 10,
-                                                bottom: 5,
-                                                top: 5),
-                                            border: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Colors.grey[100]),
-                                                borderRadius:
-                                                    BorderRadius.circular(10)),
-                                            labelText: "Your Name",
-                                            labelStyle: GoogleFonts.poppins(
-                                                color: Colors.grey[400],
-                                                fontSize: 12)))),
-                                SizedBox(height: 15),
-                                Container(
-                                    padding: EdgeInsets.only(
-                                        left: 15, right: 15, bottom: 5),
-                                    child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text("Save as",
-                                              style: GoogleFonts.poppins(
-                                                  color: Colors.grey[400],
-                                                  fontSize: 12)),
-                                          SizedBox(height: 5),
-                                          Container(
-                                              child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                Container(
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.grey,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              15),
-                                                    ),
-                                                    padding: EdgeInsets.only(
-                                                        left: 10,
-                                                        right: 10,
-                                                        top: 2,
-                                                        bottom: 2),
-                                                    child: Text('Home',
-                                                        style:
-                                                            GoogleFonts.poppins(
-                                                          fontSize: 12,
-                                                          color: Colors.white,
-                                                        ))),
-                                                SizedBox(width: 10),
-                                                Container(
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.grey,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              15),
-                                                    ),
-                                                    padding: EdgeInsets.only(
-                                                        left: 10,
-                                                        right: 10,
-                                                        top: 2,
-                                                        bottom: 2),
-                                                    child: Text('Office',
-                                                        style:
-                                                            GoogleFonts.poppins(
-                                                          fontSize: 12,
-                                                          color: Colors.white,
-                                                        ))),
-                                                SizedBox(width: 10),
-                                                Container(
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.green[600],
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              15),
-                                                    ),
-                                                    padding: EdgeInsets.only(
-                                                        left: 10,
-                                                        right: 10,
-                                                        top: 2,
-                                                        bottom: 2),
-                                                    child: Text('Others',
-                                                        style:
-                                                            GoogleFonts.poppins(
-                                                          fontSize: 12,
-                                                          color: Colors.white,
-                                                        ))),
-                                              ]))
-                                        ])),
-                                SizedBox(height: 10),
-                                Expanded(
-                                    child: Container(
-                                        decoration: BoxDecoration(
-                                            border: Border(
-                                                top: BorderSide(
-                                          color: Colors.grey[100],
-                                        ))),
-                                        padding: EdgeInsets.all(10),
-                                        child: Center(
-                                            child: InkWell(
-                                                onTap: () {
-                                                  Navigator.pushNamed(
-                                                      context, "/selectDate");
-                                                },
-                                                child: Container(
-                                                    height: 40,
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.green[600],
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
-                                                    ),
-                                                    child: Center(
-                                                        child: Text(
-                                                            "Add Flat /  Building / Street",
-                                                            style: GoogleFonts
-                                                                .poppins(
-                                                                    color: Colors
-                                                                        .white))))))))
-                              ]))))
+                      child: Container(
+                        height: height < 600 ? height * 0.60 : height * 0.45,
+                        width: width,
+                        child: enterDetailsContent(),
+                      ))
                 ])))));
+  }
+
+  Widget enterDetailsContent() {
+    return Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        child: Container(
+            decoration: BoxDecoration(
+                color: Colors.white, borderRadius: BorderRadius.circular(15)),
+            child: Column(mainAxisSize: MainAxisSize.min, children: [
+              SizedBox(height: 20),
+              Container(
+                  padding: EdgeInsets.only(left: 15, right: 15),
+                  child: TextField(
+                      style: GoogleFonts.poppins(fontSize: 12),
+                      decoration: InputDecoration(
+                          suffix: Text("Change",
+                              style: GoogleFonts.poppins(
+                                  fontSize: 10,
+                                  color: Colors.blue[800],
+                                  fontWeight: FontWeight.bold)),
+                          contentPadding: EdgeInsets.only(
+                              left: 15, right: 10, bottom: 5, top: 5),
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey[100]),
+                              borderRadius: BorderRadius.circular(10)),
+                          labelText: "Your Location",
+                          labelStyle: GoogleFonts.poppins(
+                              color: Colors.grey[400], fontSize: 12)))),
+              SizedBox(height: 15),
+              Container(
+                  padding: EdgeInsets.only(left: 15, right: 15),
+                  child: TextField(
+                      style: GoogleFonts.poppins(fontSize: 12),
+                      decoration: InputDecoration(
+                          contentPadding: EdgeInsets.only(
+                              left: 15, right: 10, bottom: 5, top: 5),
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey[100]),
+                              borderRadius: BorderRadius.circular(10)),
+                          labelText: "Flat/Building/Street",
+                          labelStyle: GoogleFonts.poppins(
+                              color: Colors.grey[400], fontSize: 12)))),
+              SizedBox(height: 15),
+              Container(
+                  padding: EdgeInsets.only(left: 15, right: 15),
+                  child: TextField(
+                      style: GoogleFonts.poppins(fontSize: 12),
+                      decoration: InputDecoration(
+                          contentPadding: EdgeInsets.only(
+                              left: 15, right: 10, bottom: 5, top: 5),
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey[100]),
+                              borderRadius: BorderRadius.circular(10)),
+                          labelText: "Your Name",
+                          labelStyle: GoogleFonts.poppins(
+                              color: Colors.grey[400], fontSize: 12)))),
+              SizedBox(height: 15),
+              Container(
+                  padding: EdgeInsets.only(left: 15, right: 15, bottom: 5),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Save as",
+                            style: GoogleFonts.poppins(
+                                color: Colors.grey[400], fontSize: 12)),
+                        SizedBox(height: 5),
+                        Container(
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                              Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey,
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  padding: EdgeInsets.only(
+                                      left: 10, right: 10, top: 2, bottom: 2),
+                                  child: Text('Home',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 12,
+                                        color: Colors.white,
+                                      ))),
+                              SizedBox(width: 10),
+                              Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey,
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  padding: EdgeInsets.only(
+                                      left: 10, right: 10, top: 2, bottom: 2),
+                                  child: Text('Office',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 12,
+                                        color: Colors.white,
+                                      ))),
+                              SizedBox(width: 10),
+                              Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.green[600],
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  padding: EdgeInsets.only(
+                                      left: 10, right: 10, top: 2, bottom: 2),
+                                  child: Text('Others',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 12,
+                                        color: Colors.white,
+                                      ))),
+                            ]))
+                      ])),
+              SizedBox(height: 10),
+              Expanded(
+                  child: Container(
+                      decoration: BoxDecoration(
+                          border: Border(
+                              top: BorderSide(
+                        color: Colors.grey[100],
+                      ))),
+                      padding: EdgeInsets.all(10),
+                      child: Center(
+                          child: InkWell(
+                              onTap: () {
+                                Navigator.pushNamed(context, "/selectDate");
+                              },
+                              child: Container(
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                    color: Colors.green[600],
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Center(
+                                      child: Text(
+                                          "Add Flat /  Building / Street",
+                                          style: GoogleFonts.poppins(
+                                              color: Colors.white))))))))
+            ])));
   }
 }
 

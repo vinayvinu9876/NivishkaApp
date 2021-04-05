@@ -7,16 +7,21 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreen extends State<SplashScreen> {
-  @override
-  Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
+  final threeSec = const Duration(seconds: 3);
 
-    const threeSec = const Duration(seconds: 3);
+  @override
+  void initState() {
+    super.initState();
     new Timer.periodic(threeSec, (Timer t) {
       Navigator.pushNamed(context, "/chooseLoginSignup");
       t.cancel();
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
 
     return Scaffold(
       body: Container(

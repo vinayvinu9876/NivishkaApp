@@ -29,7 +29,7 @@ import 'package:nivishka_android/GiftCard/index.dart';
 import 'package:nivishka_android/GiftCard/VoucherCode.dart';
 import 'package:nivishka_android/SendReport/index.dart';
 
-var kReleaseMode = false;
+var kReleaseMode = true;
 
 void main() => runApp(
       DevicePreview(
