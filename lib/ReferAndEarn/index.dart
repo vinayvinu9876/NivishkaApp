@@ -16,7 +16,7 @@ class _ReferAndEarn extends State<ReferAndEarn> {
         bottom: true,
         child: Scaffold(
             appBar: AppBar(
-              backgroundColor: blue,
+              backgroundColor: Colors.green[500],
               leading: Icon(Icons.chevron_left, color: Colors.white),
               title: Text("Refer & Earn",
                   style:
@@ -100,7 +100,7 @@ class _ReferAndEarn extends State<ReferAndEarn> {
                                     width: width * 0.4,
                                     height: 50,
                                     decoration: BoxDecoration(
-                                        color: darkblue,
+                                        color: Color(0xFF296e01),
                                         borderRadius:
                                             BorderRadius.circular(10)),
                                     child: Center(

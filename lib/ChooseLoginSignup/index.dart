@@ -87,7 +87,7 @@ class _ChooseLoginSignup extends State<ChooseLoginSignup> {
                               gradient: LinearGradient(
                                 begin: Alignment.bottomRight,
                                 end: Alignment.bottomLeft,
-                                colors: [Colors.green[800], Colors.green],
+                                colors: [primaryColor, Colors.green],
                               ),
                               border:
                                   Border.all(color: Colors.white30, width: 1.0),

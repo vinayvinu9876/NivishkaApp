@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:nivishka_android/util/index.dart';
-import 'package:timelines/timelines.dart';
 
 class CategoryDescription extends StatefulWidget {
   @override
@@ -38,7 +37,7 @@ class _CategoryDescription extends State<CategoryDescription> {
                       width: width,
                       height: 55,
                       decoration: BoxDecoration(
-                        color: blue,
+                        color: Colors.green[600],
                         boxShadow: [
                           BoxShadow(
                             color: Colors.grey,

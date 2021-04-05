@@ -112,7 +112,7 @@ class _FlashSale extends State<FlashSale> {
                                                   height: 30,
                                                   width: 40,
                                                   decoration: BoxDecoration(
-                                                      color: Colors.blue[100],
+                                                      color: Colors.green[100],
                                                       borderRadius:
                                                           BorderRadius.only(
                                                               topRight: Radius
@@ -125,7 +125,8 @@ class _FlashSale extends State<FlashSale> {
                                                           style: GoogleFonts
                                                               .poppins(
                                                             fontSize: 8,
-                                                            color: Colors.blue,
+                                                            color: Colors
+                                                                .green[800],
                                                             fontWeight:
                                                                 FontWeight.bold,
                                                           )))))
@@ -367,7 +368,9 @@ class _FlashSale extends State<FlashSale> {
                                                                 ),
                                                                 decoration:
                                                                     BoxDecoration(
-                                                                  color: blue,
+                                                                  color: Colors
+                                                                          .green[
+                                                                      500],
                                                                   borderRadius:
                                                                       BorderRadius
                                                                           .circular(

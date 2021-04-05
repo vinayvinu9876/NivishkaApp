@@ -20,7 +20,7 @@ class _Signup extends State<Signup> {
                     gradient: LinearGradient(
                   begin: Alignment.topRight,
                   end: Alignment.bottomRight,
-                  colors: [lightblue, blue],
+                  colors: gradient,
                 )),
                 child: Column(
                   children: [
@@ -37,11 +37,11 @@ class _Signup extends State<Signup> {
                                     Navigator.pushNamed(context, "/enterPhone");
                                   },
                                   child: Icon(Icons.arrow_back,
-                                      color: Colors.white)),
+                                      color: Colors.black)),
                               Center(
                                   child: Text("Sign Up",
                                       style: GoogleFonts.poppins(
-                                          fontSize: 18, color: Colors.white))),
+                                          fontSize: 18, color: Colors.black))),
                               Container()
                             ])),
                     Expanded(
@@ -98,7 +98,8 @@ class _Signup extends State<Signup> {
                                     color: Colors.white30, width: 1.0),
                                 text: "SIGN UP",
                                 fontSize: 14,
-                                fontColor: Colors.white,
+                                fontColor: Colors.black,
+                                fontWeight: FontWeight.bold,
                                 ontap: () => {
                                   Navigator.pushNamed(context, "/enterPhone")
                                 },
@@ -113,7 +114,7 @@ class _Signup extends State<Signup> {
                                       child: Text(
                                           "Already Have Account ? Click Here",
                                           style: GoogleFonts.poppins(
-                                            color: Colors.black45,
+                                            color: Colors.black,
                                             fontSize: 12,
                                           )))),
                               SizedBox(height: 20),

@@ -126,7 +126,7 @@ class _AllCategories extends State<AllCategories> {
               height: 150,
               width: width,
               decoration: BoxDecoration(
-                color: blue,
+                color: primaryColor,
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.elliptical(50, 10),
                   bottomRight: Radius.elliptical(350, 160),
@@ -140,7 +140,7 @@ class _AllCategories extends State<AllCategories> {
                         margin: EdgeInsets.only(top: 40, left: 15),
                         child: Text("Categories",
                             style: GoogleFonts.poppins(
-                                color: Colors.white,
+                                color: Colors.black,
                                 fontSize: 18,
                                 letterSpacing: 1,
                                 fontWeight: FontWeight.w600))),

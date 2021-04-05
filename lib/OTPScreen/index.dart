@@ -35,7 +35,7 @@ class _OTPScreen extends State<OTPScreen> {
                         child: Center(
                             child: Text("Verification Code",
                                 style: GoogleFonts.poppins(
-                                    color: Colors.white, fontSize: 18)))),
+                                    color: Colors.black, fontSize: 18)))),
                     Expanded(
                         child: Container(
                             padding: EdgeInsets.all(15),
@@ -69,7 +69,7 @@ class _OTPScreen extends State<OTPScreen> {
                               SizedBox(height: 40),
                               gradientButton(
                                 height: 40,
-                                width: MediaQuery.of(context).size.width * 0.4,
+                                width: MediaQuery.of(context).size.width * 0.7,
                                 gradient: LinearGradient(
                                   begin: Alignment.topLeft,
                                   end: Alignment.bottomRight,
@@ -85,8 +85,9 @@ class _OTPScreen extends State<OTPScreen> {
                                 border: Border.all(
                                     color: Colors.white30, width: 1.0),
                                 text: "VERIFY CODE",
-                                fontSize: 14,
-                                fontColor: Colors.white,
+                                fontSize: 12,
+                                fontColor: Colors.black,
+                                fontWeight: FontWeight.bold,
                                 ontap: () => {
                                   Navigator.pushNamed(context, "/enterPhone")
                                 },

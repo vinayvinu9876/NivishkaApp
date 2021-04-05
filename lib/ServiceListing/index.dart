@@ -133,7 +133,7 @@ class _ServiceListing extends State<ServiceListing> {
                 padding:
                     EdgeInsets.only(left: 20, right: 10, top: 5, bottom: 5),
                 decoration: BoxDecoration(
-                  color: Colors.black,
+                  color: Colors.green[800],
                   borderRadius: BorderRadius.circular(5),
                 ),
                 child: Row(
@@ -297,7 +297,7 @@ class _ServiceListing extends State<ServiceListing> {
     return Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
-          border: Border.all(width: 1, color: Color(0xFF304FFE)),
+          border: Border.all(width: 1, color: Colors.green),
         ),
         child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -307,7 +307,7 @@ class _ServiceListing extends State<ServiceListing> {
                   flex: 1,
                   child: Container(
                       decoration: BoxDecoration(
-                        color: Color(0xFF304FFE),
+                        color: Colors.green[600],
                       ),
                       child: Center(
                           child: Text("-",
@@ -327,7 +327,7 @@ class _ServiceListing extends State<ServiceListing> {
                   flex: 1,
                   child: Container(
                       decoration: BoxDecoration(
-                        color: Color(0xFF304FFE),
+                        color: Colors.green[600],
                       ),
                       child: Center(
                           child: Text("+",
@@ -380,9 +380,10 @@ class _ServiceListing extends State<ServiceListing> {
     return Container(
         margin: EdgeInsets.only(left: 5, right: 5),
         decoration: BoxDecoration(
-          color: active ? Colors.black : Colors.white,
+          color: active ? Colors.green[600] : Colors.white,
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(width: 1, color: Colors.black),
+          border:
+              Border.all(width: 1, color: active ? primaryColor : Colors.black),
         ),
         padding: EdgeInsets.all(10),
         child: Text("$name",

@@ -18,7 +18,7 @@ class _Profile extends State<Profile> {
             bottomNavigationBar: CustomBottomNavBar(),
             backgroundColor: Colors.white,
             appBar: AppBar(
-                backgroundColor: blue,
+                backgroundColor: Colors.green[600],
                 title: Text("My Profile",
                     style: GoogleFonts.poppins(
                       fontSize: 14,

@@ -19,8 +19,13 @@ class _SelectLocation extends State<SelectLocation> {
         top: true,
         child: Scaffold(
             appBar: AppBar(
-                title:
-                    Text("Plumbers", style: GoogleFonts.poppins(fontSize: 16))),
+                backgroundColor: Colors.green[600],
+                leading: InkWell(
+                    child:
+                        Icon(Icons.arrow_back, color: Colors.white, size: 20)),
+                title: Text("Plumbers",
+                    style: GoogleFonts.poppins(
+                        fontSize: 14, color: Colors.white))),
             body: Container(
                 height: height,
                 width: width,
@@ -174,7 +179,7 @@ class _SelectLocation extends State<SelectLocation> {
                                                 SizedBox(width: 10),
                                                 Container(
                                                     decoration: BoxDecoration(
-                                                      color: blue,
+                                                      color: Colors.green[600],
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               15),
@@ -210,7 +215,7 @@ class _SelectLocation extends State<SelectLocation> {
                                                 child: Container(
                                                     height: 40,
                                                     decoration: BoxDecoration(
-                                                      color: Colors.blue,
+                                                      color: Colors.green[600],
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               10),

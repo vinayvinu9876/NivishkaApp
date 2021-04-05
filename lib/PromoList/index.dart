@@ -26,7 +26,7 @@ class _PromoList extends State<PromoList> {
                     onTap: () {
                       Navigator.pushNamed(context, "/home");
                     },
-                    child: Icon(Icons.arrow_back, color: blue)),
+                    child: Icon(Icons.arrow_back, color: Colors.green[800])),
                 title: Text("Promos",
                     style: GoogleFonts.poppins(
                         fontSize: 14,
@@ -120,7 +120,7 @@ class _PromoList extends State<PromoList> {
               child: Container(
                   padding: EdgeInsets.all(15),
                   decoration: BoxDecoration(
-                    color: blue,
+                    color: Colors.green[600],
                     borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(10),
                         bottomRight: Radius.circular(10)),

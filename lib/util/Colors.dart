@@ -12,4 +12,6 @@ const Color selectedGreen = Color(0xFF00CC00);
 const Color selectedOrange = Color(0xFFFF9900);
 const Color selectedBlue = Color(0xFF000099);
 
-const List<Color> gradient = [blue, lightblue];
+const Color primaryColor = Color(0xFF8ec640);
+
+const List<Color> gradient = [primaryColor, Colors.green];

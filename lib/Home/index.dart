@@ -134,7 +134,7 @@ class _Home extends State<Home> {
                                   width: 70.0,
                                   lineHeight: 7.0,
                                   percent: (sold / total),
-                                  progressColor: blue,
+                                  progressColor: Colors.green[800],
                                 ),
                                 Text("$sold Sold",
                                     style: GoogleFonts.poppins(
@@ -158,7 +158,7 @@ class _Home extends State<Home> {
     return Container(
         height: 250,
         width: width,
-        color: Color(0xFFccf2ff),
+        color: Colors.green[100],
         child: Stack(children: [
           Container(
               height: 180,
@@ -169,7 +169,7 @@ class _Home extends State<Home> {
                   gradient: LinearGradient(
                     begin: Alignment.topRight,
                     end: Alignment.topCenter,
-                    colors: [blue, Colors.blue],
+                    colors: gradient,
                   ))),
           Container(
               margin: EdgeInsets.only(top: 20, left: 20, right: 15),
@@ -188,7 +188,7 @@ class _Home extends State<Home> {
                         },
                         child: Text("See All",
                             style: GoogleFonts.poppins(
-                              color: Colors.blue[800],
+                              color: Colors.green[800],
                               fontSize: 10,
                               fontWeight: FontWeight.bold,
                             )))
@@ -270,7 +270,7 @@ class _Home extends State<Home> {
                         SizedBox(height: 5),
                         Text("Rs. $price",
                             style: GoogleFonts.poppins(
-                              color: lightblue,
+                              color: Colors.green[800],
                               fontSize: 10,
                             )),
                         SizedBox(height: 5),
@@ -281,8 +281,8 @@ class _Home extends State<Home> {
                             rating: rating,
                             size: 15.0,
                             isReadOnly: true,
-                            color: blue,
-                            borderColor: blue,
+                            color: primaryColor,
+                            borderColor: primaryColor,
                             spacing: 0.0)
                       ]))
             ])));
@@ -313,8 +313,9 @@ class _Home extends State<Home> {
                             },
                             child: Text("See All",
                                 style: GoogleFonts.poppins(
-                                  color: blue,
+                                  color: Colors.green[800],
                                   fontSize: 10,
+                                  fontWeight: FontWeight.bold,
                                 )))
                       ])),
               SizedBox(height: 15),
@@ -590,9 +591,9 @@ class _Home extends State<Home> {
             width: width,
             decoration: BoxDecoration(
                 gradient: LinearGradient(
-              begin: Alignment.centerRight,
-              end: Alignment.bottomLeft,
-              colors: [Color(0xFF09C6F9), Color(0xFF045DE9)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [primaryColor, Colors.green[400]],
             )),
           ),
           Container(
@@ -612,13 +613,13 @@ class _Home extends State<Home> {
                             children: [
                               Text("Hello ,",
                                   style: GoogleFonts.poppins(
-                                    color: Colors.white,
+                                    color: Colors.black,
                                     fontWeight: FontWeight.w500,
                                     fontSize: 12,
                                   )),
                               Text("Vinay P",
                                   style: GoogleFonts.poppins(
-                                    color: Colors.white,
+                                    color: Colors.black,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14,
                                   ))
@@ -630,9 +631,10 @@ class _Home extends State<Home> {
                           decoration: InputDecoration(
                               prefixIcon: Icon(
                                 Icons.menu,
-                                color: blue,
+                                color: Colors.green[800],
                               ),
-                              suffixIcon: Icon(Icons.shopping_bag, color: blue),
+                              suffixIcon: Icon(Icons.shopping_bag,
+                                  color: Colors.green[800]),
                               fillColor: Colors.white,
                               filled: true,
                               border: OutlineInputBorder(
@@ -640,7 +642,7 @@ class _Home extends State<Home> {
                                 borderRadius: BorderRadius.circular(5),
                               ),
                               hintStyle: GoogleFonts.poppins(
-                                  color: Colors.grey[400], fontSize: 10),
+                                  color: Colors.grey[800], fontSize: 10),
                               hintText: 'Tell me what you want'),
                         ))
                   ])),

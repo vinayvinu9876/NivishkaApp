@@ -20,12 +20,28 @@ class _BookingHistory extends State<BookingHistory> {
             child: Scaffold(
                 bottomNavigationBar: CustomBottomNavBar(),
                 appBar: AppBar(
-                  leading: Icon(Icons.arrow_back),
+                  backgroundColor: primaryColor,
+                  leading: InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(context, "/home");
+                      },
+                      child: Icon(Icons.arrow_back,
+                          color: Colors.black, size: 20)),
                   title: Text("My Bookings",
                       style: GoogleFonts.poppins(
-                          color: Colors.white, fontSize: 14)),
+                          color: Colors.black, fontSize: 14)),
                   bottom: TabBar(
-                    labelStyle: GoogleFonts.poppins(fontSize: 12),
+                    labelStyle: GoogleFonts.poppins(
+                        fontSize: 12,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold),
+                    unselectedLabelStyle: GoogleFonts.poppins(
+                        fontSize: 12,
+                        color: Colors.black87,
+                        fontWeight: FontWeight.normal),
+                    labelColor: Colors.black,
+                    unselectedLabelColor: Colors.black54,
+                    indicatorColor: Colors.green[800],
                     tabs: [
                       Tab(text: "Scheduled"),
                       Tab(text: "Completed"),

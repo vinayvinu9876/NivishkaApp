@@ -141,21 +141,21 @@ class _Wallet extends State<Wallet> {
           child: Container(
               height: 200,
               decoration: BoxDecoration(
-                  color: blue.withOpacity(0.4),
+                  color: Colors.green.withOpacity(0.4),
                   borderRadius: BorderRadius.circular(20)))),
       Container(
           padding: EdgeInsets.only(top: 20, left: 45, right: 45, bottom: 5),
           child: Container(
               height: 200,
               decoration: BoxDecoration(
-                  color: blue.withOpacity(0.4),
+                  color: Colors.green.withOpacity(0.4),
                   borderRadius: BorderRadius.circular(20)))),
       Container(
           height: 200,
           width: width,
           padding: EdgeInsets.all(15),
           decoration: BoxDecoration(
-              color: blue,
+              color: Colors.green[600],
               borderRadius: BorderRadius.only(
                   bottomRight: Radius.circular(25),
                   bottomLeft: Radius.circular(25))),
@@ -234,7 +234,7 @@ class _Wallet extends State<Wallet> {
                 SizedBox(height: 25),
                 Container(
                     decoration: BoxDecoration(
-                      color: Colors.blue[400],
+                      color: Colors.green[500],
                       borderRadius: BorderRadius.circular(10),
                     ),
                     padding: EdgeInsets.all(10),

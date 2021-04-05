@@ -12,44 +12,56 @@ class _BestPicks extends State<BestPicks> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    return Scaffold(
-        appBar: AppBar(
-            title: Text("Best Picks For you",
-                style: GoogleFonts.poppins(
-                  fontSize: 14,
-                ))),
-        body: Container(
-            height: height,
-            width: width,
-            padding: EdgeInsets.all(15),
-            child: Wrap(
-                runSpacing: 8.0,
-                alignment: WrapAlignment.spaceBetween,
-                children: [
-                  bestPickWidget(
-                    imgUrl:
-                        "https://de927adv5b23k.cloudfront.net/wp-content/uploads/2019/03/27192455/salon-hygiene-checklist.png",
-                    description:
-                        "Massage Services at your home with full features",
-                    price: "10,000",
-                    rating: 4,
-                  ),
-                  bestPickWidget(
-                    imgUrl:
-                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMCvgKB2KLCgfjE1f4dtb9gIKrZYenPwfLZQ&usqp=CAU",
-                    description:
-                        "Plumbing Services at your home before you start facing problems",
-                    price: "5,000",
-                    rating: 5,
-                  ),
-                  bestPickWidget(
-                    imgUrl:
-                        "https://res.cloudinary.com/urbanclap/image/upload/q_auto,f_auto,fl_progressive:steep,w_617/t_high_res_template,q_auto:low,f_auto/categories/category_v2/category_ba329560.png",
-                    description: "Lazy to clean ? Call me right now",
-                    price: "2,000",
-                    rating: 5,
-                  ),
-                ])));
+    return SafeArea(
+        top: true,
+        bottom: true,
+        child: Scaffold(
+            appBar: AppBar(
+                backgroundColor: primaryColor,
+                leading: InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child:
+                        Icon(Icons.arrow_back, color: Colors.black, size: 20)),
+                title: Text("Best Picks For you",
+                    style: GoogleFonts.poppins(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ))),
+            body: Container(
+                height: height,
+                width: width,
+                padding: EdgeInsets.all(15),
+                child: Wrap(
+                    runSpacing: 8.0,
+                    alignment: WrapAlignment.spaceBetween,
+                    children: [
+                      bestPickWidget(
+                        imgUrl:
+                            "https://de927adv5b23k.cloudfront.net/wp-content/uploads/2019/03/27192455/salon-hygiene-checklist.png",
+                        description:
+                            "Massage Services at your home with full features",
+                        price: "10,000",
+                        rating: 4,
+                      ),
+                      bestPickWidget(
+                        imgUrl:
+                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMCvgKB2KLCgfjE1f4dtb9gIKrZYenPwfLZQ&usqp=CAU",
+                        description:
+                            "Plumbing Services at your home before you start facing problems",
+                        price: "5,000",
+                        rating: 5,
+                      ),
+                      bestPickWidget(
+                        imgUrl:
+                            "https://res.cloudinary.com/urbanclap/image/upload/q_auto,f_auto,fl_progressive:steep,w_617/t_high_res_template,q_auto:low,f_auto/categories/category_v2/category_ba329560.png",
+                        description: "Lazy to clean ? Call me right now",
+                        price: "2,000",
+                        rating: 5,
+                      ),
+                    ]))));
   }
 
   Widget bestPickWidget(
@@ -66,7 +78,7 @@ class _BestPicks extends State<BestPicks> {
             ),
             child: Container(
                 height: 180,
-                width: 140,
+                width: 150,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
@@ -74,7 +86,7 @@ class _BestPicks extends State<BestPicks> {
                 child: Column(children: [
                   Container(
                       height: 90,
-                      width: 140,
+                      width: 150,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.only(
                             topRight: Radius.circular(10),
@@ -98,7 +110,7 @@ class _BestPicks extends State<BestPicks> {
                             SizedBox(height: 5),
                             Text("Rs. $price",
                                 style: GoogleFonts.poppins(
-                                  color: lightblue,
+                                  color: Colors.green[800],
                                   fontSize: 10,
                                 )),
                             SizedBox(height: 5),
@@ -109,8 +121,8 @@ class _BestPicks extends State<BestPicks> {
                                 rating: rating,
                                 size: 15.0,
                                 isReadOnly: true,
-                                color: blue,
-                                borderColor: blue,
+                                color: primaryColor,
+                                borderColor: primaryColor,
                                 spacing: 0.0)
                           ]))
                 ]))));

@@ -150,7 +150,7 @@ class _Receipt extends State<Receipt> {
                 padding:
                     EdgeInsets.only(left: 20, right: 10, top: 5, bottom: 5),
                 decoration: BoxDecoration(
-                  color: Colors.black,
+                  color: Colors.green[800],
                 ),
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -270,7 +270,7 @@ class _Receipt extends State<Receipt> {
     return Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
-          border: Border.all(width: 1, color: Color(0xFF304FFE)),
+          border: Border.all(width: 1, color: Colors.green[800]),
         ),
         child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -280,7 +280,7 @@ class _Receipt extends State<Receipt> {
                   flex: 1,
                   child: Container(
                       decoration: BoxDecoration(
-                        color: Color(0xFF304FFE),
+                        color: Colors.green[800],
                       ),
                       child: Center(
                           child: Text("-",
@@ -295,12 +295,12 @@ class _Receipt extends State<Receipt> {
                       child: Center(
                           child: Text(" 0 ",
                               style: GoogleFonts.poppins(
-                                  color: Color(0xFF304FFE), fontSize: 10))))),
+                                  color: Colors.green, fontSize: 10))))),
               Expanded(
                   flex: 1,
                   child: Container(
                       decoration: BoxDecoration(
-                        color: Color(0xFF304FFE),
+                        color: Colors.green[800],
                       ),
                       child: Center(
                           child: Text("+",

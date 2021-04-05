@@ -18,8 +18,8 @@ class _EnterPhone extends State<EnterPhone> {
                 decoration: BoxDecoration(
                     gradient: LinearGradient(
                   begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: gradient,
+                  end: Alignment.bottomCenter,
+                  colors: [primaryColor, Colors.green[800]],
                 )),
                 child: Stack(children: [
                   Container(
@@ -30,17 +30,18 @@ class _EnterPhone extends State<EnterPhone> {
                       child: Align(
                           alignment: Alignment.topCenter,
                           child: Column(children: [
-                            Image(
-                                height: 80,
-                                width: 80,
-                                image: AssetImage("images/logo.png")),
-                            Text("Nivishka",
-                                style: GoogleFonts.dancingScript(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  letterSpacing: 1,
-                                  fontWeight: FontWeight.bold,
-                                ))
+                            CircleAvatar(
+                                radius: 50,
+                                backgroundColor: Colors.black,
+                                child: CircleAvatar(
+                                    backgroundColor: Colors.black,
+                                    radius: 45,
+                                    child: Image(
+                                        height: 60,
+                                        width: 60,
+                                        fit: BoxFit.contain,
+                                        image:
+                                            AssetImage("images/logo2.png")))),
                           ]))),
                   Container(
                       margin: EdgeInsets.only(top: 200),
@@ -59,7 +60,7 @@ class _EnterPhone extends State<EnterPhone> {
                                 child: Text("Login",
                                     style: GoogleFonts.poppins(
                                       color: Colors.black,
-                                      fontSize: 24,
+                                      fontSize: 20,
                                       fontWeight: FontWeight.w400,
                                     ))),
                             SizedBox(height: 30),
@@ -74,7 +75,7 @@ class _EnterPhone extends State<EnterPhone> {
                             SizedBox(height: 20),
                             gradientButton(
                               height: 40,
-                              width: MediaQuery.of(context).size.width * 0.8,
+                              width: MediaQuery.of(context).size.width * 0.9,
                               gradient: LinearGradient(
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
@@ -91,7 +92,8 @@ class _EnterPhone extends State<EnterPhone> {
                                   Border.all(color: Colors.white30, width: 1.0),
                               text: "LOGIN",
                               fontSize: 14,
-                              fontColor: Colors.white,
+                              fontColor: Colors.black,
+                              fontWeight: FontWeight.bold,
                               ontap: () =>
                                   {Navigator.pushNamed(context, "/otp_screen")},
                             ),

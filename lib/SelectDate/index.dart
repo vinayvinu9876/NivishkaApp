@@ -60,7 +60,7 @@ class _SelectDate extends State<SelectDate> {
                         left: 10, right: 10, top: 5, bottom: 12),
                     child: Container(
                         decoration: BoxDecoration(
-                            color: blue,
+                            color: Colors.green[500],
                             borderRadius: BorderRadius.circular(5)),
                         child: Center(
                             child: Text("Next ",
@@ -69,6 +69,7 @@ class _SelectDate extends State<SelectDate> {
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold)))))),
             appBar: AppBar(
+                backgroundColor: Colors.green[500],
                 title:
                     Text("Plumbers", style: GoogleFonts.poppins(fontSize: 14))),
             body: Container(

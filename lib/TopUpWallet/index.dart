@@ -92,7 +92,7 @@ class _TopUpWallet extends State<TopUpWallet> {
                                 ),
                                 child: CircleAvatar(
                                     radius: 25,
-                                    backgroundColor: Colors.orange,
+                                    backgroundColor: Colors.green,
                                     child: Center(
                                         child: Icon(
                                       Icons.arrow_forward,
@@ -115,7 +115,7 @@ class _TopUpWallet extends State<TopUpWallet> {
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
                 width: 0.8,
-                color: isActive ? Colors.orange : Colors.grey[200])),
+                color: isActive ? Colors.green[500] : Colors.grey[200])),
         child: Stack(children: [
           Container(
               width: 100,
@@ -140,7 +140,7 @@ class _TopUpWallet extends State<TopUpWallet> {
                     CircleAvatar(
                         radius: 10,
                         backgroundColor:
-                            isActive ? Colors.orange : Colors.black,
+                            isActive ? Colors.green[500] : Colors.black,
                         child: Center(
                           child: isActive
                               ? Icon(Icons.done, size: 14, color: Colors.white)
@@ -167,21 +167,21 @@ class _TopUpWallet extends State<TopUpWallet> {
           child: Container(
               height: 120,
               decoration: BoxDecoration(
-                  color: blue.withOpacity(0.4),
+                  color: Colors.green.withOpacity(0.4),
                   borderRadius: BorderRadius.circular(20)))),
       Container(
           padding: EdgeInsets.only(top: 20, left: 45, right: 45, bottom: 5),
           child: Container(
               height: 120,
               decoration: BoxDecoration(
-                  color: blue.withOpacity(0.4),
+                  color: Colors.green.withOpacity(0.4),
                   borderRadius: BorderRadius.circular(20)))),
       Container(
           height: 120,
           width: width,
           padding: EdgeInsets.all(15),
           decoration: BoxDecoration(
-              color: blue,
+              color: Colors.green[500],
               borderRadius: BorderRadius.only(
                   bottomRight: Radius.circular(25),
                   bottomLeft: Radius.circular(25))),

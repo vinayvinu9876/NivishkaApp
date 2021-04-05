@@ -49,7 +49,7 @@ class _ServiceLocationSelect extends State<ServiceLocationSelect> {
                           child: Container(
                               padding: EdgeInsets.all(10),
                               decoration: BoxDecoration(
-                                color: blue,
+                                color: primaryColor,
                                 borderRadius: BorderRadius.circular(5),
                               ),
                               child: Row(
@@ -57,11 +57,11 @@ class _ServiceLocationSelect extends State<ServiceLocationSelect> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Icon(Icons.location_on,
-                                        color: Colors.white),
+                                        color: Colors.black),
                                     SizedBox(width: 10),
                                     Text("Your Current Location",
                                         style: GoogleFonts.poppins(
-                                          color: Colors.white,
+                                          color: Colors.black,
                                           fontWeight: FontWeight.bold,
                                           fontSize: 12,
                                         ))
@@ -77,14 +77,15 @@ class _ServiceLocationSelect extends State<ServiceLocationSelect> {
                               decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(5),
-                                  border: Border.all(width: 1, color: blue)),
+                                  border: Border.all(
+                                      width: 1, color: primaryColor)),
                               child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Text("Some other Location",
                                         style: GoogleFonts.poppins(
-                                          color: blue,
+                                          color: primaryColor,
                                           fontWeight: FontWeight.bold,
                                           fontSize: 12,
                                         ))

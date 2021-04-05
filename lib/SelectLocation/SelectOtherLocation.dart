@@ -16,6 +16,7 @@ class _SelectOtherLocation extends State<SelectOtherLocation> {
         bottom: true,
         child: Scaffold(
             appBar: AppBar(
+                backgroundColor: Colors.green[600],
                 title: Container(
                     child: Container(
                         height: 60,
@@ -61,11 +62,11 @@ class _SelectOtherLocation extends State<SelectOtherLocation> {
                                   )),
                               padding: EdgeInsets.all(15),
                               child: Row(children: [
-                                Icon(Icons.gps_fixed, color: blue),
+                                Icon(Icons.gps_fixed, color: Colors.green[600]),
                                 SizedBox(width: 15),
                                 Text("Use Current Location",
                                     style: GoogleFonts.poppins(
-                                        color: blue, fontSize: 12))
+                                        color: Colors.green[600], fontSize: 12))
                               ]))),
                       Expanded(
                         child: Container(

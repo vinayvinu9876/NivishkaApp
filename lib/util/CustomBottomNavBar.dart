@@ -26,7 +26,7 @@ class _CustomBottomNavBar extends State<CustomBottomNavBar> {
               iconSize: 24,
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               duration: Duration(milliseconds: 400),
-              tabBackgroundColor: blue.withOpacity(0.9),
+              tabBackgroundColor: Colors.green[600].withOpacity(0.9),
               tabs: [
                 GButton(
                   icon: Icons.home,
