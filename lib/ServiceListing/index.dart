@@ -21,10 +21,14 @@ class _ServiceListing extends State<ServiceListing> {
                 elevation: 4,
                 backgroundColor: Colors.white,
                 centerTitle: true,
-                leading: Icon(
-                  Icons.arrow_back,
-                  color: Colors.black,
-                ),
+                leading: InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Icon(
+                      Icons.arrow_back,
+                      color: Colors.black,
+                    )),
                 title: Text("Plumbers and Repairs",
                     style: GoogleFonts.poppins(
                       fontSize: 14,

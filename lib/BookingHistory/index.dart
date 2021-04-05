@@ -18,7 +18,7 @@ class _BookingHistory extends State<BookingHistory> {
         child: DefaultTabController(
             length: 3,
             child: Scaffold(
-                bottomNavigationBar: CustomBottomNavBar(),
+                bottomNavigationBar: CustomBottomNavBar(selectedIndex: 1),
                 appBar: AppBar(
                   backgroundColor: primaryColor,
                   leading: InkWell(

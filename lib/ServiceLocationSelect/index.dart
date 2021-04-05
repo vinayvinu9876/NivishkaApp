@@ -18,7 +18,11 @@ class _ServiceLocationSelect extends State<ServiceLocationSelect> {
             appBar: AppBar(
                 backgroundColor: Colors.white,
                 elevation: 3,
-                leading: Icon(Icons.arrow_back, color: Colors.black),
+                leading: InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Icon(Icons.arrow_back, color: Colors.black)),
                 centerTitle: true,
                 title: Text("Plumbers",
                     style: GoogleFonts.poppins(

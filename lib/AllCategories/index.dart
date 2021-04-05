@@ -15,7 +15,7 @@ class _AllCategories extends State<AllCategories> {
         top: true,
         bottom: true,
         child: Scaffold(
-            bottomNavigationBar: CustomBottomNavBar(),
+            bottomNavigationBar: CustomBottomNavBar(selectedIndex: 0),
             body: Container(
                 height: height,
                 width: width,

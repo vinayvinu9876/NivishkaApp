@@ -21,6 +21,9 @@ class _SelectLocation extends State<SelectLocation> {
             appBar: AppBar(
                 backgroundColor: Colors.green[600],
                 leading: InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
                     child:
                         Icon(Icons.arrow_back, color: Colors.white, size: 20)),
                 title: Text("Plumbers",

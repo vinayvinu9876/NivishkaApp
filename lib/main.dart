@@ -24,6 +24,10 @@ import 'package:nivishka_android/Profile/index.dart';
 import 'package:nivishka_android/Wallet/index.dart';
 import 'package:nivishka_android/TopUpWallet/index.dart';
 import 'package:nivishka_android/ReferAndEarn/index.dart';
+import 'package:nivishka_android/About/index.dart';
+import 'package:nivishka_android/GiftCard/index.dart';
+import 'package:nivishka_android/GiftCard/VoucherCode.dart';
+import 'package:nivishka_android/SendReport/index.dart';
 
 var kReleaseMode = false;
 
@@ -56,6 +60,7 @@ class MyApp extends StatelessWidget {
         "/otp_screen": (context) => OTPScreen(),
         "/home": (context) => Home(),
         "/allCategories": (context) => AllCategories(),
+        "/about": (context) => About(),
         "/promoList": (context) => PromoList(),
         "/promoDesc": (context) => PromoDescription(),
         "/bestPicks": (context) => BestPicks(),
@@ -72,6 +77,9 @@ class MyApp extends StatelessWidget {
         "/wallet": (context) => Wallet(),
         "/topupwallet": (context) => TopUpWallet(),
         "/referAndEarn": (context) => ReferAndEarn(),
+        "/giftCard": (context) => GiftCard(),
+        "/voucherCode": (context) => VoucherCode(),
+        "/sendReport": (context) => SendReport(),
       },
     );
   }

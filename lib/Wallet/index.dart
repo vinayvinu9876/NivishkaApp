@@ -15,7 +15,7 @@ class _Wallet extends State<Wallet> {
         top: true,
         bottom: true,
         child: Scaffold(
-            bottomNavigationBar: CustomBottomNavBar(),
+            bottomNavigationBar: CustomBottomNavBar(selectedIndex: 2),
             body: Container(
                 height: height,
                 width: width,
@@ -168,7 +168,11 @@ class _Wallet extends State<Wallet> {
                     child: Row(children: [
                   Expanded(
                       flex: 1,
-                      child: Icon(Icons.arrow_back, color: Colors.white)),
+                      child: InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Icon(Icons.arrow_back, color: Colors.white))),
                   Expanded(
                       flex: 8,
                       child: Center(

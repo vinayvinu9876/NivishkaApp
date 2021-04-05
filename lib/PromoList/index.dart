@@ -17,7 +17,7 @@ class _PromoList extends State<PromoList> {
         bottom: true,
         child: Scaffold(
             backgroundColor: Colors.grey[200],
-            bottomNavigationBar: CustomBottomNavBar(),
+            bottomNavigationBar: CustomBottomNavBar(selectedIndex: 0),
             appBar: AppBar(
                 elevation: 0,
                 backgroundColor: Colors.white,

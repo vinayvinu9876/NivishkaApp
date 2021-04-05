@@ -21,7 +21,12 @@ class _Receipt extends State<Receipt> {
                 backgroundColor: Colors.white,
                 centerTitle: true,
                 elevation: 3,
-                leading: Icon(Icons.arrow_back, color: Colors.black, size: 16),
+                leading: InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child:
+                        Icon(Icons.arrow_back, color: Colors.black, size: 16)),
                 title: Text("Plumbers",
                     style: GoogleFonts.poppins(
                         color: Colors.black, fontSize: 14))),

@@ -17,7 +17,11 @@ class _ReferAndEarn extends State<ReferAndEarn> {
         child: Scaffold(
             appBar: AppBar(
               backgroundColor: Colors.green[500],
-              leading: Icon(Icons.chevron_left, color: Colors.white),
+              leading: InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Icon(Icons.chevron_left, color: Colors.white)),
               title: Text("Refer & Earn",
                   style:
                       GoogleFonts.poppins(color: Colors.white, fontSize: 14)),

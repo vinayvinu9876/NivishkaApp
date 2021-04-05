@@ -3,6 +3,7 @@ import 'package:nivishka_android/util/index.dart';
 import 'package:styled_text/styled_text.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import "CustomDrawer.dart";
 
 class Home extends StatefulWidget {
   @override
@@ -10,13 +11,21 @@ class Home extends StatefulWidget {
 }
 
 class _Home extends State<Home> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  void _openDrawer() {
+    _scaffoldKey.currentState.openDrawer();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         top: true,
         bottom: true,
         child: Scaffold(
-            bottomNavigationBar: CustomBottomNavBar(),
+            key: _scaffoldKey,
+            drawer: CustomDrawer(),
+            bottomNavigationBar: CustomBottomNavBar(selectedIndex: 0),
             body: Container(
                 child: ListView(children: [
               topAppBar(),
@@ -629,12 +638,16 @@ class _Home extends State<Home> {
                         margin: EdgeInsets.only(left: 5, top: 15),
                         child: TextField(
                           decoration: InputDecoration(
-                              prefixIcon: Icon(
-                                Icons.menu,
-                                color: Colors.green[800],
-                              ),
-                              suffixIcon: Icon(Icons.shopping_bag,
-                                  color: Colors.green[800]),
+                              prefixIcon: InkWell(
+                                  onTap: () {
+                                    _openDrawer();
+                                  },
+                                  child: Icon(
+                                    Icons.menu,
+                                    color: Colors.green[800],
+                                  )),
+                              suffixIcon:
+                                  Icon(Icons.search, color: Colors.green[800]),
                               fillColor: Colors.white,
                               filled: true,
                               border: OutlineInputBorder(

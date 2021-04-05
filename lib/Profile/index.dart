@@ -15,7 +15,7 @@ class _Profile extends State<Profile> {
         top: true,
         bottom: true,
         child: Scaffold(
-            bottomNavigationBar: CustomBottomNavBar(),
+            bottomNavigationBar: CustomBottomNavBar(selectedIndex: 3),
             backgroundColor: Colors.white,
             appBar: AppBar(
                 backgroundColor: Colors.green[600],
@@ -53,24 +53,28 @@ class _Profile extends State<Profile> {
                                     color: Colors.grey[600], fontSize: 10)),
                           ])),
                   Container(height: 10, color: Colors.grey[200]),
-                  Container(
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border(
-                              top: BorderSide(
-                                  width: 0.5, color: Colors.grey[400]),
-                              bottom: BorderSide(
-                                  width: 0.5, color: Colors.grey[400]))),
-                      child: Row(children: [
-                        Icon(Icons.chat, color: Colors.grey[800]),
-                        SizedBox(width: 10),
-                        Text("Help Center",
-                            style: GoogleFonts.poppins(
-                                color: Colors.grey[700],
-                                fontSize: 10,
-                                fontWeight: FontWeight.w600))
-                      ])),
+                  InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(context, "/sendReport");
+                      },
+                      child: Container(
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border(
+                                  top: BorderSide(
+                                      width: 0.5, color: Colors.grey[400]),
+                                  bottom: BorderSide(
+                                      width: 0.5, color: Colors.grey[400]))),
+                          child: Row(children: [
+                            Icon(Icons.chat, color: Colors.grey[800]),
+                            SizedBox(width: 10),
+                            Text("Help Center",
+                                style: GoogleFonts.poppins(
+                                    color: Colors.grey[700],
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w600))
+                          ]))),
                   Container(height: 10, color: Colors.grey[200]),
                   Expanded(
                       child: Container(
@@ -90,7 +94,10 @@ class _Profile extends State<Profile> {
                                     text: "Register as Partner"),
                                 iconText(
                                     icon: Icons.badge,
-                                    text: "About Nivishka Services"),
+                                    text: "About Nivishka Services",
+                                    ontap: () {
+                                      Navigator.pushNamed(context, "/about");
+                                    }),
                                 iconText(
                                     icon: Icons.share,
                                     text: "Share Nivishka App"),
@@ -101,7 +108,9 @@ class _Profile extends State<Profile> {
                                         context, "/referAndEarn")),
                                 iconText(
                                     icon: Icons.card_giftcard,
-                                    text: "My Gift Cards"),
+                                    text: "My Gift Cards",
+                                    ontap: () => Navigator.pushNamed(
+                                        context, "/giftCard")),
                                 iconText(
                                     icon: Icons.account_balance_wallet,
                                     text: "My Wallet",
@@ -109,10 +118,11 @@ class _Profile extends State<Profile> {
                                         context, "/wallet")),
                                 iconText(
                                     icon: Icons.schedule,
-                                    text: "Scheduled Booking"),
+                                    text: "Scheduled Booking",
+                                    ontap: () => Navigator.pushNamed(
+                                        context, "/bookingHistory")),
                                 iconText(
                                     icon: Icons.star, text: "Rate Nivishka"),
-                                iconText(icon: Icons.build, text: "Settings"),
                               ]))),
                   SizedBox(height: 10),
                   Container(

@@ -3,14 +3,20 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import "Colors.dart";
 
 class CustomBottomNavBar extends StatefulWidget {
+  CustomBottomNavBar({this.selectedIndex});
+  final int selectedIndex;
   @override
-  State<CustomBottomNavBar> createState() => _CustomBottomNavBar();
+  State<CustomBottomNavBar> createState() =>
+      _CustomBottomNavBar(selectedIndex: selectedIndex);
 }
 
 class _CustomBottomNavBar extends State<CustomBottomNavBar> {
+  _CustomBottomNavBar({this.selectedIndex});
+
+  final int selectedIndex;
+
   @override
   Widget build(BuildContext context) {
-    int _selectedIndex = 1;
     return Container(
       decoration: BoxDecoration(color: Colors.white, boxShadow: [
         BoxShadow(blurRadius: 20, color: Colors.black.withOpacity(.1))
@@ -33,24 +39,37 @@ class _CustomBottomNavBar extends State<CustomBottomNavBar> {
                   text: 'Home',
                 ),
                 GButton(
-                  icon: Icons.ac_unit,
-                  text: 'Likes',
-                ),
-                GButton(
-                  icon: Icons.search,
-                  text: 'Search',
-                ),
-                GButton(
                   icon: Icons.access_time_rounded,
+                  text: 'History',
+                ),
+                GButton(
+                  icon: Icons.account_balance_wallet,
+                  text: 'Wallet',
+                ),
+                GButton(
+                  icon: Icons.person,
                   text: 'Profile',
                 ),
               ],
-              selectedIndex: _selectedIndex,
+              selectedIndex: selectedIndex,
               onTabChange: (index) {
-                setState(() {
-                  print("Selected Index = $index");
-                  _selectedIndex = index;
-                });
+                if (selectedIndex == index) {
+                  return;
+                }
+                switch (index) {
+                  case 0:
+                    Navigator.pushNamed(context, "/home");
+                    break;
+                  case 1:
+                    Navigator.pushNamed(context, "/bookingHistory");
+                    break;
+                  case 2:
+                    Navigator.pushNamed(context, "/wallet");
+                    break;
+                  case 3:
+                    Navigator.pushNamed(context, "/profile");
+                    break;
+                }
               }),
         ),
       ),
