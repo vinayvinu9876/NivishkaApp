@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'dart:async';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -11,6 +11,13 @@ class _SplashScreen extends State<SplashScreen> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+
+    const threeSec = const Duration(seconds: 3);
+    new Timer.periodic(threeSec, (Timer t) {
+      Navigator.pushNamed(context, "/chooseLoginSignup");
+      t.cancel();
+    });
+
     return Scaffold(
       body: Container(
           height: height,

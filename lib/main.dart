@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: "/home",
+      initialRoute: "/splashScreen",
       routes: {
         "/splashScreen": (context) => SplashScreen(),
         "/enterPhone": (context) => EnterPhone(),
