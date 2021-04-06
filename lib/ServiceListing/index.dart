@@ -299,6 +299,7 @@ class _ServiceListing extends State<ServiceListing> {
 
   Widget counter() {
     return Container(
+        width: 87,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
           border: Border.all(width: 1, color: Colors.green),
@@ -307,38 +308,35 @@ class _ServiceListing extends State<ServiceListing> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Expanded(
-                  flex: 1,
-                  child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.green[600],
-                      ),
-                      child: Center(
-                          child: Text("-",
-                              style: GoogleFonts.poppins(
-                                fontSize: 16,
-                                color: Colors.white,
-                              ))))),
-              Expanded(
-                  flex: 1,
-                  child: Container(
-                      color: Colors.white,
-                      child: Center(
-                          child: Text(" 0 ",
-                              style: GoogleFonts.poppins(
-                                  color: Color(0xFF304FFE), fontSize: 10))))),
-              Expanded(
-                  flex: 1,
-                  child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.green[600],
-                      ),
-                      child: Center(
-                          child: Text("+",
-                              style: GoogleFonts.poppins(
-                                fontSize: 16,
-                                color: Colors.white,
-                              ))))),
+              Container(
+                  width: 30,
+                  decoration: BoxDecoration(
+                    color: Colors.green[600],
+                  ),
+                  child: Center(
+                      child: Text("-",
+                          style: GoogleFonts.poppins(
+                            fontSize: 16,
+                            color: Colors.white,
+                          )))),
+              Container(
+                  width: 25,
+                  color: Colors.white,
+                  child: Center(
+                      child: Text(" 0 ",
+                          style: GoogleFonts.poppins(
+                              color: Colors.green[800], fontSize: 10)))),
+              Container(
+                  width: 30,
+                  decoration: BoxDecoration(
+                    color: Colors.green[600],
+                  ),
+                  child: Center(
+                      child: Text("+",
+                          style: GoogleFonts.poppins(
+                            fontSize: 16,
+                            color: Colors.white,
+                          )))),
             ]));
   }
 

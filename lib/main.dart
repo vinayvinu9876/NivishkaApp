@@ -28,8 +28,9 @@ import 'package:nivishka_android/About/index.dart';
 import 'package:nivishka_android/GiftCard/index.dart';
 import 'package:nivishka_android/GiftCard/VoucherCode.dart';
 import 'package:nivishka_android/SendReport/index.dart';
+import 'package:nivishka_android/Search/index.dart';
 
-var kReleaseMode = true;
+var kReleaseMode = false;
 
 void main() => runApp(
       DevicePreview(
@@ -80,6 +81,7 @@ class MyApp extends StatelessWidget {
         "/giftCard": (context) => GiftCard(),
         "/voucherCode": (context) => VoucherCode(),
         "/sendReport": (context) => SendReport(),
+        "/search": (context) => Search(),
       },
     );
   }

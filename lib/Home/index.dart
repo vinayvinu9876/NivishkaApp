@@ -36,13 +36,13 @@ class _Home extends State<Home> {
               bestPicks(),
               SizedBox(height: 10),
               flashSale(),
-              SizedBox(height: 10),
+              SizedBox(height: 5),
             ]))));
   }
 
   Widget flashSale() {
     return Container(
-        height: 180,
+        height: 150,
         padding: EdgeInsets.only(left: 15, top: 5, bottom: 5),
         width: MediaQuery.of(context).size.width,
         child: Column(
@@ -634,30 +634,43 @@ class _Home extends State<Home> {
                                   ))
                             ])),
                     Container(
-                        height: 40,
+                        height: 45,
                         margin: EdgeInsets.only(left: 5, top: 15),
-                        child: TextField(
-                          decoration: InputDecoration(
-                              prefixIcon: InkWell(
-                                  onTap: () {
-                                    _openDrawer();
-                                  },
-                                  child: Icon(
-                                    Icons.menu,
-                                    color: Colors.green[800],
-                                  )),
-                              suffixIcon:
-                                  Icon(Icons.search, color: Colors.green[800]),
-                              fillColor: Colors.white,
-                              filled: true,
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              hintStyle: GoogleFonts.poppins(
-                                  color: Colors.grey[800], fontSize: 10),
-                              hintText: 'Tell me what you want'),
-                        ))
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(5)),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                  flex: 1,
+                                  child: InkWell(
+                                      onTap: _openDrawer,
+                                      child: Icon(Icons.menu,
+                                          color: Colors.green[800]))),
+                              Expanded(
+                                  flex: 8,
+                                  child: InkWell(
+                                      onTap: () {
+                                        Navigator.pushNamed(context, "/search");
+                                      },
+                                      child: Container(
+                                          padding: EdgeInsets.only(
+                                              top: 5,
+                                              left: 5,
+                                              right: 5,
+                                              bottom: 5),
+                                          child: Text("Start Typing here",
+                                              style: GoogleFonts.poppins(
+                                                  color: Colors.grey[600],
+                                                  fontSize: 10))))),
+                              Expanded(
+                                  flex: 1,
+                                  child: Icon(Icons.search,
+                                      color: Colors.green[800]))
+                            ])),
                   ])),
         ]));
   }

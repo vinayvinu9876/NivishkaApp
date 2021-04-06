@@ -76,54 +76,51 @@ class _Profile extends State<Profile> {
                                     fontWeight: FontWeight.w600))
                           ]))),
                   Container(height: 10, color: Colors.grey[200]),
-                  Expanded(
-                      child: Container(
-                          padding: EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border(
-                                top: BorderSide(
-                                    width: 0.5, color: Colors.grey[400]),
-                              )),
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                iconText(
-                                    icon: Icons.how_to_reg,
-                                    text: "Register as Partner"),
-                                iconText(
-                                    icon: Icons.badge,
-                                    text: "About Nivishka Services",
-                                    ontap: () {
-                                      Navigator.pushNamed(context, "/about");
-                                    }),
-                                iconText(
-                                    icon: Icons.share,
-                                    text: "Share Nivishka App"),
-                                iconText(
-                                    icon: Icons.loyalty,
-                                    text: "Refer and Earn",
-                                    ontap: () => Navigator.pushNamed(
-                                        context, "/referAndEarn")),
-                                iconText(
-                                    icon: Icons.card_giftcard,
-                                    text: "My Gift Cards",
-                                    ontap: () => Navigator.pushNamed(
-                                        context, "/giftCard")),
-                                iconText(
-                                    icon: Icons.account_balance_wallet,
-                                    text: "My Wallet",
-                                    ontap: () => Navigator.pushNamed(
-                                        context, "/wallet")),
-                                iconText(
-                                    icon: Icons.schedule,
-                                    text: "Scheduled Booking",
-                                    ontap: () => Navigator.pushNamed(
-                                        context, "/bookingHistory")),
-                                iconText(
-                                    icon: Icons.star, text: "Rate Nivishka"),
-                              ]))),
+                  Container(
+                      padding: EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border(
+                            top:
+                                BorderSide(width: 0.5, color: Colors.grey[400]),
+                          )),
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            iconText(
+                                icon: Icons.how_to_reg,
+                                text: "Register as Partner"),
+                            iconText(
+                                icon: Icons.badge,
+                                text: "About Nivishka Services",
+                                ontap: () {
+                                  Navigator.pushNamed(context, "/about");
+                                }),
+                            iconText(
+                                icon: Icons.share, text: "Share Nivishka App"),
+                            iconText(
+                                icon: Icons.loyalty,
+                                text: "Refer and Earn",
+                                ontap: () => Navigator.pushNamed(
+                                    context, "/referAndEarn")),
+                            iconText(
+                                icon: Icons.card_giftcard,
+                                text: "My Gift Cards",
+                                ontap: () =>
+                                    Navigator.pushNamed(context, "/giftCard")),
+                            iconText(
+                                icon: Icons.account_balance_wallet,
+                                text: "My Wallet",
+                                ontap: () =>
+                                    Navigator.pushNamed(context, "/wallet")),
+                            iconText(
+                                icon: Icons.schedule,
+                                text: "Scheduled Booking",
+                                ontap: () => Navigator.pushNamed(
+                                    context, "/bookingHistory")),
+                            iconText(icon: Icons.star, text: "Rate Nivishka"),
+                          ])),
                   SizedBox(height: 10),
                   Container(
                       child: Center(
