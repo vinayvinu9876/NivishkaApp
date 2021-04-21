@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1003488354402",
+    "firebase_url": "https://nivishka-1ccdf.firebaseio.com",
+    "project_id": "nivishka-1ccdf",
+    "storage_bucket": "nivishka-1ccdf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1003488354402:android:872d483375575362c9b13b",
+        "android_client_info": {
+          "package_name": "com.example.nivishka_android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1003488354402-cg9jopeteguu19bklavibj8utrt5htoq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqfJ-UnDXPozcMyZUJ-2pmCJDqZoKE78Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1003488354402-cg9jopeteguu19bklavibj8utrt5htoq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

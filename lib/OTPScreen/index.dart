@@ -3,15 +3,40 @@ import 'package:nivishka_android/util/index.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
 import 'package:styled_text/styled_text.dart';
+import 'package:provider/provider.dart';
+import "OTPModel.dart";
 
 class OTPScreen extends StatefulWidget {
+  final String phone;
+  OTPScreen({@required this.phone});
   @override
-  State<OTPScreen> createState() => _OTPScreen();
+  State<OTPScreen> createState() => _OTPScreen(phone: phone);
 }
 
 class _OTPScreen extends State<OTPScreen> {
+  final String phone;
+  _OTPScreen({@required this.phone});
+
+  @override
+  @protected
+  void initState() {
+    super.initState();
+    var otpModel = Provider.of<OTPModel>(context, listen: false);
+    print("Phone recevied at otp screen is $phone");
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => {otpModel.setPhoneNo(phone)});
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    var otpModel = Provider.of<OTPModel>(context, listen: false);
+    otpModel.cancelListeners();
+  }
+
   @override
   Widget build(BuildContext context) {
+    var otpModel = Provider.of<OTPModel>(context);
     double width = MediaQuery.of(context).size.width;
     return SafeArea(
         top: true,
@@ -64,48 +89,66 @@ class _OTPScreen extends State<OTPScreen> {
                                 fieldStyle: FieldStyle.underline,
                                 onCompleted: (pin) {
                                   print("Completed: " + pin);
+                                  otpModel.setOTP(pin);
                                 },
                               ),
                               SizedBox(height: 40),
-                              gradientButton(
-                                height: 40,
-                                width: MediaQuery.of(context).size.width * 0.7,
-                                gradient: LinearGradient(
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                  colors: gradient,
-                                ),
-                                shadow: [
-                                  BoxShadow(
-                                    color: Colors.grey,
-                                    offset: Offset(0.0, 1.0), //(x,y)
-                                    blurRadius: 3.0,
-                                  )
-                                ],
-                                border: Border.all(
-                                    color: Colors.white30, width: 1.0),
-                                text: "VERIFY CODE",
-                                fontSize: 12,
-                                fontColor: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                ontap: () =>
-                                    {Navigator.pushNamed(context, "/home")},
-                              ),
+                              otpModel.isLoading
+                                  ? Container(
+                                      height: 60,
+                                      width: 60,
+                                      child: Column(children: [
+                                        CircularProgressIndicator()
+                                      ]))
+                                  : gradientButton(
+                                      height: 40,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.7,
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                        colors: gradient,
+                                      ),
+                                      shadow: [
+                                        BoxShadow(
+                                          color: Colors.grey,
+                                          offset: Offset(0.0, 1.0), //(x,y)
+                                          blurRadius: 3.0,
+                                        )
+                                      ],
+                                      border: Border.all(
+                                          color: Colors.white30, width: 1.0),
+                                      text: "VERIFY CODE",
+                                      fontSize: 12,
+                                      fontColor: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      ontap: () => {otpModel.verifyOTP()},
+                                    ),
                               SizedBox(height: 20),
                               Center(
                                   child: InkWell(
                                       onTap: () {
-                                        Navigator.pushNamed(
-                                            context, "/enterPhone");
+                                        if (otpModel.nextOTPDelay == 0)
+                                          otpModel.resendOTP();
                                       },
                                       child: StyledText(
-                                        text: 'Resend OTP ? <red>(0:30)</red>',
+                                        text: otpModel.nextOTPDelay == 0
+                                            ? 'Resend OTP ? <red>Click here</red>'
+                                            : 'Resend OTP ? <red>(${otpModel.nextOTPDelay} seconds)</red>',
                                         styles: {
                                           'red': TextStyle(
                                             color: Colors.red,
                                           ),
                                         },
-                                      )))
+                                      ))),
+                              SizedBox(height: 10),
+                              Visibility(
+                                  visible: otpModel.errorMessage != null,
+                                  child: Center(
+                                      child: Text("${otpModel.errorMessage}",
+                                          style: GoogleFonts.poppins(
+                                              color: Colors.red,
+                                              fontSize: 10))))
                             ])))
                   ])),
         ));

@@ -1,16 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:nivishka_android/util/index.dart';
+import 'package:provider/provider.dart';
+import 'package:nivishka_android/AuthListener.dart';
+import 'CategoryDescriptionModel.dart';
 
 class CategoryDescription extends StatefulWidget {
+  final Map<String, dynamic> categoryData;
+  CategoryDescription({@required this.categoryData});
   @override
-  State<CategoryDescription> createState() => _CategoryDescription();
+  State<CategoryDescription> createState() =>
+      _CategoryDescription(categoryData: categoryData);
 }
 
 class _CategoryDescription extends State<CategoryDescription> {
+  final Map<String, dynamic> categoryData;
+  _CategoryDescription({@required this.categoryData});
+  @override
+  @protected
+  void initState() {
+    super.initState();
+    var catDescModel =
+        Provider.of<CategoryDescriptionModel>(context, listen: false);
+    print(
+        "Category Description cat id =  ${categoryData["cat_id"]} and name = ${categoryData["catName"]}");
+    WidgetsBinding.instance.addPostFrameCallback((_) => {
+          catDescModel.getCategoryData(
+              categoryData["catName"], categoryData["cat_id"].toString())
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+    var catDescModel = Provider.of<CategoryDescriptionModel>(context);
+    var authModel = Provider.of<AuthListener>(context);
     return SafeArea(
         top: true,
         bottom: true,
@@ -19,20 +43,22 @@ class _CategoryDescription extends State<CategoryDescription> {
                 height: height,
                 width: width,
                 child: ListView(children: [
-                  Container(
-                      width: width,
-                      height: height * 0.3,
-                      decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey,
-                              blurRadius: 25.0,
-                            ),
-                          ],
-                          image: DecorationImage(
-                              fit: BoxFit.fill,
-                              image: NetworkImage(
-                                  "https://profiles.sulekha.com/mstore/2063368/albums/default/thumbnailfull/plumber.jpg")))),
+                  Hero(
+                      tag: "${categoryData["imgUrl"]}",
+                      child: Container(
+                          width: width,
+                          height: height * 0.3,
+                          decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey,
+                                  blurRadius: 25.0,
+                                ),
+                              ],
+                              image: DecorationImage(
+                                  fit: BoxFit.fill,
+                                  image: NetworkImage(
+                                      "${categoryData["imgUrl"]}"))))),
                   Container(
                       width: width,
                       height: 55,
@@ -49,7 +75,7 @@ class _CategoryDescription extends State<CategoryDescription> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text("Plumbers and Rapairs",
+                            Text("${categoryData["catName"]}",
                                 style: GoogleFonts.poppins(
                                     color: Colors.white,
                                     fontSize: 12,
@@ -78,30 +104,11 @@ class _CategoryDescription extends State<CategoryDescription> {
                           spacing: 25.0,
                           runSpacing: 10.0,
                           children: [
-                            categorySelect(
-                                image:
-                                    "https://images-na.ssl-images-amazon.com/images/I/41NiOrxNI8L.jpg",
-                                name: "Basin and Sink"),
-                            categorySelect(
-                                image:
-                                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvh8KQtTexpbt3DYLqF8XmOiED-hcqmvdLog&usqp=CAU",
-                                name: "Bath Fitting"),
-                            categorySelect(
-                                image:
-                                    "https://web.cdn.aspect.co.uk/wp-content/uploads/2018/08/05201431/Drainage_SP_0081_Blocked_Sink-1024x683.jpg",
-                                name: "Blockage"),
-                            categorySelect(
-                                image:
-                                    "https://images-na.ssl-images-amazon.com/images/I/415bpe12NML._SY355_.jpg",
-                                name: "Tap and Mixer"),
-                            categorySelect(
-                                image:
-                                    "https://secure.img1-fg.wfcdn.com/im/19969045/compr-r85/1167/116735217/128-gpf-elongated-one-piece-toilet-seat-included.jpg",
-                                name: "Toilet"),
-                            categorySelect(
-                                image:
-                                    "https://5.imimg.com/data5/GB/LI/MY-25595663/plastic-water-tank-500x500.jpg",
-                                name: "Water Tank"),
+                            for (var item in catDescModel.subCategoryData)
+                              categorySelect(
+                                image: item["imgUrl"],
+                                name: item["cat_name"],
+                              )
                           ])),
                   Container(
                     height: 10,
@@ -149,13 +156,14 @@ class _CategoryDescription extends State<CategoryDescription> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Plumbers in Bangalore",
+                            Text(
+                                "${categoryData["catName"]} in ${authModel.cityCode == null ? "" : authModel.cityCode}",
                                 style: GoogleFonts.poppins(
                                     color: Colors.black,
                                     fontSize: 12,
                                     fontWeight: FontWeight.bold)),
                             Text(
-                                "Get plumbers in Bangalore near you within 90 minute with 300..",
+                                "Get ${categoryData["catName"]} near you within 90 minutes",
                                 style: GoogleFonts.poppins(
                                     color: Colors.grey, fontSize: 10))
                           ])),
@@ -171,13 +179,14 @@ class _CategoryDescription extends State<CategoryDescription> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Plumbers",
+                            Text("${categoryData["catName"]}",
                                 style: GoogleFonts.poppins(
                                   color: Colors.black,
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,
                                 )),
-                            Text("394 plumbers in bangalore",
+                            Text(
+                                "394 plumbers in ${authModel.cityCode == null ? "" : authModel.cityCode}",
                                 style: GoogleFonts.poppins(
                                     color: Colors.grey, fontSize: 10)),
                             SizedBox(height: 25),

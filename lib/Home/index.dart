@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:nivishka_android/util/index.dart';
+import 'package:nivishka_android/CategoryDescription/index.dart';
 import 'package:styled_text/styled_text.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:provider/provider.dart';
 import "CustomDrawer.dart";
+import "HomeModel.dart";
 
 class Home extends StatefulWidget {
   @override
@@ -13,12 +16,29 @@ class Home extends StatefulWidget {
 class _Home extends State<Home> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  @override
+  void initState() {
+    super.initState();
+    var homeModel = Provider.of<HomeModel>(context, listen: false);
+    WidgetsBinding.instance.addPostFrameCallback((_) => homeModel.getAllData());
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    var homeModel = Provider.of<HomeModel>(context, listen: false);
+    homeModel.cancelSubscriptions();
+  }
+
   void _openDrawer() {
     _scaffoldKey.currentState.openDrawer();
   }
 
   @override
   Widget build(BuildContext context) {
+    var homeModel = Provider.of<HomeModel>(context);
+    print(
+        "isLoading = ${homeModel.isLoading} and length of promo = ${homeModel.promoData.length}");
     return SafeArea(
         top: true,
         bottom: true,
@@ -30,13 +50,27 @@ class _Home extends State<Home> {
                 child: ListView(children: [
               topAppBar(),
               SizedBox(height: 10),
-              promo(),
-              category(),
+              Visibility(
+                  visible: (!homeModel.isLoading) &&
+                      (homeModel.promoData.length > 0),
+                  child: promo()),
+              Visibility(
+                  visible: (!homeModel.isLoading) &&
+                      (homeModel.categoryData.length > 0),
+                  child: category()),
               SizedBox(height: 10),
-              bestPicks(),
+              Visibility(visible: !homeModel.isLoading, child: bestPicks()),
               SizedBox(height: 10),
-              flashSale(),
+              Visibility(visible: !homeModel.isLoading, child: flashSale()),
               SizedBox(height: 5),
+              Visibility(
+                  visible: homeModel.isLoading,
+                  child: Container(
+                      height: 100,
+                      width: 100,
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      )))
             ]))));
   }
 
@@ -298,6 +332,7 @@ class _Home extends State<Home> {
   }
 
   Widget category() {
+    var homeModel = Provider.of<HomeModel>(context);
     return Container(
         padding: EdgeInsets.only(left: 10, top: 10, right: 0, bottom: 10),
         child: Column(
@@ -332,58 +367,21 @@ class _Home extends State<Home> {
                   height: 90,
                   width: MediaQuery.of(context).size.width,
                   child: ListView(scrollDirection: Axis.horizontal, children: [
-                    categoryIndividual(
-                        imgurl:
-                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIYHM6EoOE4xAFozSlHYW19OcjlT8ETx_hzA&usqp=CAU",
-                        name: "Womens Salon"),
-                    categoryIndividual(
-                        imgurl:
-                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBS-ujyWqYDfzl_okH3J-rqO3PMVpV248BFg&usqp=CAU",
-                        name: "Mens Salon"),
-                    categoryIndividual(
-                        imgurl:
-                            "https://hiring-assets.careerbuilder.com/media/attachments/careerbuilder-original-3580.jpg?1511294086",
-                        name: "Electrician"),
-                    categoryIndividual(
-                        imgurl:
-                            "https://cdn.123test.com/content/beroepen/loodgieter.jpg",
-                        name: "Plumber"),
-                    categoryIndividual(
-                        imgurl:
-                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4MRYKUdXecNurqmNdxksDyEiZtV4ySn1stw&usqp=CAU",
-                        name: "Repairs"),
-                    categoryIndividual(
-                        imgurl:
-                            "https://content3.jdmagicbox.com/comp/sahibabad/l3/011pxx11.xx11.191006142514.x2l3/catalogue/all-time-massage-parlour-sahibabad-0xs75zq7ih.jpg?clr=4d331a",
-                        name: "Massage"),
-                    categoryIndividual(
-                        imgurl:
-                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBS-ujyWqYDfzl_okH3J-rqO3PMVpV248BFg&usqp=CAU",
-                        name: "Mens"),
-                    categoryIndividual(
-                        imgurl:
-                            "https://hiring-assets.careerbuilder.com/media/attachments/careerbuilder-original-3580.jpg?1511294086",
-                        name: "Electrician"),
-                    categoryIndividual(
-                        imgurl:
-                            "https://cdn.123test.com/content/beroepen/loodgieter.jpg",
-                        name: "Plumber"),
-                    categoryIndividual(
-                        imgurl:
-                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4MRYKUdXecNurqmNdxksDyEiZtV4ySn1stw&usqp=CAU",
-                        name: "Repairs"),
-                    categoryIndividual(
-                        imgurl:
-                            "https://content3.jdmagicbox.com/comp/sahibabad/l3/011pxx11.xx11.191006142514.x2l3/catalogue/all-time-massage-parlour-sahibabad-0xs75zq7ih.jpg?clr=4d331a",
-                        name: "Massage"),
+                    for (var item in homeModel.categoryData)
+                      categoryIndividual(categoryData: item)
                   ]))
             ]));
   }
 
-  Widget categoryIndividual({@required String imgurl, @required String name}) {
+  Widget categoryIndividual({@required Map<String, dynamic> categoryData}) {
     return InkWell(
         onTap: () {
-          Navigator.pushNamed(context, "/categoryDescription");
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    CategoryDescription(categoryData: categoryData)),
+          );
         },
         child: Container(
             height: 90,
@@ -402,31 +400,34 @@ class _Home extends State<Home> {
                           padding: EdgeInsets.all(8),
                           child: Align(
                               alignment: Alignment.bottomCenter,
-                              child: Text("$name",
+                              child: Text("${categoryData["catName"]}",
                                   style: GoogleFonts.poppins(
                                       fontWeight: FontWeight.w500,
                                       fontSize: 8,
                                       color: Colors.black)))))),
-              Container(
-                  height: 50,
-                  width: 60,
-                  margin: EdgeInsets.only(left: 25),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey,
-                          blurRadius: 2,
-                        )
-                      ],
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: NetworkImage("$imgurl"),
-                      )))
+              Hero(
+                  tag: "${categoryData["imgUrl"]}",
+                  child: Container(
+                      height: 50,
+                      width: 60,
+                      margin: EdgeInsets.only(left: 25),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey,
+                              blurRadius: 2,
+                            )
+                          ],
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: NetworkImage("${categoryData["imgUrl"]}"),
+                          ))))
             ])));
   }
 
   Widget promo() {
+    var homeModel = Provider.of<HomeModel>(context);
     return Container(
         padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10),
         height: 120,
@@ -466,38 +467,16 @@ class _Home extends State<Home> {
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white,
                                       fontSize: 8)))),
-                      promoBox(
-                        imgurl:
-                            "https://i0.wp.com/cdn.whatsuplife.in/kolkata/blog/2017/08/featured-8.jpg",
-                        heading: "Spring Sale",
-                        bigText: "50%",
-                        smallText: "off",
-                        buttonName: "Apply Now",
-                      ),
-                      promoBox(
-                        imgurl:
-                            "https://m.economictimes.com/thumb/msid-72103130,width-1200,height-900,resizemode-4,imgsize-626385/femina-flaunt-studio-salon-will-follow-a-hybrid-model-of-growth-to-expand-to-over-100-salons-in-five-years-.jpg",
-                        heading: "Fashion Sale",
-                        bigText: "30%",
-                        smallText: "off",
-                        buttonName: "Apply Now",
-                      ),
-                      promoBox(
-                        imgurl:
-                            "https://i0.wp.com/cdn.whatsuplife.in/kolkata/blog/2017/08/featured-8.jpg",
-                        heading: "Spring Sale",
-                        bigText: "50%",
-                        smallText: "off",
-                        buttonName: "Apply Now",
-                      ),
-                      promoBox(
-                        imgurl:
-                            "https://m.economictimes.com/thumb/msid-72103130,width-1200,height-900,resizemode-4,imgsize-626385/femina-flaunt-studio-salon-will-follow-a-hybrid-model-of-growth-to-expand-to-over-100-salons-in-five-years-.jpg",
-                        heading: "Fashion Sale",
-                        bigText: "30%",
-                        smallText: "off",
-                        buttonName: "Apply Now",
-                      ),
+                      for (var item in homeModel.promoData)
+                        promoBox(
+                          imgurl: "${item["imgUrl"]}",
+                          heading: "${item["promo_name"]}",
+                          bigText: item["isPercentDiscount"]
+                              ? "${item["percentageDiscount"]} %"
+                              : "₹ ${item["max_discount_rupees"]}",
+                          smallText: "off",
+                          buttonName: "Apply Now",
+                        )
                     ],
                   ))
             ]));
@@ -590,6 +569,7 @@ class _Home extends State<Home> {
   }
 
   Widget topAppBar() {
+    var homeModel = Provider.of<HomeModel>(context);
     double width = MediaQuery.of(context).size.width;
     return Container(
         height: 145,
@@ -626,7 +606,8 @@ class _Home extends State<Home> {
                                     fontWeight: FontWeight.w500,
                                     fontSize: 12,
                                   )),
-                              Text("Vinay P",
+                              Text(
+                                  "${homeModel.userData == null ? "Loading..." : homeModel.userData["fname"] + " " + homeModel.userData["lname"]}",
                                   style: GoogleFonts.poppins(
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold,

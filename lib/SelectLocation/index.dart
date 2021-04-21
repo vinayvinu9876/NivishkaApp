@@ -201,8 +201,8 @@ class MapSampleState extends State<MapSample> {
   static const LatLng _center = const LatLng(12.9716, 77.5946);
 
   Future<void> _onMapCreated(GoogleMapController controller) async {
-    //Position position = await _determinePosition();
-    //_add(position);
+    Position position = await _determinePosition();
+    _add(position);
     _controller.complete(controller);
   }
 

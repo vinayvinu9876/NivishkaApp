@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nivishka_android/util/index.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 
 class EnterPhone extends StatefulWidget {
   @override
@@ -113,18 +114,16 @@ class _EnterPhone extends State<EnterPhone> {
   }
 
   Widget customTextField({@required String placeholder, int maxLength}) {
-    return TextField(
-      maxLength: maxLength,
+    return IntlPhoneField(
       decoration: InputDecoration(
-          contentPadding: EdgeInsets.all(5),
-          border: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey[300]),
-          ),
-          focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey[300]),
-          ),
-          hintStyle: GoogleFonts.poppins(fontSize: 12, color: Colors.grey[400]),
-          hintText: '$placeholder'),
+        contentPadding: EdgeInsets.all(5),
+        labelText: 'Phone Number',
+        labelStyle: GoogleFonts.poppins(fontSize: 10),
+      ),
+      initialCountryCode: 'IN',
+      onChanged: (phone) {
+        print(phone.completeNumber);
+      },
     );
   }
 }
