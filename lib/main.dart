@@ -39,6 +39,7 @@ import 'package:nivishka_android/OTPScreen/OTPModel.dart';
 import 'package:nivishka_android/Home/HomeModel.dart';
 import 'package:nivishka_android/SelectCity/SelectCityModel.dart';
 import 'package:nivishka_android/CategoryDescription/CategoryDescriptionModel.dart';
+import 'package:nivishka_android/ServiceListing/ServiceListingModel.dart';
 
 import 'AppServices/NavigatorService.dart';
 import 'AppServices/services.dart';
@@ -79,7 +80,8 @@ class MaterialAppCopy extends StatelessWidget {
           ChangeNotifierProvider(create: (context) => HomeModel()),
           ChangeNotifierProvider(create: (context) => SelectCityModel()),
           ChangeNotifierProvider(
-              create: (context) => CategoryDescriptionModel())
+              create: (context) => CategoryDescriptionModel()),
+          ChangeNotifierProvider(create: (context) => ServiceListingModel())
         ],
         child: MaterialApp(
           title: 'Nivishka',
@@ -119,7 +121,6 @@ class MaterialAppCopy extends StatelessWidget {
             "/promoDesc": (context) => PromoDescription(),
             "/bestPicks": (context) => BestPicks(),
             "/flashSale": (context) => FlashSale(),
-            "/serviceListing": (context) => ServiceListing(),
             "/receipt": (context) => Receipt(),
             "/serviceLocationSelect": (context) => ServiceLocationSelect(),
             "/selectLocation": (context) => SelectLocation(),

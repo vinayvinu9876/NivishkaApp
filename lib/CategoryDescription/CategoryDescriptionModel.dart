@@ -18,9 +18,11 @@ class CategoryDescriptionModel extends ChangeNotifier {
   void cancelSubscriptions() {
     if (subscription != null) {
       subscription.cancel();
+      subscription = null;
     }
     if (partnerSubscription != null) {
       partnerSubscription.cancel();
+      partnerSubscription = null;
     }
   }
 

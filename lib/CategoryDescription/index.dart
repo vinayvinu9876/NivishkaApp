@@ -3,6 +3,7 @@ import 'package:nivishka_android/util/index.dart';
 import 'package:provider/provider.dart';
 import 'package:nivishka_android/AuthListener.dart';
 import 'CategoryDescriptionModel.dart';
+import 'package:nivishka_android/ServiceListing/index.dart';
 
 class CategoryDescription extends StatefulWidget {
   final Map<String, dynamic> categoryData;
@@ -80,7 +81,7 @@ class _CategoryDescription extends State<CategoryDescription> {
                                     color: Colors.white,
                                     fontSize: 12,
                                     fontWeight: FontWeight.bold)),
-                            Text("Get upto 15% offer | Limited Offer",
+                            Text("${categoryData["subtitle"]}",
                                 style: GoogleFonts.poppins(
                                   color: Colors.white70,
                                   fontSize: 8,
@@ -108,6 +109,7 @@ class _CategoryDescription extends State<CategoryDescription> {
                               categorySelect(
                                 image: item["imgUrl"],
                                 name: item["cat_name"],
+                                catID: item["cat_id"],
                               )
                           ])),
                   Container(
@@ -186,7 +188,7 @@ class _CategoryDescription extends State<CategoryDescription> {
                                   fontWeight: FontWeight.bold,
                                 )),
                             Text(
-                                "394 plumbers in ${authModel.cityCode == null ? "" : authModel.cityCode}",
+                                "${categoryData["no_of_partners"]} plumbers in ${authModel.cityCode == null ? "" : authModel.cityCode}",
                                 style: GoogleFonts.poppins(
                                     color: Colors.grey, fontSize: 10)),
                             SizedBox(height: 25),
@@ -422,10 +424,18 @@ class _CategoryDescription extends State<CategoryDescription> {
         ]));
   }
 
-  Widget categorySelect({@required String image, @required String name}) {
+  Widget categorySelect(
+      {@required String image, @required String name, @required String catID}) {
     return InkWell(
         onTap: () {
-          Navigator.pushNamed(context, "/serviceListing");
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ServiceListing(
+                      categoryID: catID,
+                      catName: categoryData["catName"],
+                    )),
+          );
         },
         child: Container(
             height: 100,

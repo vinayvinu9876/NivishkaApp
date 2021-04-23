@@ -26,6 +26,7 @@ class SelectCityModel extends ChangeNotifier {
   void cancelListeners() {
     if (cityListener != null) {
       cityListener.cancel();
+      cityListener = null;
     }
   }
 

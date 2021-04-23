@@ -19,7 +19,10 @@ class OTPModel extends ChangeNotifier {
   FirebaseAuth auth = FirebaseAuth.instance;
 
   void cancelListeners() {
-    if (_timer != null) _timer.cancel();
+    if (_timer != null) {
+      _timer.cancel();
+      _timer = null;
+    }
   }
 
   void setPhoneNo(String value) {

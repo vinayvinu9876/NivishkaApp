@@ -1,21 +1,89 @@
 import 'package:flutter/material.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:nivishka_android/util/index.dart';
+import 'package:provider/provider.dart';
+import 'ServiceListingModel.dart';
+import 'dart:math' as math;
 
 class ServiceListing extends StatefulWidget {
+  final String categoryID, catName;
+  final int scrollToSubCatId;
+  ServiceListing(
+      {@required this.categoryID,
+      @required this.catName,
+      @required this.scrollToSubCatId});
   @override
-  State<ServiceListing> createState() => _ServiceListing();
+  State<ServiceListing> createState() => _ServiceListing(
+      categoryID: categoryID,
+      catName: catName,
+      scrollToSubCatId: scrollToSubCatId);
 }
 
 class _ServiceListing extends State<ServiceListing> {
+  final String categoryID, catName;
+  final int scrollToSubCatId;
+  _ServiceListing(
+      {@required this.categoryID,
+      @required this.catName,
+      @required this.scrollToSubCatId});
+
+  final random = math.Random();
+  final scrollDirection = Axis.vertical;
+  int currentIndex = 1;
+  bool scrolledToInitialIndex = false;
+
+  AutoScrollController controller;
+  List<List<int>> randomList;
+
+  @override
+  @protected
+  void initState() {
+    super.initState();
+    var serviceListModel =
+        Provider.of<ServiceListingModel>(context, listen: false);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      serviceListModel.callEverything(categoryID);
+    });
+
+    controller = AutoScrollController(
+        viewportBoundaryGetter: () =>
+            Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
+        axis: scrollDirection);
+  }
+
+  @override
+  @protected
+  void dispose() {
+    super.dispose();
+    var serviceListModel =
+        Provider.of<ServiceListingModel>(context, listen: false);
+    serviceListModel.killAllSubscriptions();
+  }
+
+  double getServiceCost(Map<String, dynamic> serviceData) {
+    int total = serviceData["partner_cost"] + serviceData["charges"];
+    double discount = (total) * (serviceData["discount"] / 100);
+    return ((total - discount));
+  }
+
+  Future _scrollToIndex(int index) async {
+    await controller.scrollToIndex(index,
+        duration: Duration(milliseconds: 500),
+        preferPosition: AutoScrollPosition.begin);
+    controller.highlight(index);
+  }
+
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
+    var serviceListModel = Provider.of<ServiceListingModel>(context);
     double width = MediaQuery.of(context).size.width;
+
     return SafeArea(
         top: true,
         child: Scaffold(
-            bottomNavigationBar: checkoutButton(),
+            bottomNavigationBar: Visibility(
+                visible: (serviceListModel.cartData.keys.length > 0),
+                child: checkoutButton()),
             backgroundColor: Colors.grey[100],
             appBar: AppBar(
                 elevation: 4,
@@ -29,95 +97,64 @@ class _ServiceListing extends State<ServiceListing> {
                       Icons.arrow_back,
                       color: Colors.black,
                     )),
-                title: Text("Plumbers and Repairs",
+                title: Text("$catName",
                     style: GoogleFonts.poppins(
                       fontSize: 14,
                       color: Colors.black,
                     ))),
-            body: Container(
-                height: height,
-                width: width,
-                child: ListView(children: [
-                  categoryList(),
-                  SizedBox(height: 10),
-                  Container(
-                      width: width,
-                      padding: EdgeInsets.all(10),
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+            body: Column(children: [
+              categoryList(),
+              Expanded(
+                  child: Container(
+                      child: ListView(
+                          scrollDirection: scrollDirection,
+                          controller: controller,
                           children: [
-                            Text("Basin & Sink",
-                                style: GoogleFonts.poppins(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            SizedBox(height: 10),
-                            item(
-                                name: "Waste Pipe",
-                                imgUrl:
-                                    "https://res.cloudinary.com/urbanclap/image/upload/t_medium_res_template,q_30/categories/category_v2/category_a15b16e0.jpeg",
-                                rating: "4.5",
-                                noOfRatings: "14.5k",
-                                cost: "119",
-                                bulletPoints: [
-                                  "Best Suited for installation Leakage",
-                                  "Best Suited for installation Leakage",
-                                ]),
-                            SizedBox(height: 10),
-                            item(
-                                name: "Washbasin Repair",
-                                imgUrl:
-                                    "https://res.cloudinary.com/urbanclap/image/upload/t_medium_res_template,q_30/categories/category_v2/category_a7bc5bd0.jpeg",
-                                rating: "4.72",
-                                noOfRatings: "8.7k",
-                                cost: "169  ",
-                                bulletPoints: [
-                                  "Suitable for leakage under basin",
-                                  "Any one of coupling or bottle trap repair",
-                                  "Any one of coupling or bottle trap repair"
-                                ]),
-                          ])),
-                  SizedBox(height: 10),
-                  Container(
-                      width: width,
-                      padding: EdgeInsets.all(10),
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Bath Fitting",
-                                style: GoogleFonts.poppins(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            SizedBox(height: 10),
-                            item(
-                                name: "Bath Fitting Installation",
-                                imgUrl:
-                                    "https://res.cloudinary.com/urbanclap/image/upload/t_medium_res_template,q_30/images/supply/customer-app-supply/1597927820534-5be4b1.png",
-                                rating: "4.74",
-                                noOfRatings: "1.9k",
-                                cost: "100",
-                                bulletPoints: [
-                                  "Any one tap or holder",
-                                ]),
-                            SizedBox(height: 10),
-                            item(
-                                name: "Shower Installation Ceiling Mounted",
-                                imgUrl:
-                                    "https://res.cloudinary.com/urbanclap/image/upload/t_medium_res_template,q_30/categories/category_v2/category_4f7dff40.png",
-                                rating: "4.72",
-                                noOfRatings: "1.7k",
-                                cost: "139  ",
-                                bulletPoints: []),
-                          ])),
-                ]))));
+                    SizedBox(height: 10),
+                    for (var item in serviceListModel.subCategoryData)
+                      if (serviceListModel.servicesData
+                          .containsKey(item["sub_cat_id"].toString()))
+                        AutoScrollTag(
+                            key: ValueKey(item["sub_cat_id"]),
+                            controller: controller,
+                            index: item["sub_cat_id"],
+                            highlightColor: Colors.black.withOpacity(0.1),
+                            child: Container(
+                                width: width,
+                                padding: EdgeInsets.all(10),
+                                child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text("${item["cat_name"]}",
+                                          style: GoogleFonts.poppins(
+                                            color: Colors.black,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                      SizedBox(height: 10),
+                                      for (var service
+                                          in serviceListModel.servicesData[
+                                              item["sub_cat_id"].toString()])
+                                        serviceItem(serviceData: service),
+                                      SizedBox(height: 10),
+                                    ]))),
+                  ])))
+            ])));
   }
 
   Widget checkoutButton() {
+    var serviceListModel = Provider.of<ServiceListingModel>(context);
+    int totalServices = 0;
+    double totalValue = 0;
+
+    serviceListModel.cartData.keys.forEach((key) {
+      totalValue += (getServiceCost(serviceListModel.cartData[key]) *
+          (serviceListModel.cartData[key]["no_of_items"]));
+      totalServices += serviceListModel.cartData[key]["no_of_items"];
+    });
+
     return Container(
         width: MediaQuery.of(context).size.width,
         height: 70,
@@ -157,13 +194,13 @@ class _ServiceListing extends State<ServiceListing> {
                                   border:
                                       Border.all(width: 1, color: Colors.white),
                                 ),
-                                child: Text("1",
+                                child: Text("$totalServices",
                                     style: GoogleFonts.poppins(
                                       color: Colors.white,
                                       fontSize: 14,
                                     ))),
                             SizedBox(width: 10),
-                            Text("₹ 119",
+                            Text("₹ $totalValue",
                                 style: GoogleFonts.roboto(
                                   color: Colors.white,
                                 ))
@@ -184,14 +221,10 @@ class _ServiceListing extends State<ServiceListing> {
                     ]))));
   }
 
-  Widget item({
-    @required String name,
-    @required String imgUrl,
-    @required String rating,
-    @required String noOfRatings,
-    @required String cost,
-    @required List<String> bulletPoints,
-  }) {
+  Widget serviceItem({@required Map<String, dynamic> serviceData}) {
+    int totalCost = serviceData["partner_cost"] + serviceData["charges"];
+    double discountMoney = (serviceData["discount"] / 100) * totalCost;
+    int offerPrice = (totalCost - discountMoney).toInt();
     return Card(
         elevation: 0,
         child: Container(
@@ -215,7 +248,8 @@ class _ServiceListing extends State<ServiceListing> {
                                     borderRadius: BorderRadius.circular(3),
                                     image: DecorationImage(
                                         fit: BoxFit.fill,
-                                        image: NetworkImage("$imgUrl"))))),
+                                        image: NetworkImage(
+                                            "${serviceData["imageUrl"]}"))))),
                         SizedBox(width: 10),
                         Expanded(
                           flex: 5,
@@ -224,7 +258,7 @@ class _ServiceListing extends State<ServiceListing> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                Text("$name",
+                                Text("${serviceData["service_name"]}",
                                     style: GoogleFonts.poppins(
                                       fontSize: 12,
                                       color: Color(0xFF252525),
@@ -242,21 +276,29 @@ class _ServiceListing extends State<ServiceListing> {
                                         color: Colors.green[800],
                                       ),
                                       SizedBox(width: 3),
-                                      Text("$rating",
+                                      Text("${serviceData["ratings"]}",
                                           style: GoogleFonts.poppins(
                                               color: Colors.green[800],
                                               fontWeight: FontWeight.bold,
                                               fontSize: 12)),
                                       SizedBox(width: 5),
-                                      Text("$noOfRatings ratings",
+                                      Text("${serviceData["total_raters"]}",
                                           style: GoogleFonts.poppins(
                                               color: Colors.grey[500],
                                               fontSize: 10))
                                     ]),
                                 SizedBox(height: 3),
-                                Text("₹ $cost",
+                                Text("₹ $offerPrice",
                                     style: GoogleFonts.poppins(
-                                        color: Colors.black, fontSize: 12))
+                                        color: Colors.black, fontSize: 12)),
+                                Visibility(
+                                    visible: discountMoney > 0,
+                                    child: Text("₹ $totalCost",
+                                        style: GoogleFonts.poppins(
+                                            decoration:
+                                                TextDecoration.lineThrough,
+                                            color: Colors.black,
+                                            fontSize: 10))),
                               ])),
                         ),
                         Expanded(
@@ -270,25 +312,30 @@ class _ServiceListing extends State<ServiceListing> {
                                           CrossAxisAlignment.center,
                                       children: [
                                 SizedBox(height: 15),
-                                counter(),
+                                counter(
+                                  serviceId:
+                                      serviceData["service_id"].toString(),
+                                  serviceData: serviceData,
+                                ),
                               ]))),
                         )
                       ]),
                   SizedBox(height: 15),
                   Visibility(
-                      visible: bulletPoints.length > 0,
+                      visible: serviceData["service_description"].length > 0,
                       child: Container(height: 1, color: Colors.grey[100])),
                   Visibility(
-                      visible: bulletPoints.length > 0,
+                      visible: serviceData["service_description"].length > 0,
                       child: SizedBox(height: 10)),
                   Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        for (String i in bulletPoints)
+                        for (String serviceDescription
+                            in serviceData["service_description"])
                           Container(
                               margin: EdgeInsets.only(top: 5, bottom: 5),
-                              child: Bullet("$i",
+                              child: Bullet("$serviceDescription",
                                   style: GoogleFonts.poppins(
                                     color: Colors.grey[500],
                                     fontSize: 10,
@@ -297,7 +344,19 @@ class _ServiceListing extends State<ServiceListing> {
                 ])));
   }
 
-  Widget counter() {
+  Widget counter(
+      {@required String serviceId,
+      @required Map<String, dynamic> serviceData}) {
+    var serviceListModel = Provider.of<ServiceListingModel>(context);
+
+    int noOfItems = 0;
+
+    if (serviceListModel.cartData.containsKey(serviceId)) {
+      noOfItems = serviceListModel.cartData[serviceId]["no_of_items"];
+    } else {
+      noOfItems = 0;
+    }
+
     return Container(
         width: 87,
         decoration: BoxDecoration(
@@ -308,73 +367,65 @@ class _ServiceListing extends State<ServiceListing> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                  width: 30,
-                  decoration: BoxDecoration(
-                    color: Colors.green[600],
-                  ),
-                  child: Center(
-                      child: Text("-",
-                          style: GoogleFonts.poppins(
-                            fontSize: 16,
-                            color: Colors.white,
-                          )))),
+              InkWell(
+                  onTap: () {
+                    serviceListModel.removeFromCart(serviceId);
+                  },
+                  child: Container(
+                      width: 30,
+                      decoration: BoxDecoration(
+                        color: Colors.green[600],
+                      ),
+                      child: Center(
+                          child: Text("-",
+                              style: GoogleFonts.poppins(
+                                fontSize: 16,
+                                color: Colors.white,
+                              ))))),
               Container(
                   width: 25,
                   color: Colors.white,
                   child: Center(
-                      child: Text(" 0 ",
+                      child: Text(" $noOfItems ",
                           style: GoogleFonts.poppins(
                               color: Colors.green[800], fontSize: 10)))),
-              Container(
-                  width: 30,
-                  decoration: BoxDecoration(
-                    color: Colors.green[600],
-                  ),
-                  child: Center(
-                      child: Text("+",
-                          style: GoogleFonts.poppins(
-                            fontSize: 16,
-                            color: Colors.white,
-                          )))),
+              InkWell(
+                  onTap: () {
+                    serviceListModel.addToCart(serviceId, serviceData);
+                  },
+                  child: Container(
+                      width: 30,
+                      decoration: BoxDecoration(
+                        color: Colors.green[600],
+                      ),
+                      child: Center(
+                          child: Text("+",
+                              style: GoogleFonts.poppins(
+                                fontSize: 16,
+                                color: Colors.white,
+                              ))))),
             ]));
   }
 
   Widget categoryList() {
+    var serviceListModel = Provider.of<ServiceListingModel>(context);
     return Container(
         width: MediaQuery.of(context).size.width,
         height: 60,
         color: Colors.white,
         padding: EdgeInsets.only(top: 10, bottom: 10),
         child: ListView(scrollDirection: Axis.horizontal, children: [
-          categoryListWidget(
-            name: "Basin and Sink",
-          ),
-          categoryListWidget(
-            name: "Bath Fitting",
-            active: true,
-          ),
-          categoryListWidget(
-            name: "Blockage",
-          ),
-          categoryListWidget(
-            name: "Tap & Mixer",
-          ),
-          categoryListWidget(
-            name: "Toilet",
-          ),
-          categoryListWidget(
-            name: "Water Tank",
-          ),
-          categoryListWidget(
-            name: "Motor",
-          ),
-          categoryListWidget(
-            name: "Minor Installation",
-          ),
-          categoryListWidget(
-            name: "Looking for Something Else ?",
-          ),
+          for (var item in serviceListModel.subCategoryData)
+            InkWell(
+                onTap: () {
+                  _scrollToIndex(item["sub_cat_id"]);
+                  setState(() {
+                    currentIndex = item["sub_cat_id"];
+                  });
+                },
+                child: categoryListWidget(
+                    name: "${item["cat_name"]}",
+                    active: (item["sub_cat_id"] == currentIndex))),
         ]));
   }
 

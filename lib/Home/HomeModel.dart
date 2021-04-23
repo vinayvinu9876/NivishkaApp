@@ -24,9 +24,19 @@ class HomeModel extends ChangeNotifier {
   List<Map<String, dynamic>> get categoryData => _categoryData;
 
   void cancelSubscriptions() {
-    if (userSubscription != null) userSubscription.cancel();
-    if (promoSubscription != null) promoSubscription.cancel();
-    if (categorySubscription != null) categorySubscription.cancel();
+    if (userSubscription != null) {
+      userSubscription.cancel();
+      userSubscription = null;
+    }
+    if (promoSubscription != null) {
+      promoSubscription.cancel();
+      promoSubscription = null;
+    }
+    if (categorySubscription != null) {
+      categorySubscription.cancel();
+      categorySubscription = null;
+    }
+
     _calledOnce = false;
   }
 
