@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nivishka_android/util/index.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:provider/provider.dart';
+import 'package:nivishka_android/Login/LoginModel.dart';
 
 class EnterPhone extends StatefulWidget {
   @override
@@ -11,6 +13,7 @@ class EnterPhone extends StatefulWidget {
 class _EnterPhone extends State<EnterPhone> {
   @override
   Widget build(BuildContext context) {
+    var phoneModel = Provider.of<LoginModel>(context);
     return SafeArea(
         top: true,
         bottom: true,
@@ -71,33 +74,49 @@ class _EnterPhone extends State<EnterPhone> {
                                     fontSize: 12,
                                     fontWeight: FontWeight.bold)),
                             SizedBox(height: 10),
-                            customTextField(
-                                placeholder: "Enter Phone", maxLength: 10),
+                            phoneTextField(
+                                placeholder: "Enter Phone",
+                                maxLength: 10,
+                                onChange: (phone) {
+                                  phoneModel.setPhone(phone);
+                                }),
                             SizedBox(height: 20),
-                            gradientButton(
-                              height: 40,
-                              width: MediaQuery.of(context).size.width * 0.9,
-                              gradient: LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: gradient,
-                              ),
-                              shadow: [
-                                BoxShadow(
-                                  color: Colors.grey,
-                                  offset: Offset(0.0, 1.0), //(x,y)
-                                  blurRadius: 6.0,
-                                )
-                              ],
-                              border:
-                                  Border.all(color: Colors.white30, width: 1.0),
-                              text: "LOGIN",
-                              fontSize: 14,
-                              fontColor: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              ontap: () =>
-                                  {Navigator.pushNamed(context, "/otp_screen")},
+                            Visibility(
+                              visible: phoneModel.isLoading,
+                              child: Center(child: CircularProgressIndicator()),
                             ),
+                            Visibility(
+                                visible: !phoneModel.isLoading,
+                                child: gradientButton(
+                                  height: 40,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.9,
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                    colors: gradient,
+                                  ),
+                                  shadow: [
+                                    BoxShadow(
+                                      color: Colors.grey,
+                                      offset: Offset(0.0, 1.0), //(x,y)
+                                      blurRadius: 6.0,
+                                    )
+                                  ],
+                                  border: Border.all(
+                                      color: Colors.white30, width: 1.0),
+                                  text: "LOGIN",
+                                  fontSize: 14,
+                                  fontColor: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  ontap: () => {phoneModel.login()},
+                                )),
+                            SizedBox(height: 10),
+                            Visibility(
+                                visible: phoneModel.errorMessage != null,
+                                child: Text("${phoneModel.errorMessage}",
+                                    style: GoogleFonts.poppins(
+                                        color: Colors.red, fontSize: 10))),
                             SizedBox(height: 30),
                             Center(
                                 child: InkWell(
@@ -113,8 +132,15 @@ class _EnterPhone extends State<EnterPhone> {
                 ]))));
   }
 
-  Widget customTextField({@required String placeholder, int maxLength}) {
+  Widget phoneTextField({
+    @required String placeholder,
+    int maxLength,
+    Function onChange,
+  }) {
     return IntlPhoneField(
+      //controller: controller,
+      countries: ["IN"],
+      autofocus: true,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.all(5),
         labelText: 'Phone Number',
@@ -123,6 +149,9 @@ class _EnterPhone extends State<EnterPhone> {
       initialCountryCode: 'IN',
       onChanged: (phone) {
         print(phone.completeNumber);
+        String nextPhone = phone.completeNumber.substring(3);
+        print("Removed country code $nextPhone");
+        onChange(nextPhone);
       },
     );
   }

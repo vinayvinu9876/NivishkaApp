@@ -434,6 +434,7 @@ class _CategoryDescription extends State<CategoryDescription> {
                 builder: (context) => ServiceListing(
                       categoryID: catID,
                       catName: categoryData["catName"],
+                      scrollToSubCatId: int.parse(catID),
                     )),
           );
         },

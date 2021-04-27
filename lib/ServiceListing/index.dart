@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:nivishka_android/util/index.dart';
+import 'package:nivishka_android/Receipt/index.dart';
 import 'package:provider/provider.dart';
 import 'ServiceListingModel.dart';
 import 'dart:math' as math;
@@ -51,14 +52,14 @@ class _ServiceListing extends State<ServiceListing> {
         axis: scrollDirection);
   }
 
-  @override
+  /*@override
   @protected
   void dispose() {
     super.dispose();
     var serviceListModel =
         Provider.of<ServiceListingModel>(context, listen: false);
     serviceListModel.killAllSubscriptions();
-  }
+  }*/
 
   double getServiceCost(Map<String, dynamic> serviceData) {
     int total = serviceData["partner_cost"] + serviceData["charges"];
@@ -167,7 +168,13 @@ class _ServiceListing extends State<ServiceListing> {
         padding: EdgeInsets.all(15),
         child: InkWell(
             onTap: () {
-              Navigator.pushNamed(context, "/receipt");
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Receipt(
+                        categoryName: catName,
+                        cartData: serviceListModel.cartData)),
+              );
             },
             child: Container(
                 height: 50,

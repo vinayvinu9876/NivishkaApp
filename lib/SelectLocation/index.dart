@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:nivishka_android/util/index.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:provider/provider.dart';
+import 'SelectLocationModel.dart';
 
 class SelectLocation extends StatefulWidget {
   @override
@@ -19,6 +21,7 @@ class _SelectLocation extends State<SelectLocation> {
         bottom: true,
         top: true,
         child: Scaffold(
+            bottomNavigationBar: enterDetailsContent(),
             appBar: AppBar(
                 backgroundColor: Colors.green[600],
                 leading: InkWell(
@@ -27,7 +30,7 @@ class _SelectLocation extends State<SelectLocation> {
                     },
                     child:
                         Icon(Icons.arrow_back, color: Colors.white, size: 20)),
-                title: Text("Plumbers",
+                title: Text("Select Location",
                     style: GoogleFonts.poppins(
                         fontSize: 14, color: Colors.white))),
             body: Container(
@@ -37,23 +40,30 @@ class _SelectLocation extends State<SelectLocation> {
                 child: Container(
                     child: Stack(children: [
                   Container(
-                      height: height < 600 ? height * 0.3 : height * 0.51,
-                      width: width,
-                      child: MapSample()),
-                  Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Container(
-                        height: height < 600 ? height * 0.60 : height * 0.45,
-                        width: width,
-                        child: enterDetailsContent(),
-                      ))
+                      height: height - 340, width: width, child: MapSample()),
                 ])))));
   }
 
   Widget enterDetailsContent() {
+    var locationModel = Provider.of<SelectLocationModel>(context);
+    TextEditingController yourLocationController = new TextEditingController();
+    TextEditingController buildingController = new TextEditingController();
+    TextEditingController nameController = new TextEditingController();
+
+    if (locationModel.placeName != null) {
+      yourLocationController.text = locationModel.placeName;
+    }
+    if (locationModel.building != null) {
+      buildingController.text = locationModel.building;
+    }
+    if (locationModel.name != null) {
+      nameController.text = locationModel.name;
+    }
+
     return Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         child: Container(
+            height: 340,
             decoration: BoxDecoration(
                 color: Colors.white, borderRadius: BorderRadius.circular(15)),
             child: Column(mainAxisSize: MainAxisSize.min, children: [
@@ -61,13 +71,10 @@ class _SelectLocation extends State<SelectLocation> {
               Container(
                   padding: EdgeInsets.only(left: 15, right: 15),
                   child: TextField(
+                      controller: yourLocationController,
+                      enabled: false,
                       style: GoogleFonts.poppins(fontSize: 12),
                       decoration: InputDecoration(
-                          suffix: Text("Change",
-                              style: GoogleFonts.poppins(
-                                  fontSize: 10,
-                                  color: Colors.blue[800],
-                                  fontWeight: FontWeight.bold)),
                           contentPadding: EdgeInsets.only(
                               left: 15, right: 10, bottom: 5, top: 5),
                           border: OutlineInputBorder(
@@ -80,6 +87,10 @@ class _SelectLocation extends State<SelectLocation> {
               Container(
                   padding: EdgeInsets.only(left: 15, right: 15),
                   child: TextField(
+                      controller: buildingController,
+                      onChanged: (txt) {
+                        //locationModel.setBuilding(txt);
+                      },
                       style: GoogleFonts.poppins(fontSize: 12),
                       decoration: InputDecoration(
                           contentPadding: EdgeInsets.only(
@@ -94,6 +105,10 @@ class _SelectLocation extends State<SelectLocation> {
               Container(
                   padding: EdgeInsets.only(left: 15, right: 15),
                   child: TextField(
+                      controller: nameController,
+                      onChanged: (txt) {
+                        //locationModel.setName(txt);
+                      },
                       style: GoogleFonts.poppins(fontSize: 12),
                       decoration: InputDecoration(
                           contentPadding: EdgeInsets.only(
@@ -105,61 +120,12 @@ class _SelectLocation extends State<SelectLocation> {
                           labelStyle: GoogleFonts.poppins(
                               color: Colors.grey[400], fontSize: 12)))),
               SizedBox(height: 15),
-              Container(
-                  padding: EdgeInsets.only(left: 15, right: 15, bottom: 5),
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Save as",
-                            style: GoogleFonts.poppins(
-                                color: Colors.grey[400], fontSize: 12)),
-                        SizedBox(height: 5),
-                        Container(
-                            child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                              Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey,
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  padding: EdgeInsets.only(
-                                      left: 10, right: 10, top: 2, bottom: 2),
-                                  child: Text('Home',
-                                      style: GoogleFonts.poppins(
-                                        fontSize: 12,
-                                        color: Colors.white,
-                                      ))),
-                              SizedBox(width: 10),
-                              Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey,
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  padding: EdgeInsets.only(
-                                      left: 10, right: 10, top: 2, bottom: 2),
-                                  child: Text('Office',
-                                      style: GoogleFonts.poppins(
-                                        fontSize: 12,
-                                        color: Colors.white,
-                                      ))),
-                              SizedBox(width: 10),
-                              Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.green[600],
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  padding: EdgeInsets.only(
-                                      left: 10, right: 10, top: 2, bottom: 2),
-                                  child: Text('Others',
-                                      style: GoogleFonts.poppins(
-                                        fontSize: 12,
-                                        color: Colors.white,
-                                      ))),
-                            ]))
-                      ])),
+              selectType(
+                onChange: (value) {
+                  locationModel.setAddressType(value);
+                },
+                selected: locationModel.addressType,
+              ),
               SizedBox(height: 10),
               Expanded(
                   child: Container(
@@ -177,15 +143,72 @@ class _SelectLocation extends State<SelectLocation> {
                               child: Container(
                                   height: 40,
                                   decoration: BoxDecoration(
-                                    color: Colors.green[600],
+                                    color: locationModel.isLoading
+                                        ? Colors.white
+                                        : Colors.green[600],
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Center(
-                                      child: Text(
-                                          "Add Flat /  Building / Street",
-                                          style: GoogleFonts.poppins(
-                                              color: Colors.white))))))))
+                                      child: (locationModel.isLoading
+                                          ? CircularProgressIndicator()
+                                          : Text(
+                                              "Add Flat /  Building / Street",
+                                              style: GoogleFonts.poppins(
+                                                  color: Colors.white)))))))))
             ])));
+  }
+
+  Widget selectType({Function onChange, String selected}) {
+    return Container(
+        padding: EdgeInsets.only(left: 15, right: 15, bottom: 5),
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Save as",
+                  style: GoogleFonts.poppins(
+                      color: Colors.grey[400], fontSize: 12)),
+              SizedBox(height: 5),
+              Container(
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                    selectWidget(
+                        name: "Home",
+                        onChange: onChange,
+                        isActive: (selected == "Home")),
+                    SizedBox(width: 10),
+                    selectWidget(
+                        name: "Office",
+                        onChange: onChange,
+                        isActive: (selected == "Office")),
+                    SizedBox(width: 10),
+                    selectWidget(
+                        name: "Others",
+                        onChange: onChange,
+                        isActive: (selected == "Others")),
+                  ]))
+            ]));
+  }
+
+  Widget selectWidget(
+      {@required String name,
+      @required Function onChange,
+      bool isActive = false}) {
+    return InkWell(
+        onTap: () => onChange(name),
+        child: Container(
+            decoration: BoxDecoration(
+              color: isActive ? Colors.green[600] : Colors.grey,
+              borderRadius: BorderRadius.circular(15),
+            ),
+            padding: EdgeInsets.only(left: 10, right: 10, top: 2, bottom: 2),
+            child: Text('$name',
+                style: GoogleFonts.poppins(
+                  fontSize: 12,
+                  color: Colors.white,
+                ))));
   }
 }
 
@@ -202,8 +225,20 @@ class MapSampleState extends State<MapSample> {
 
   Future<void> _onMapCreated(GoogleMapController controller) async {
     Position position = await _determinePosition();
+    print("Position = $position");
     _add(position);
+    print("Position added");
+    moveCamera(position);
     _controller.complete(controller);
+  }
+
+  void moveCamera(Position position) async {
+    final GoogleMapController controller = await _controller.future;
+
+    controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+      target: LatLng(position.latitude, position.longitude),
+      zoom: 19.0,
+    )));
   }
 
   _onMarkerTapped(markerId) {
@@ -230,6 +265,10 @@ class MapSampleState extends State<MapSample> {
       // adding a new marker to map
       markers[markerId] = marker;
     });
+
+    var locationModel =
+        Provider.of<SelectLocationModel>(context, listen: false);
+    locationModel.setCurrentPosition(position);
   }
 
   /// Determine the current position of the device.

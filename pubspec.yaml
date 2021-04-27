@@ -57,6 +57,7 @@ dependencies:
   firebase_messaging: ^9.1.1
   cloud_functions: ^1.0.3
   get_it: ^6.1.1
+  geocoder: ^0.2.1
 
 
 dev_dependencies:

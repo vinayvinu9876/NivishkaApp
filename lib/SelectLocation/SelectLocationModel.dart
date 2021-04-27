@@ -1,0 +1,121 @@
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:nivishka_android/util/index.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geocoder/geocoder.dart';
+import 'package:cloud_functions/cloud_functions.dart';
+import 'package:nivishka_android/AppServices/NavigatorService.dart';
+import 'package:nivishka_android/AppServices/services.dart';
+
+class SelectLocationModel extends ChangeNotifier {
+  bool _isLoading = false;
+
+  dynamic _currentPosition; //can be LatLng or Position object
+  String _placeName;
+  String _building;
+  String _name;
+  String _addressType;
+  String _errorMessage;
+
+  bool get isLoading => _isLoading;
+  Position get currentPosition => _currentPosition;
+  String get placeName => _placeName;
+  String get building => _building;
+  String get name => _name;
+  String get addressType => _addressType;
+  String get errorMessage => _errorMessage;
+
+  FirebaseAuth auth = FirebaseAuth.instance;
+  FirebaseFunctions func = FirebaseFunctions.instance;
+
+  void setCurrentPosition(position) async {
+    final coordinates = new Coordinates(position.latitude, position.longitude);
+    List<Address> addresses =
+        await Geocoder.local.findAddressesFromCoordinates(coordinates);
+    _placeName = addresses.first.addressLine;
+    _currentPosition = position;
+    notifyListeners();
+  }
+
+  void setBuilding(String buildingName) {
+    _building = buildingName;
+    notifyListeners();
+  }
+
+  void setName(String nameVal) {
+    _name = nameVal;
+    notifyListeners();
+  }
+
+  void setAddressType(String addressTypeVal) {
+    _addressType = addressTypeVal;
+    notifyListeners();
+  }
+
+  void updateLocation() {
+    _errorMessage = null;
+    notifyListeners();
+
+    if (isEmpty(_placeName)) {
+      _errorMessage = "Place name cannot be empty";
+      notifyListeners();
+      return;
+    }
+    if (isEmpty(_currentPosition)) {
+      _errorMessage = "Please Select a location";
+      notifyListeners();
+      return;
+    }
+
+    if (isEmpty(_name)) {
+      _errorMessage = "Name cannot be empty";
+      notifyListeners();
+      return;
+    }
+
+    if (isEmpty(_building)) {
+      _errorMessage = "Building cannot be empty";
+      notifyListeners();
+      return;
+    }
+
+    if (isEmpty(_addressType)) {
+      _errorMessage = "Address Type cannot be empty";
+      notifyListeners();
+      return;
+    }
+
+    _isLoading = true;
+    notifyListeners();
+
+    String uid = auth.currentUser.uid;
+
+    HttpsCallable callable = func.httpsCallable("updateLocationOrder");
+
+    callable({
+      "uid": uid,
+      "placeName": _placeName,
+      "name": _name,
+      "building": _building,
+      "addressType": _addressType,
+      "lat": _currentPosition.latitude,
+      "lng": _currentPosition.longitude
+    }).then((HttpsCallableResult res) async {
+      print("Result = ${res.data}");
+      if (res.data["status"] == "success") {
+        _isLoading = false;
+        await getIt<NavigationService>().navigateTo("/selectDate");
+        notifyListeners();
+        return;
+      }
+      _errorMessage = res.data["message"];
+      _isLoading = false;
+      notifyListeners();
+    }).onError((error, stackTrace) {
+      print("$error");
+      _isLoading = false;
+      _errorMessage = error.message;
+      notifyListeners();
+    });
+  }
+}

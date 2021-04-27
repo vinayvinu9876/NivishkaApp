@@ -63,6 +63,8 @@ class SignupModel extends ChangeNotifier {
       _errorMessage = "Referal code Cannot be empty";
     } else if (isEmpty(_countryCode)) {
       _errorMessage = "Country Code cannot be empty";
+    } else if (_phone.length < 10) {
+      _errorMessage = "Phone no. cannot be lesser than 10";
     }
 
     print(

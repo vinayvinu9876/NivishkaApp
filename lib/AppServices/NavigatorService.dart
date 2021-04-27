@@ -11,4 +11,8 @@ class NavigationService {
     return navigatorKey.currentState
         .push(MaterialPageRoute(builder: (context) => widget));
   }
+
+  void pop() {
+    return navigatorKey.currentState.pop();
+  }
 }

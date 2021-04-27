@@ -142,7 +142,7 @@ class ServiceListingModel extends ChangeNotifier {
 
     _cartData[serviceId]["no_of_items"] =
         _cartData[serviceId]["no_of_items"] - 1;
-    _cartData.remove(serviceId);
+    if (_cartData[serviceId]["no_of_items"] == 0) _cartData.remove(serviceId);
     notifyListeners();
   }
 }
