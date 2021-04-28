@@ -12,16 +12,23 @@ class SelectLocation extends StatefulWidget {
 }
 
 class _SelectLocation extends State<SelectLocation> {
+  TextEditingController yourLocationController = new TextEditingController();
+  TextEditingController buildingController = new TextEditingController();
+  TextEditingController nameController = new TextEditingController();
+
+  FocusNode locationNode = new FocusNode();
+  FocusNode buildingNode = new FocusNode();
+  FocusNode nameNode = new FocusNode();
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    print("Device height = $height width = $width");
+    //print("Device height = $height width = $width");
     return SafeArea(
         bottom: true,
         top: true,
         child: Scaffold(
-            bottomNavigationBar: enterDetailsContent(),
             appBar: AppBar(
                 backgroundColor: Colors.green[600],
                 leading: InkWell(
@@ -41,37 +48,61 @@ class _SelectLocation extends State<SelectLocation> {
                     child: Stack(children: [
                   Container(
                       height: height - 340, width: width, child: MapSample()),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: enterDetailsContent(),
+                  )
                 ])))));
   }
 
   Widget enterDetailsContent() {
     var locationModel = Provider.of<SelectLocationModel>(context);
-    TextEditingController yourLocationController = new TextEditingController();
-    TextEditingController buildingController = new TextEditingController();
-    TextEditingController nameController = new TextEditingController();
 
     if (locationModel.placeName != null) {
       yourLocationController.text = locationModel.placeName;
+      yourLocationController.selection = TextSelection.fromPosition(
+          TextPosition(offset: yourLocationController.text.length));
     }
     if (locationModel.building != null) {
       buildingController.text = locationModel.building;
+      buildingController.selection = TextSelection.fromPosition(
+          TextPosition(offset: buildingController.text.length));
     }
     if (locationModel.name != null) {
       nameController.text = locationModel.name;
+      nameController.selection = TextSelection.fromPosition(
+          TextPosition(offset: nameController.text.length));
     }
 
     return Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         child: Container(
-            height: 340,
+            height: locationModel.errorMessage == null ? 340 : 360,
             decoration: BoxDecoration(
                 color: Colors.white, borderRadius: BorderRadius.circular(15)),
             child: Column(mainAxisSize: MainAxisSize.min, children: [
               SizedBox(height: 20),
+              Visibility(
+                  visible: locationModel.errorMessage != null,
+                  child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      padding: EdgeInsets.only(left: 15, right: 15),
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("${locationModel.errorMessage}",
+                                style: GoogleFonts.poppins(
+                                    color: Colors.red, fontSize: 12)),
+                          ]))),
+              Visibility(
+                  visible: locationModel.errorMessage != null,
+                  child: SizedBox(height: 10)),
               Container(
                   padding: EdgeInsets.only(left: 15, right: 15),
                   child: TextField(
                       controller: yourLocationController,
+                      focusNode: locationNode,
                       enabled: false,
                       style: GoogleFonts.poppins(fontSize: 12),
                       decoration: InputDecoration(
@@ -86,10 +117,11 @@ class _SelectLocation extends State<SelectLocation> {
               SizedBox(height: 15),
               Container(
                   padding: EdgeInsets.only(left: 15, right: 15),
-                  child: TextField(
+                  child: TextFormField(
                       controller: buildingController,
+                      focusNode: buildingNode,
                       onChanged: (txt) {
-                        //locationModel.setBuilding(txt);
+                        locationModel.setBuilding(txt);
                       },
                       style: GoogleFonts.poppins(fontSize: 12),
                       decoration: InputDecoration(
@@ -104,10 +136,11 @@ class _SelectLocation extends State<SelectLocation> {
               SizedBox(height: 15),
               Container(
                   padding: EdgeInsets.only(left: 15, right: 15),
-                  child: TextField(
+                  child: TextFormField(
                       controller: nameController,
+                      focusNode: nameNode,
                       onChanged: (txt) {
-                        //locationModel.setName(txt);
+                        locationModel.setName(txt);
                       },
                       style: GoogleFonts.poppins(fontSize: 12),
                       decoration: InputDecoration(
@@ -138,7 +171,7 @@ class _SelectLocation extends State<SelectLocation> {
                       child: Center(
                           child: InkWell(
                               onTap: () {
-                                Navigator.pushNamed(context, "/selectDate");
+                                locationModel.updateLocation();
                               },
                               child: Container(
                                   height: 40,

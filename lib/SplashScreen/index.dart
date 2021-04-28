@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import "../AuthListener.dart";
+import 'package:provider/provider.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -12,6 +14,8 @@ class _SplashScreen extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    var authModel = Provider.of<AuthListener>(context, listen: false);
+    authModel.listen();
     new Timer.periodic(threeSec, (Timer t) {
       Navigator.pushNamed(context, "/chooseLoginSignup");
       t.cancel();

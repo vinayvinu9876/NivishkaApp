@@ -41,6 +41,7 @@ import 'package:nivishka_android/ServiceListing/ServiceListingModel.dart';
 import 'package:nivishka_android/Receipt/ReceiptModel.dart';
 import 'package:nivishka_android/SelectLocation/SelectLocationModel.dart';
 import 'package:nivishka_android/Login/LoginModel.dart';
+import 'package:nivishka_android/SelectDate/SelectDateModel.dart';
 
 import 'AppServices/NavigatorService.dart';
 import 'AppServices/services.dart';
@@ -68,7 +69,12 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MaterialAppCopy extends StatelessWidget {
+class MaterialAppCopy extends StatefulWidget {
+  @override
+  State<MaterialAppCopy> createState() => _MaterialAppCopy();
+}
+
+class _MaterialAppCopy extends State<MaterialAppCopy> {
   final FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
@@ -86,6 +92,7 @@ class MaterialAppCopy extends StatelessWidget {
           ChangeNotifierProvider(create: (context) => ReceiptModel()),
           ChangeNotifierProvider(create: (context) => SelectLocationModel()),
           ChangeNotifierProvider(create: (context) => LoginModel()),
+          ChangeNotifierProvider(create: (context) => SelectDateModel()),
         ],
         child: MaterialApp(
           title: 'Nivishka',
@@ -98,21 +105,7 @@ class MaterialAppCopy extends StatelessWidget {
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
           initialRoute: "/splashScreen",
-          home: StreamBuilder<User>(
-            stream: auth.authStateChanges(),
-            builder: (BuildContext context, snapshot) {
-              var authModel = Provider.of<AuthListener>(context);
-              authModel.listen();
-              if (snapshot.hasData) {
-                return Home();
-              } else if (snapshot.hasError) {
-                return Message(
-                    message: "Authenitcation Error", icon: Icons.warning);
-              } else {
-                return ChooseLoginSignup();
-              }
-            },
-          ),
+
           routes: {
             "/splashScreen": (context) => SplashScreen(),
             "/enterPhone": (context) => EnterPhone(),

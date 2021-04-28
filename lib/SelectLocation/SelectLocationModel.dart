@@ -90,7 +90,7 @@ class SelectLocationModel extends ChangeNotifier {
 
     String uid = auth.currentUser.uid;
 
-    HttpsCallable callable = func.httpsCallable("updateLocationOrder");
+    HttpsCallable callable = func.httpsCallable("updateLocationOnOrder");
 
     callable({
       "uid": uid,

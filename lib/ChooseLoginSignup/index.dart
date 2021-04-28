@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nivishka_android/util/index.dart';
+import "../AuthListener.dart";
+import 'package:provider/provider.dart';
 
 class ChooseLoginSignup extends StatefulWidget {
   @override
@@ -7,6 +9,13 @@ class ChooseLoginSignup extends StatefulWidget {
 }
 
 class _ChooseLoginSignup extends State<ChooseLoginSignup> {
+  @override
+  void initState() {
+    super.initState();
+    var authModel = Provider.of<AuthListener>(context, listen: false);
+    authModel.listen();
+  }
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;

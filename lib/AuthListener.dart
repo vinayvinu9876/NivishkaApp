@@ -8,10 +8,13 @@ import 'package:nivishka_android/AppServices/services.dart';
 import 'package:nivishka_android/util/index.dart';
 
 class AuthListener extends ChangeNotifier {
+  AuthListener() {
+    print("AuthListener class has been initated now");
+  }
+
   bool _isLoading = false;
   String _cityCode;
   FirebaseAuth auth = FirebaseAuth.instance;
-
   StreamSubscription<User> subscription;
   StreamSubscription<DocumentSnapshot> userListener;
 
@@ -19,11 +22,14 @@ class AuthListener extends ChangeNotifier {
   String get cityCode => _cityCode;
 
   void cancelListeners() {
+    print("Cancelling auth listeners");
+    _cityCode = null;
     if (subscription != null) subscription.cancel();
     if (userListener != null) userListener.cancel();
   }
 
   void listen() async {
+    cancelListeners();
     authListen();
   }
 
@@ -57,6 +63,7 @@ class AuthListener extends ChangeNotifier {
         cityCodeListen();
         await getIt<NavigationService>().navigateTo("/home");
       } else {
+        print("No User forwaring to loginsignup");
         await getIt<NavigationService>().navigateTo("/chooseLoginSignup");
       }
     });
