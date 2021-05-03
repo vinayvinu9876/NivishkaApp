@@ -14,6 +14,7 @@ class SelectLocationModel extends ChangeNotifier {
   String _placeName;
   String _building;
   String _name;
+  String _pincode;
   String _addressType;
   String _errorMessage;
 
@@ -24,6 +25,7 @@ class SelectLocationModel extends ChangeNotifier {
   String get name => _name;
   String get addressType => _addressType;
   String get errorMessage => _errorMessage;
+  String get pincode => _pincode;
 
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFunctions func = FirebaseFunctions.instance;
@@ -49,6 +51,11 @@ class SelectLocationModel extends ChangeNotifier {
 
   void setAddressType(String addressTypeVal) {
     _addressType = addressTypeVal;
+    notifyListeners();
+  }
+
+  void setPinCode(String pincode) {
+    _pincode = pincode;
     notifyListeners();
   }
 
@@ -85,6 +92,12 @@ class SelectLocationModel extends ChangeNotifier {
       return;
     }
 
+    if (isEmpty(_pincode)) {
+      _errorMessage = "Pin code cannot be empty";
+      notifyListeners();
+      return;
+    }
+
     _isLoading = true;
     notifyListeners();
 
@@ -99,7 +112,8 @@ class SelectLocationModel extends ChangeNotifier {
       "building": _building,
       "addressType": _addressType,
       "lat": _currentPosition.latitude,
-      "lng": _currentPosition.longitude
+      "lng": _currentPosition.longitude,
+      "pincode": _pincode,
     }).then((HttpsCallableResult res) async {
       print("Result = ${res.data}");
       if (res.data["status"] == "success") {

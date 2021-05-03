@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nivishka_android/util/index.dart';
 import 'Bookings.dart';
+import 'package:provider/provider.dart';
+import 'BookingHistoryModel.dart';
 
 class BookingHistory extends StatefulWidget {
   @override
@@ -9,9 +11,19 @@ class BookingHistory extends StatefulWidget {
 
 class _BookingHistory extends State<BookingHistory> {
   @override
+  @protected
+  void initState() {
+    super.initState();
+    var bookingModel = Provider.of<BookingHistoryModel>(context, listen: false);
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => {bookingModel.getPendingOrderData()});
+  }
+
+  @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+    var bookingModel = Provider.of<BookingHistoryModel>(context);
     return SafeArea(
         top: true,
         bottom: true,
@@ -42,6 +54,19 @@ class _BookingHistory extends State<BookingHistory> {
                     labelColor: Colors.black,
                     unselectedLabelColor: Colors.black54,
                     indicatorColor: Colors.green[800],
+                    onTap: (int index) {
+                      switch (index) {
+                        case 0:
+                          bookingModel.getPendingOrderData();
+                          break;
+                        case 1:
+                          bookingModel.getCompletedOrderData();
+                          break;
+                        case 2:
+                          bookingModel.getCancelledOrderData();
+                          break;
+                      }
+                    },
                     tabs: [
                       Tab(text: "Scheduled"),
                       Tab(text: "Completed"),
@@ -53,9 +78,39 @@ class _BookingHistory extends State<BookingHistory> {
                     height: height,
                     width: width,
                     child: TabBarView(children: [
-                      Bookings(),
-                      Bookings(),
-                      Bookings(),
+                      (!bookingModel.isScheduledLoading)
+                          ? Bookings(
+                              type: "pending",
+                              ordersData: bookingModel.pendingOrders,
+                            )
+                          : Container(
+                              height: 100,
+                              width: width,
+                              padding: EdgeInsets.all(20),
+                              child: Column(
+                                  children: [CircularProgressIndicator()])),
+                      (!bookingModel.isCompletedLoading)
+                          ? Bookings(
+                              type: "completed",
+                              ordersData: bookingModel.completedOrders,
+                            )
+                          : Container(
+                              height: 100,
+                              width: width,
+                              padding: EdgeInsets.all(20),
+                              child: Column(
+                                  children: [CircularProgressIndicator()])),
+                      (!bookingModel.isCancelledLoading)
+                          ? Bookings(
+                              type: "cancelled",
+                              ordersData: bookingModel.cancelledOrders,
+                            )
+                          : Container(
+                              height: 100,
+                              width: width,
+                              padding: EdgeInsets.all(20),
+                              child: Column(
+                                  children: [CircularProgressIndicator()])),
                     ])))));
   }
 }

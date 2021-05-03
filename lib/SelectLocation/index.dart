@@ -15,10 +15,12 @@ class _SelectLocation extends State<SelectLocation> {
   TextEditingController yourLocationController = new TextEditingController();
   TextEditingController buildingController = new TextEditingController();
   TextEditingController nameController = new TextEditingController();
+  TextEditingController pincodeController = new TextEditingController();
 
   FocusNode locationNode = new FocusNode();
   FocusNode buildingNode = new FocusNode();
   FocusNode nameNode = new FocusNode();
+  FocusNode pincodeNode = new FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +49,7 @@ class _SelectLocation extends State<SelectLocation> {
                 child: Container(
                     child: Stack(children: [
                   Container(
-                      height: height - 340, width: width, child: MapSample()),
+                      height: height - 400, width: width, child: MapSample()),
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: enterDetailsContent(),
@@ -74,10 +76,16 @@ class _SelectLocation extends State<SelectLocation> {
           TextPosition(offset: nameController.text.length));
     }
 
+    if (locationModel.pincode != null) {
+      pincodeController.text = locationModel.pincode;
+      pincodeController.selection = TextSelection.fromPosition(
+          TextPosition(offset: pincodeController.text.length));
+    }
+
     return Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         child: Container(
-            height: locationModel.errorMessage == null ? 340 : 360,
+            height: locationModel.errorMessage == null ? 400 : 420,
             decoration: BoxDecoration(
                 color: Colors.white, borderRadius: BorderRadius.circular(15)),
             child: Column(mainAxisSize: MainAxisSize.min, children: [
@@ -112,6 +120,25 @@ class _SelectLocation extends State<SelectLocation> {
                               borderSide: BorderSide(color: Colors.grey[100]),
                               borderRadius: BorderRadius.circular(10)),
                           labelText: "Your Location",
+                          labelStyle: GoogleFonts.poppins(
+                              color: Colors.grey[400], fontSize: 12)))),
+              SizedBox(height: 15),
+              Container(
+                  padding: EdgeInsets.only(left: 15, right: 15),
+                  child: TextField(
+                      controller: pincodeController,
+                      focusNode: pincodeNode,
+                      onChanged: (txt) {
+                        locationModel.setPinCode(txt);
+                      },
+                      style: GoogleFonts.poppins(fontSize: 12),
+                      decoration: InputDecoration(
+                          contentPadding: EdgeInsets.only(
+                              left: 15, right: 10, bottom: 5, top: 5),
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey[100]),
+                              borderRadius: BorderRadius.circular(10)),
+                          labelText: "PinCode",
                           labelStyle: GoogleFonts.poppins(
                               color: Colors.grey[400], fontSize: 12)))),
               SizedBox(height: 15),

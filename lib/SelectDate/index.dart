@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:nivishka_android/util/index.dart';
-import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'SelectDateModel.dart';
@@ -24,38 +23,6 @@ class _SelectDate extends State<SelectDate> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
-    var _razorpay = Razorpay();
-
-    void _handlePaymentSuccess(PaymentSuccessResponse response) {
-      // Do something when payment succeeds
-      print("Success");
-    }
-
-    void _handlePaymentError(PaymentFailureResponse response) {
-      // Do something when payment fails
-      print("Failed");
-    }
-
-    void _handleExternalWallet(ExternalWalletResponse response) {
-      // Do something when an external wallet was selected
-      print("External Wallet");
-    }
-
-    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
-
-    openPayment() {
-      var options = {
-        'key': 'rzp_test_0dMyoBh7KWn48o',
-        'amount': 100,
-        'name': 'Acme Corp.',
-        'description': 'Fine T-Shirt',
-        'prefill': {'contact': '8888888888', 'email': 'test@razorpay.com'}
-      };
-      _razorpay.open(options);
-    }
-
     var selectDateModel = Provider.of<SelectDateModel>(context);
 
     return SafeArea(
@@ -64,23 +31,45 @@ class _SelectDate extends State<SelectDate> {
         child: Scaffold(
             bottomNavigationBar: InkWell(
                 onTap: () {
-                  openPayment();
+                  //openPayment();
+                  if (!(selectDateModel.isLoading))
+                    selectDateModel.updateDateAndTime();
                 },
                 child: Container(
-                    height: 60,
+                    height: selectDateModel.errorMessage == null ? 70 : 90,
                     color: Colors.grey[200],
                     padding: EdgeInsets.only(
                         left: 10, right: 10, top: 5, bottom: 12),
-                    child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.green[500],
-                            borderRadius: BorderRadius.circular(5)),
-                        child: Center(
-                            child: Text("Next ",
-                                style: GoogleFonts.poppins(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold)))))),
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 5),
+                          Visibility(
+                              visible: selectDateModel.errorMessage != null,
+                              child: Text("${selectDateModel.errorMessage}",
+                                  style: GoogleFonts.poppins(
+                                      color: Colors.red, fontSize: 10))),
+                          SizedBox(height: 5),
+                          Expanded(
+                              child: Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.green[500],
+                                      borderRadius: BorderRadius.circular(5)),
+                                  child: Center(
+                                      child: selectDateModel.isLoading
+                                          ? CircularProgressIndicator(
+                                              valueColor:
+                                                  new AlwaysStoppedAnimation<
+                                                      Color>(Colors.white),
+                                            )
+                                          : Text("Next ",
+                                              style: GoogleFonts.poppins(
+                                                  color: Colors.white,
+                                                  fontSize: 14,
+                                                  fontWeight:
+                                                      FontWeight.bold)))))
+                        ]))),
             appBar: AppBar(
                 backgroundColor: Colors.green[500],
                 title: Text("Select Date",
@@ -93,44 +82,21 @@ class _SelectDate extends State<SelectDate> {
                   SizedBox(
                     height: 15,
                   ),
-                  Visibility(
-                    visible: (selectDateModel.isLoading),
-                    child: Center(child: CircularProgressIndicator()),
-                  ),
-                  Visibility(
-                      visible: (!selectDateModel.isLoading),
-                      child: Text(
-                          "When would you like Nivishka Services to serve you?",
-                          style: GoogleFonts.poppins(
-                              color: Colors.black, fontSize: 14))),
-                  Visibility(
-                      visible: (!selectDateModel.isLoading),
-                      child: SizedBox(height: 15)),
-                  Visibility(
-                      visible: (!selectDateModel.isLoading),
-                      child: Text("Select date of service",
-                          style: GoogleFonts.poppins(
-                              color: Colors.grey[600], fontSize: 10))),
-                  Visibility(
-                      visible: (!selectDateModel.isLoading),
-                      child: SizedBox(height: 10)),
-                  Visibility(
-                      visible: (!selectDateModel.isLoading),
-                      child: selectDate()),
-                  Visibility(
-                      visible: (!selectDateModel.isLoading),
-                      child: SizedBox(height: 10)),
-                  Visibility(
-                      visible: (!selectDateModel.isLoading),
-                      child: Text("Select Time",
-                          style: GoogleFonts.poppins(
-                              color: Colors.grey[600], fontSize: 10))),
-                  Visibility(
-                      visible: (!selectDateModel.isLoading),
-                      child: SizedBox(height: 10)),
-                  Visibility(
-                      visible: (!selectDateModel.isLoading),
-                      child: timeSelection())
+                  Text("When would you like Nivishka Services to serve you?",
+                      style: GoogleFonts.poppins(
+                          color: Colors.black, fontSize: 14)),
+                  SizedBox(height: 15),
+                  Text("Select date of service",
+                      style: GoogleFonts.poppins(
+                          color: Colors.grey[600], fontSize: 10)),
+                  SizedBox(height: 10),
+                  selectDate(),
+                  SizedBox(height: 10),
+                  Text("Select Time",
+                      style: GoogleFonts.poppins(
+                          color: Colors.grey[600], fontSize: 10)),
+                  SizedBox(height: 10),
+                  timeSelection()
                 ]))));
   }
 
@@ -160,15 +126,46 @@ class _SelectDate extends State<SelectDate> {
     return "$hrs : $min $amORpm";
   }
 
+  int getStart(int initStart) {
+    DateTime now = DateTime.now();
+    int min = now.minute;
+    int start = (now.hour + 2) * 100;
+
+    if (min > 15) {
+      start = start + 30;
+    }
+    if (initStart > start) {
+      return initStart;
+    }
+    return start;
+  }
+
   Widget timeSelection() {
     var selectDateModel = Provider.of<SelectDateModel>(context);
 
-    List<String> times = [];
-    int i = selectDateModel.start;
+    List<List<dynamic>> times = [];
+    int i = selectDateModel.selectedDate.day == (DateTime.now().day)
+        ? getStart(selectDateModel.start)
+        : selectDateModel.start;
     int diff = selectDateModel.diff;
+    int timesLoopRan = 500;
+
+    DateTime now = DateTime.now();
+
+    print("${now.hour} and min = ${now.minute}");
+
     while (i <= selectDateModel.end) {
       int temp = i % 100;
       int val = i;
+      timesLoopRan--;
+      if (diff == 0) {
+        print("Diff is $diff so broke the loop");
+        break;
+      }
+      if (timesLoopRan == 0) {
+        print("Loop ran for 500 times");
+        break;
+      }
       if (temp == 0) {
         i = i + diff;
       } else if (temp == 60) {
@@ -179,7 +176,7 @@ class _SelectDate extends State<SelectDate> {
         i = i + diff;
       }
       String time = getTime(val);
-      times.add(time);
+      times.add([time, val]);
     }
 
     return Container(
@@ -188,7 +185,13 @@ class _SelectDate extends State<SelectDate> {
             runSpacing: 10.0,
             alignment: WrapAlignment.spaceBetween,
             runAlignment: WrapAlignment.center,
-            children: [for (var time in times) timeWidget("$time")]));
+            children: [
+          for (var time in times)
+            timeWidget(
+              "${time.first}",
+              time.last,
+            )
+        ]));
   }
 
   Widget selectDate() {
@@ -225,17 +228,30 @@ class _SelectDate extends State<SelectDate> {
         ]));
   }
 
-  Widget timeWidget(String title) {
+  Widget timeWidget(String title, int val) {
+    var selectDateModel = Provider.of<SelectDateModel>(context);
     double width = MediaQuery.of(context).size.width;
-    return Container(
-        width: width * 0.45,
-        padding: EdgeInsets.all(10),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            border: Border.all(width: 1, color: Colors.grey[400])),
-        child: Center(
-            child: Text("$title",
-                style: GoogleFonts.poppins(color: Colors.grey[600]))));
+    var currSelected = selectDateModel.selectedTime;
+    bool isActive = (currSelected == val);
+
+    return InkWell(
+        onTap: () {
+          selectDateModel.setSelectedTime(val);
+        },
+        child: Container(
+            width: width * 0.45,
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                border: Border.all(
+                    width: 1,
+                    color: isActive ? Colors.black : Colors.grey[400])),
+            child: Center(
+                child: Text("$title",
+                    style: GoogleFonts.poppins(
+                        color: isActive ? Colors.black : Colors.grey[600],
+                        fontWeight:
+                            isActive ? FontWeight.bold : FontWeight.normal)))));
   }
 
   Widget dateWidget(String title, String date, DateTime currDate,
