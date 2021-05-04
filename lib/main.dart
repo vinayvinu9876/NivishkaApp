@@ -43,6 +43,7 @@ import 'package:nivishka_android/SelectLocation/SelectLocationModel.dart';
 import 'package:nivishka_android/Login/LoginModel.dart';
 import 'package:nivishka_android/SelectDate/SelectDateModel.dart';
 import 'package:nivishka_android/BookingHistory/BookingHistoryModel.dart';
+import 'package:nivishka_android/BookingDetails/BookingDetailsModel.dart';
 
 import 'AppServices/NavigatorService.dart';
 import 'AppServices/services.dart';
@@ -94,7 +95,8 @@ class _MaterialAppCopy extends State<MaterialAppCopy> {
           ChangeNotifierProvider(create: (context) => SelectLocationModel()),
           ChangeNotifierProvider(create: (context) => LoginModel()),
           ChangeNotifierProvider(create: (context) => SelectDateModel()),
-          ChangeNotifierProvider(create: (context) => BookingHistoryModel())
+          ChangeNotifierProvider(create: (context) => BookingHistoryModel()),
+          ChangeNotifierProvider(create: (context) => BookingDetailsModel())
         ],
         child: MaterialApp(
           title: 'Nivishka',
@@ -106,7 +108,7 @@ class _MaterialAppCopy extends State<MaterialAppCopy> {
             primarySwatch: Colors.blue,
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
-          initialRoute: "/bookingDetails",
+          initialRoute: "/home",
 
           routes: {
             "/splashScreen": (context) => SplashScreen(),

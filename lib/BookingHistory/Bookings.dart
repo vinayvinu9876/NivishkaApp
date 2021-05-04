@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nivishka_android/util/index.dart';
+import 'package:nivishka_android/BookingDetails/index.dart';
 import 'package:intl/intl.dart';
 
 class Bookings extends StatefulWidget {
@@ -53,7 +54,7 @@ class _Bookings extends State<Bookings> {
       'November',
       'December'
     ];
-    String month = months[order["create_date"].toDate().month];
+    String month = months[order["create_date"].toDate().month - 1];
     String services = "";
     Map<String, dynamic> cartData = order["cartData"];
     if (cartData.keys.length > 0) {
@@ -65,15 +66,14 @@ class _Bookings extends State<Bookings> {
 
     String scheduleTime = "";
 
-    if (order["delivery_date_and_time"]["time"] != null) {
+    if (order["delivery_date_and_time"] != null) {
       int time = order["delivery_date_and_time"]["time"];
       int hrs = (time ~/ 100).toInt();
       int mins = (time - (hrs * 100));
       if (time >= 1200 && time < 1300) {
         scheduleTime = "12: ${mins == 0 ? "00" : mins} pm";
       } else if (time >= 1300) {
-        scheduleTime =
-            "(${hrs - 12} : ${mins == 0 ? "00" : mins.toString()} pm";
+        scheduleTime = "${hrs - 12} : ${mins == 0 ? "00" : mins.toString()} pm";
       } else {
         scheduleTime = " $hrs : ${mins == 0 ? "00" : mins.toString()} am";
       }
@@ -154,7 +154,8 @@ class _Bookings extends State<Bookings> {
                                     color: Colors.black54,
                                     fontSize: 8)),
                             SizedBox(height: 5),
-                            Text("${order["deliveryLocation"]["placeName"]}",
+                            Text(
+                                "${order["deliveryLocation"] == null ? "" : order["deliveryLocation"]["placeName"]}",
                                 style: GoogleFonts.poppins(
                                     color: Colors.black54, fontSize: 8)),
                           ])),
@@ -171,11 +172,22 @@ class _Bookings extends State<Bookings> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                      Text("VIEW",
-                                          style: GoogleFonts.poppins(
-                                              color: blue,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 8)),
+                                      InkWell(
+                                          onTap: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      BookingDetails(
+                                                        orderDetails: order,
+                                                      )),
+                                            );
+                                          },
+                                          child: Text("VIEW",
+                                              style: GoogleFonts.poppins(
+                                                  color: blue,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 8))),
                                       SizedBox(width: 10),
                                       Text(
                                           "${widget.type == "pending" ? "CANCEL" : "BOOK AGAIN"}",

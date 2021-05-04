@@ -24,7 +24,7 @@ class BookingHistoryModel extends ChangeNotifier {
   bool get isCancelledLoading => _isCancelledLoading;
 
   void getPendingOrderData() {
-    List<String> status = ["pending", "partner_alloted", "paid"];
+    List<String> status = ["paid"];
     print("Getting pending orders");
     if (_pendingOrders.length == 0) {
       getOrdersData(status);
@@ -48,7 +48,8 @@ class BookingHistoryModel extends ChangeNotifier {
   }
 
   void getOrdersData(List<String> status) {
-    if (status.contains("pending")) {
+    if (status.contains("paid")) {
+      // pending
       _isScheduledLoading = true;
     } else if (status.contains("success")) {
       _isCompletedLoading = true;
@@ -68,7 +69,8 @@ class BookingHistoryModel extends ChangeNotifier {
     query.snapshots().listen((event) {
       List<Map<String, dynamic>> temp = [];
       event.docs.forEach((element) => {temp.add(element.data())});
-      if (status.contains("pending")) {
+      if (status.contains("paid")) {
+        // pending
         _pendingOrders = temp;
         _isScheduledLoading = false;
       } else if (status.contains("success")) {

@@ -1,16 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:nivishka_android/util/index.dart';
+import 'package:provider/provider.dart';
+import 'BookingDetailsModel.dart';
 
 class BookingDetails extends StatefulWidget {
+  final Map<String, dynamic> orderDetails;
+  BookingDetails({@required this.orderDetails});
   @override
   State<BookingDetails> createState() => _BookingDetails();
 }
 
 class _BookingDetails extends State<BookingDetails> {
   @override
+  void initState() {
+    super.initState();
+    var bookingDetailsModel =
+        Provider.of<BookingDetailsModel>(context, listen: false);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      bookingDetailsModel.getData(widget.orderDetails["order_id"]);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+    var bookingDetailsModel = Provider.of<BookingDetailsModel>(context);
     return SafeArea(
         top: true,
         bottom: true,
@@ -24,8 +40,12 @@ class _BookingDetails extends State<BookingDetails> {
                 SizedBox(height: 10),
                 serviceTimeAndLocation(),
                 billDetails(),
-                partnerDetails(),
-                paymentDetails(),
+                Visibility(
+                    visible: bookingDetailsModel.partnerData != null,
+                    child: partnerDetails()),
+                Visibility(
+                    visible: bookingDetailsModel.paymentData != null,
+                    child: paymentDetails()),
               ]),
             )));
   }
@@ -50,6 +70,22 @@ class _BookingDetails extends State<BookingDetails> {
               ]));
     }
 
+    var bookingDetailsModel = Provider.of<BookingDetailsModel>(context);
+
+    Map<String, dynamic> paymentData = bookingDetailsModel.paymentData;
+
+    String paymentAmount = "";
+    String paymentMethod = "";
+    String status = "";
+
+    if (paymentData != null) {
+      paymentAmount = (paymentData["payment_amount"] / 100).toString();
+      paymentMethod = paymentData["payment_method"];
+      status = paymentData["status"];
+    }
+
+    if (paymentData != null) {}
+
     return Container(
         padding: EdgeInsets.all(
           10,
@@ -64,10 +100,9 @@ class _BookingDetails extends State<BookingDetails> {
                       color: Colors.black,
                       fontWeight: FontWeight.w600)),
               SizedBox(height: 10),
-              keyValue(key: "Payment Amount", value: "₹ 540"),
-              keyValue(key: "Payment Method", value: "netbanking"),
-              keyValue(key: "Payment Status", value: "captured"),
-              keyValue(key: "Ratings", value: "4.5"),
+              keyValue(key: "Payment Amount", value: "₹ $paymentAmount"),
+              keyValue(key: "Payment Method", value: "$paymentMethod"),
+              keyValue(key: "Payment Status", value: "$status"),
             ]));
   }
 
@@ -135,6 +170,23 @@ class _BookingDetails extends State<BookingDetails> {
               ]));
     }
 
+    var bookingDetailsModel = Provider.of<BookingDetailsModel>(context);
+
+    String imgUrl = bookingDetailsModel.partnerData == null
+        ? "https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"
+        : bookingDetailsModel.partnerData["imgUrl"];
+    String name = bookingDetailsModel.partnerData == null
+        ? ""
+        : bookingDetailsModel.partnerData["name"];
+
+    String phone = bookingDetailsModel.partnerData == null
+        ? ""
+        : bookingDetailsModel.partnerData["phone"];
+
+    String partnerId = bookingDetailsModel.partnerData == null
+        ? ""
+        : bookingDetailsModel.partnerData["partner_id"].toString();
+
     return Container(
         padding: EdgeInsets.all(
           10,
@@ -157,8 +209,7 @@ class _BookingDetails extends State<BookingDetails> {
                         child: Image(
                             height: 120,
                             fit: BoxFit.cover,
-                            image: NetworkImage(
-                                "https://www.irreverentgent.com/wp-content/uploads/2018/03/Awesome-Profile-Pictures-for-Guys-look-away2.jpg"))),
+                            image: NetworkImage("$imgUrl"))),
                     SizedBox(width: 15),
                     Expanded(
                         flex: 7,
@@ -167,9 +218,10 @@ class _BookingDetails extends State<BookingDetails> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               keyValue(
-                                  key: "Partner number", value: "NIVPART001"),
-                              keyValue(key: "Partner Name", value: "Abhishek"),
-                              keyValue(key: "Phone", value: "9019301344"),
+                                  key: "Partner number",
+                                  value: "NIVPART$partnerId"),
+                              keyValue(key: "Partner Name", value: "$name"),
+                              keyValue(key: "Phone", value: "$phone"),
                             ]))
                   ])),
             ]));
@@ -198,6 +250,19 @@ class _BookingDetails extends State<BookingDetails> {
               ]));
     }
 
+    Map<String, dynamic> cartData = widget.orderDetails["cartData"];
+
+    double total = 0;
+
+    cartData.keys.forEach((key) {
+      var subtotal = cartData[key]["charges"] + cartData[key]["partner_cost"];
+      double discount = (subtotal * (cartData[key]["discount"] / 100));
+      total += (subtotal - discount);
+    });
+
+    total += widget.orderDetails["other_charges"];
+    total -= widget.orderDetails["discount"];
+
     return Container(
         padding: EdgeInsets.all(10),
         child: Column(
@@ -205,29 +270,84 @@ class _BookingDetails extends State<BookingDetails> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Divider(color: Colors.grey[500]),
-              itemValue(key: "Some good service", value: "100.0"),
-              itemValue(key: "Delivery Charges", value: "200.0"),
-              itemValue(key: "Tax and Charges", value: "300.0"),
+              for (var key in cartData.keys)
+                itemValue(
+                    key: cartData[key]["service_name"],
+                    value: ((cartData[key]["partner_cost"] +
+                                cartData[key]["charges"]) -
+                            ((cartData[key]["partner_cost"] +
+                                    cartData[key]["charges"]) *
+                                (cartData[key]["discount"] / 100)))
+                        .toString()),
+              itemValue(
+                  key: "Other Charges",
+                  value: "${widget.orderDetails["other_charges"]}"),
+              Visibility(
+                  visible: widget.orderDetails["discount"] > 0,
+                  child: itemValue(
+                      key: "Discount",
+                      value: "- ${widget.orderDetails["discount"]}")),
               Divider(color: Colors.grey[500]),
-              itemValue(key: "Total", value: "600.0"),
+              itemValue(key: "Total", value: "$total", bold: true),
             ]));
   }
 
   Widget serviceTimeAndLocation() {
+    int d = widget.orderDetails["create_date"].toDate().day;
+    String day;
+    if (d % 10 == 1) {
+      day = "$d st";
+    } else if (d % 10 == 2) {
+      day = "$d nd";
+    } else {
+      day = "$d th";
+    }
+    List<String> months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+    ];
+    String month =
+        months[widget.orderDetails["create_date"].toDate().month - 1];
+    String year = widget.orderDetails["create_date"].toDate().year.toString();
+
+    String scheduleTime = "";
+
+    if (widget.orderDetails["delivery_date_and_time"]["time"] != null) {
+      int time = widget.orderDetails["delivery_date_and_time"]["time"];
+      int hrs = (time ~/ 100).toInt();
+      int mins = (time - (hrs * 100));
+      if (time >= 1200 && time < 1300) {
+        scheduleTime = "12: ${mins == 0 ? "00" : mins} pm";
+      } else if (time >= 1300) {
+        scheduleTime =
+            "(${hrs - 12} : ${mins == 0 ? "00" : mins.toString()} pm";
+      } else {
+        scheduleTime = " $hrs : ${mins == 0 ? "00" : mins.toString()} am";
+      }
+    }
     return Container(
         padding: EdgeInsets.all(10),
         child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Scheduled on 14th june 2020 at 5:34",
+              Text("Scheduled on $day $month $year at $scheduleTime",
                   style: GoogleFonts.poppins(
                     fontSize: 10,
                     color: Colors.black54,
                   )),
               SizedBox(height: 5),
-              Text(
-                  "342, 12th main JC Nagar Kurubarahalli,Bangalore,Karnataka, Some high court not in supreme court",
+              Text("${widget.orderDetails["deliveryLocation"]["placeName"]}",
                   style: GoogleFonts.poppins(
                     color: Colors.black,
                     fontSize: 10,
@@ -255,7 +375,11 @@ class _BookingDetails extends State<BookingDetails> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(Icons.arrow_back, color: Colors.black),
+            InkWell(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Icon(Icons.arrow_back, color: Colors.black)),
             SizedBox(height: 10),
             Container(
                 child: Row(children: [
@@ -277,7 +401,7 @@ class _BookingDetails extends State<BookingDetails> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("NIV0001",
+                          Text("NIV${widget.orderDetails["order_id"]}",
                               style: GoogleFonts.poppins(
                                   color: Colors.black,
                                   fontSize: 10,
@@ -285,7 +409,8 @@ class _BookingDetails extends State<BookingDetails> {
                           SizedBox(
                             height: 1,
                           ),
-                          Text("Service is Scheduled",
+                          Text(
+                              "Service is ${widget.orderDetails["status"] == "paid" ? "scheduled" : widget.orderDetails["status"]}",
                               style: GoogleFonts.poppins(
                                   fontSize: 12, fontWeight: FontWeight.bold))
                         ])),
