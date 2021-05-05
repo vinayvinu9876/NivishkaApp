@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nivishka_android/util/index.dart';
+import "../Wallet/WalletModel.dart";
+import 'package:provider/provider.dart';
+import 'TopUpWalletModel.dart';
 
 class TopUpWallet extends StatefulWidget {
   @override
@@ -7,6 +10,16 @@ class TopUpWallet extends StatefulWidget {
 }
 
 class _TopUpWallet extends State<TopUpWallet> {
+  TextEditingController input = new TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    var walletModel = Provider.of<WalletModel>(context, listen: false);
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => walletModel.getWalletData());
+  }
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -38,11 +51,6 @@ class _TopUpWallet extends State<TopUpWallet> {
                       child:
                           ListView(scrollDirection: Axis.horizontal, children: [
                         rechargeAmountSelect(
-                          isActive: true,
-                          displayNo: 5,
-                          cost: 50,
-                        ),
-                        rechargeAmountSelect(
                           displayNo: 1,
                           cost: 100,
                         ),
@@ -53,6 +61,10 @@ class _TopUpWallet extends State<TopUpWallet> {
                         rechargeAmountSelect(
                           displayNo: 5,
                           cost: 500,
+                        ),
+                        rechargeAmountSelect(
+                          displayNo: 1,
+                          cost: 1000,
                         ),
                       ])),
                   Container(
@@ -66,99 +78,144 @@ class _TopUpWallet extends State<TopUpWallet> {
                                       style: GoogleFonts.poppins(
                                           fontSize: 12,
                                           color: Colors.grey[500])))))),
-                  Container(
-                      padding: EdgeInsets.all(15),
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text("Enter other amount",
-                                style: GoogleFonts.poppins(
-                                  color: Colors.black,
-                                  fontSize: 14,
-                                )),
-                            Container(
-                                child: TextField(
-                                    decoration: InputDecoration(
-                                        hintText: "₹ 0.00",
-                                        hintStyle: GoogleFonts.poppins(
-                                            color: Colors.grey[400],
-                                            fontSize: 18)))),
-                            SizedBox(height: 30),
-                            Card(
-                                elevation: 3,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(25),
-                                ),
-                                child: CircleAvatar(
-                                    radius: 25,
-                                    backgroundColor: Colors.green,
-                                    child: Center(
-                                        child: Icon(
-                                      Icons.arrow_forward,
-                                      color: Colors.white,
-                                    ))))
-                          ])),
+                  customEnterAmount()
                 ]))));
   }
 
-  Widget rechargeAmountSelect(
-      {bool isActive = false,
-      @required double displayNo,
-      @required double cost}) {
+  Widget customEnterAmount() {
+    var topUpWalletModel = Provider.of<TopUpWalletModel>(context);
+
+    input.text = topUpWalletModel.topUpValue == null
+        ? ""
+        : topUpWalletModel.topUpValue.toString();
+    if (input.text != null)
+      input.selection =
+          TextSelection.fromPosition(TextPosition(offset: input.text.length));
+
+    void onChange(String txt) {
+      if (txt == null) {
+        topUpWalletModel.setTopUpValue(null);
+        return;
+      }
+      double val = double.parse(txt);
+      topUpWalletModel.setTopUpValue(val.toInt());
+    }
+
     return Container(
-        height: 120,
-        width: 100,
-        margin: EdgeInsets.only(left: 10, right: 10),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(
-                width: 0.8,
-                color: isActive ? Colors.green[500] : Colors.grey[200])),
-        child: Stack(children: [
-          Container(
-              width: 100,
-              height: 120,
-              padding: EdgeInsets.all(5),
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text("$displayNo",
-                        style: GoogleFonts.poppins(
-                            fontSize: 59, color: Colors.grey[100]))
-                  ])),
-          Container(
-              width: 100,
-              height: 120,
-              padding: EdgeInsets.all(15),
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CircleAvatar(
-                        radius: 10,
-                        backgroundColor:
-                            isActive ? Colors.green[500] : Colors.black,
-                        child: Center(
-                          child: isActive
-                              ? Icon(Icons.done, size: 14, color: Colors.white)
-                              : CircleAvatar(
-                                  radius: 9,
-                                  backgroundColor: Colors.white,
-                                ),
-                        )),
-                    Text("₹ $cost",
-                        style: GoogleFonts.poppins(
-                            color: Colors.black,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold))
-                  ]))
-        ]));
+        padding: EdgeInsets.all(15),
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text("Enter other amount",
+                  style: GoogleFonts.poppins(
+                    color: Colors.black,
+                    fontSize: 14,
+                  )),
+              Container(
+                  child: TextField(
+                      controller: input,
+                      onChanged: onChange,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                          errorText: topUpWalletModel.errorMessage,
+                          hintText: "₹ 0.00",
+                          hintStyle: GoogleFonts.poppins(
+                              color: Colors.grey[400], fontSize: 18)))),
+              SizedBox(height: 30),
+              InkWell(
+                  onTap: () {
+                    topUpWalletModel.addMoneyToWallet();
+                  },
+                  child: Card(
+                      elevation: 3,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      child: CircleAvatar(
+                          radius: 25,
+                          backgroundColor: Colors.green,
+                          child: Center(
+                              child: topUpWalletModel.isLoading
+                                  ? CircularProgressIndicator(
+                                      valueColor:
+                                          new AlwaysStoppedAnimation<Color>(
+                                              Colors.white))
+                                  : Icon(
+                                      Icons.arrow_forward,
+                                      color: Colors.white,
+                                    )))))
+            ]));
+  }
+
+  Widget rechargeAmountSelect(
+      {@required double displayNo, @required int cost}) {
+    bool isActive = false;
+
+    var topUpWalletModel = Provider.of<TopUpWalletModel>(context);
+
+    if (topUpWalletModel.topUpValue == cost) {
+      isActive = true;
+    }
+    return InkWell(
+        onTap: () {
+          topUpWalletModel.setTopUpValue(cost);
+        },
+        child: Container(
+            height: 120,
+            width: 100,
+            margin: EdgeInsets.only(left: 10, right: 10),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                    width: 0.8,
+                    color: isActive ? Colors.green[500] : Colors.grey[200])),
+            child: Stack(children: [
+              Container(
+                  width: 100,
+                  height: 120,
+                  padding: EdgeInsets.all(5),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text("$displayNo",
+                            style: GoogleFonts.poppins(
+                                fontSize: 59, color: Colors.grey[100]))
+                      ])),
+              Container(
+                  width: 100,
+                  height: 120,
+                  padding: EdgeInsets.all(15),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CircleAvatar(
+                            radius: 10,
+                            backgroundColor:
+                                isActive ? Colors.green[500] : Colors.black,
+                            child: Center(
+                              child: isActive
+                                  ? Icon(Icons.done,
+                                      size: 14, color: Colors.white)
+                                  : CircleAvatar(
+                                      radius: 9,
+                                      backgroundColor: Colors.white,
+                                    ),
+                            )),
+                        Text("₹ $cost",
+                            style: GoogleFonts.poppins(
+                                color: Colors.black,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold))
+                      ]))
+            ])));
   }
 
   Widget topBar() {
+    var walletModel = Provider.of<WalletModel>(context);
     double width = MediaQuery.of(context).size.width;
     return Container(
         child: Stack(children: [
@@ -228,7 +285,8 @@ class _TopUpWallet extends State<TopUpWallet> {
                                       fontWeight: FontWeight.w500,
                                     )),
                               ])),
-                          Text("₹ 2,500.30",
+                          Text(
+                              "₹ ${walletModel.walletData == null ? "NA" : walletModel.walletData["wallet_balance"] / 100}",
                               style: GoogleFonts.poppins(
                                 fontSize: 16,
                                 color: Colors.white,

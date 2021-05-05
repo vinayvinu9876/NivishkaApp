@@ -4,7 +4,9 @@ import 'package:nivishka_android/util/index.dart';
 class Message extends StatefulWidget {
   final String message;
   final IconData icon;
-  Message({@required this.message, @required this.icon});
+  final bool backActive;
+  Message(
+      {@required this.message, @required this.icon, this.backActive = false});
   @override
   State<Message> createState() => _Message(message: message, icon: icon);
 }
@@ -20,9 +22,15 @@ class _Message extends State<Message> {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () {
+            if (widget.backActive) {
+              Navigator.pop(context);
+              return;
+            }
             Navigator.pushNamed(context, "/home");
           },
-          child: Icon(Icons.home, color: Colors.white),
+          child: widget.backActive
+              ? Icon(Icons.arrow_back, color: Colors.white)
+              : Icon(Icons.home, color: Colors.white),
         ),
         body: Container(
             height: height,

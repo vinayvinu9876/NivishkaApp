@@ -25,7 +25,6 @@ import 'package:nivishka_android/GiftCard/VoucherCode.dart';
 import 'package:nivishka_android/SendReport/index.dart';
 import 'package:nivishka_android/Search/index.dart';
 import 'package:nivishka_android/SelectCity/index.dart';
-import 'package:nivishka_android/cancelOrder/index.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -44,6 +43,8 @@ import 'package:nivishka_android/SelectDate/SelectDateModel.dart';
 import 'package:nivishka_android/BookingHistory/BookingHistoryModel.dart';
 import 'package:nivishka_android/BookingDetails/BookingDetailsModel.dart';
 import 'package:nivishka_android/cancelOrder/CancelOrderModel.dart';
+import 'package:nivishka_android/Wallet/WalletModel.dart';
+import 'package:nivishka_android/TopUpWallet/TopUpWalletModel.dart';
 
 import 'AppServices/NavigatorService.dart';
 import 'AppServices/services.dart';
@@ -97,7 +98,9 @@ class _MaterialAppCopy extends State<MaterialAppCopy> {
           ChangeNotifierProvider(create: (context) => SelectDateModel()),
           ChangeNotifierProvider(create: (context) => BookingHistoryModel()),
           ChangeNotifierProvider(create: (context) => BookingDetailsModel()),
-          ChangeNotifierProvider(create: (context) => CancelOrderModel())
+          ChangeNotifierProvider(create: (context) => CancelOrderModel()),
+          ChangeNotifierProvider(create: (context) => WalletModel()),
+          ChangeNotifierProvider(create: (context) => TopUpWalletModel())
         ],
         child: MaterialApp(
           title: 'Nivishka',
@@ -128,7 +131,6 @@ class _MaterialAppCopy extends State<MaterialAppCopy> {
             "/selectOtherLocation": (context) => SelectOtherLocation(),
             "/selectDate": (context) => SelectDate(),
             "/bookingHistory": (context) => BookingHistory(),
-            "/cancelOrder": (context) => CancelOrder(),
             "/profile": (context) => Profile(),
             "/wallet": (context) => Wallet(),
             "/topupwallet": (context) => TopUpWallet(),

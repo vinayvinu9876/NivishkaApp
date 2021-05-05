@@ -65,6 +65,7 @@ class _Signup extends State<Signup> {
                           fieldName: "First Name",
                           placeholder: "Ex : John",
                           value: signupModel.fname,
+                          inputType: TextInputType.name,
                           onChange: (fname) {
                             signupModel.setFname(fname);
                           }),
@@ -72,6 +73,7 @@ class _Signup extends State<Signup> {
                       field(
                           fieldName: "Last Name",
                           placeholder: "Ex: Doe",
+                          inputType: TextInputType.name,
                           value: signupModel.lname,
                           onChange: (lname) {
                             signupModel.setLname(lname);
@@ -81,6 +83,7 @@ class _Signup extends State<Signup> {
                           fieldName: "Email",
                           placeholder: "Ex : johndoe@gmail.com",
                           value: signupModel.email,
+                          inputType: TextInputType.emailAddress,
                           onChange: (email) {
                             signupModel.setEmail(email);
                           }),
@@ -94,7 +97,7 @@ class _Signup extends State<Signup> {
                                 child: field(
                                     fieldName: "Code",
                                     placeholder: "Ex:91 (india)",
-                                    isNumber: true,
+                                    inputType: TextInputType.number,
                                     value: signupModel.countryCode,
                                     textLimit: 2,
                                     onChange: (countryCode) {
@@ -107,7 +110,7 @@ class _Signup extends State<Signup> {
                                     fieldName: "Phone",
                                     placeholder: "Ex: 9108205639",
                                     value: signupModel.phone,
-                                    isNumber: true,
+                                    inputType: TextInputType.number,
                                     onChange: (phone) {
                                       signupModel.setPhone(phone);
                                     },
@@ -194,7 +197,7 @@ class _Signup extends State<Signup> {
       @required String placeholder,
       Function onChange,
       String value,
-      bool isNumber = false,
+      TextInputType inputType,
       int textLimit}) {
     return Card(
         elevation: 3,
@@ -223,11 +226,12 @@ class _Signup extends State<Signup> {
                       style: GoogleFonts.poppins(
                           fontSize: 10, fontWeight: FontWeight.bold)),
                   customTextField(
-                      placeholder: "$placeholder",
-                      maxLength: textLimit,
-                      onChange: onChange,
-                      value: value,
-                      isNumber: isNumber),
+                    placeholder: "$placeholder",
+                    maxLength: textLimit,
+                    onChange: onChange,
+                    value: value,
+                    inputType: inputType,
+                  ),
                 ])));
   }
 
@@ -235,7 +239,7 @@ class _Signup extends State<Signup> {
       {@required String placeholder,
       int maxLength,
       Function onChange,
-      bool isNumber = false,
+      TextInputType inputType,
       String value}) {
     TextEditingController controller = new TextEditingController();
 
@@ -245,8 +249,8 @@ class _Signup extends State<Signup> {
 
     return TextField(
       controller: controller,
-      keyboardType: isNumber ? TextInputType.number : null,
       maxLength: maxLength,
+      keyboardType: inputType,
       onChanged: (String val) {
         onChange(val);
       },

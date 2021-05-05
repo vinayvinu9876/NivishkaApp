@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nivishka_android/util/index.dart';
+import "WalletModel.dart";
+import 'package:provider/provider.dart';
 
 class Wallet extends StatefulWidget {
   @override
@@ -8,9 +10,18 @@ class Wallet extends StatefulWidget {
 
 class _Wallet extends State<Wallet> {
   @override
+  void initState() {
+    super.initState();
+    var walletModel = Provider.of<WalletModel>(context, listen: false);
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => walletModel.getWalletData());
+  }
+
+  @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+    var walletModel = Provider.of<WalletModel>(context, listen: false);
     return SafeArea(
         top: true,
         bottom: true,
@@ -27,46 +38,47 @@ class _Wallet extends State<Wallet> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Today",
-                                style: GoogleFonts.poppins(
-                                    color: Colors.black, fontSize: 12)),
                             SizedBox(height: 5),
-                            transaction(
-                                imgUrl:
-                                    "https://m.economictimes.com/thumb/msid-57371236,width-1200,height-900,resizemode-4,imgsize-9448/paytm-wallet-reaches-200-million-users.jpg",
-                                title: "Top up using PayTM Wallet",
-                                time: "10:43 AM",
-                                isPositive: true,
-                                cost: "500"),
-                            transaction(
-                                imgUrl:
-                                    "https://images.livemint.com/img/2020/05/13/600x338/knowledge_graph_logo_1558085837429_1589341700472.png",
-                                title: "Paid using Google UPI",
-                                time: "12:43 AM",
-                                isPositive: true,
-                                cost: "900"),
-                            transaction(
-                                imgUrl:
-                                    "https://previews.123rf.com/images/alexutemov/alexutemov1509/alexutemov150900193/44961051-n-letter-vector-n-logo-icon-template-n-symbol-silhouette-n-isolated-icon-n-line-style-letter-n-logot.jpg",
-                                title: "Paid for Hair Wash services",
-                                time: "1:43 AM",
-                                isPositive: false,
-                                cost: "600"),
-                            SizedBox(height: 10),
-                            Text("Yesterday",
-                                style: GoogleFonts.poppins(
-                                    color: Colors.black, fontSize: 12)),
-                            SizedBox(height: 5),
-                            transaction(
-                                imgUrl:
-                                    "https://m.economictimes.com/thumb/msid-57371236,width-1200,height-900,resizemode-4,imgsize-9448/paytm-wallet-reaches-200-million-users.jpg",
-                                title: "Top up using PayTM Wallet",
-                                time: "10:43 AM",
-                                isPositive: true,
-                                cost: "500"),
-                            SizedBox(height: 20),
+                            for (DateTime key
+                                in walletModel.dividedTransactionsData.keys)
+                              transactionList(
+                                  key, walletModel.dividedTransactionsData[key])
                           ]))
                 ]))));
+  }
+
+  Widget transactionList(DateTime date, List<Map<String, dynamic>> dataList) {
+    DateTime today = new DateTime.now();
+    String label = "";
+
+    if (today.difference(date).compareTo(Duration(days: 1)) <
+        0) //return negative if shorter
+      label = "Today";
+    else if (today.difference(date).compareTo(Duration(days: 2)) < 0)
+      label = "Yesterday";
+    else
+      label = "${date.day}-${date.month}-${date.year}";
+
+    return Container(
+        margin: EdgeInsets.only(top: 5, bottom: 5),
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("$label",
+                  style:
+                      GoogleFonts.poppins(color: Colors.black, fontSize: 12)),
+              SizedBox(height: 5),
+              for (Map<String, dynamic> trans in dataList)
+                transaction(
+                    imgUrl:
+                        "https://m.economictimes.com/thumb/msid-57371236,width-1200,height-900,resizemode-4,imgsize-9448/paytm-wallet-reaches-200-million-users.jpg",
+                    title: "Top Up using ${trans["payment_method"]}",
+                    time:
+                        "${trans["createDate"].toDate().hour.toString() + " : " + trans["createDate"].toDate().minute.toString()}",
+                    isPositive: true,
+                    cost: "${trans["payment_amount"] / 100}"),
+            ]));
   }
 
   Widget transaction(
@@ -133,6 +145,7 @@ class _Wallet extends State<Wallet> {
   }
 
   Widget topBar() {
+    var walletModel = Provider.of<WalletModel>(context);
     double width = MediaQuery.of(context).size.width;
     return Container(
         child: Stack(children: [
@@ -201,7 +214,8 @@ class _Wallet extends State<Wallet> {
                                       color: Colors.white,
                                       fontWeight: FontWeight.w500,
                                     )),
-                                Text("₹ 2,500.30",
+                                Text(
+                                    "₹ ${walletModel.walletData == null ? "NA" : walletModel.walletData["wallet_balance"] / 100}",
                                     style: GoogleFonts.poppins(
                                       fontSize: 16,
                                       color: Colors.white,
