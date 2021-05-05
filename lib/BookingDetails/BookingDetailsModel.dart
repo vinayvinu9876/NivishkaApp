@@ -5,15 +5,20 @@ class BookingDetailsModel extends ChangeNotifier {
   bool _isLoading = false;
   Map<String, dynamic> _partnerData;
   Map<String, dynamic> _paymentData;
+  Map<String, dynamic> _refundData;
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   Map<String, dynamic> get partnerData => _partnerData;
   Map<String, dynamic> get paymentData => _paymentData;
+  Map<String, dynamic> get refundData => _refundData;
   bool get isLoading => _isLoading;
 
   void getData(int orderId) async {
     _isLoading = true;
+    _partnerData = null;
+    _paymentData = null;
+    _refundData = null;
     notifyListeners();
     await getPartnerData(orderId).catchError((e) {
       print(e);
@@ -21,19 +26,38 @@ class BookingDetailsModel extends ChangeNotifier {
     await getPaymentData(orderId).catchError((e) {
       print(e);
     });
+    await getRefundData(orderId).catchError((e) {
+      print(e);
+    });
     _isLoading = false;
     notifyListeners();
   }
 
-  Future<void> getPartnerData(int orderId) async {
-    _partnerData = null;
+  Future<void> getRefundData(int orderId) async {
+    Query query =
+        firestore.collection("Refund").where("order_id", isEqualTo: orderId);
 
+    await query.get().then((QuerySnapshot snap) {
+      print("refund data = ${snap.size}");
+      if (snap.size > 0) {
+        _refundData = snap.docs.last.data();
+        print("refund data = $_refundData");
+        notifyListeners();
+      }
+    }).catchError((e) {
+      print(e);
+    });
+  }
+
+  Future<void> getPartnerData(int orderId) async {
     Query query = firestore
         .collection("OrderSchedule")
         .where("order_id", isEqualTo: orderId)
-        .where("status", whereIn: ["success", "active"]);
+        .where("status", whereIn: ["success", "active", "failed"]);
     await query.get().then((QuerySnapshot snap) {
+      print("Partner data size = ${snap.size}");
       if (snap.size > 0) {
+        print("Partner data = $_partnerData");
         _partnerData = snap.docs.first.data();
         notifyListeners();
       }
@@ -43,7 +67,6 @@ class BookingDetailsModel extends ChangeNotifier {
   }
 
   Future<void> getPaymentData(int orderId) async {
-    _paymentData = null;
     Query query = firestore
         .collection("Payments")
         .where("order_id", isEqualTo: orderId.toString())

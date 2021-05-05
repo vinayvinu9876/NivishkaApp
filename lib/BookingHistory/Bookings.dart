@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nivishka_android/util/index.dart';
 import 'package:nivishka_android/BookingDetails/index.dart';
 import 'package:intl/intl.dart';
+import 'package:nivishka_android/cancelOrder/index.dart';
 
 class Bookings extends StatefulWidget {
   final List<Map<String, dynamic>> ordersData;
@@ -189,23 +190,26 @@ class _Bookings extends State<Bookings> {
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 8))),
                                       SizedBox(width: 10),
-                                      Text(
-                                          "${widget.type == "pending" ? "CANCEL" : "BOOK AGAIN"}",
-                                          style: GoogleFonts.poppins(
-                                              color: blue,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 8)),
                                       Visibility(
                                           visible: (widget.type == "pending"),
-                                          child: SizedBox(width: 10)),
-                                      Visibility(
-                                        visible: (widget.type == "pending"),
-                                        child: Text("RESCHEDULE",
-                                            style: GoogleFonts.poppins(
-                                                color: blue,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 8)),
-                                      )
+                                          child: InkWell(
+                                              onTap: () {
+                                                if (widget.type == "pending")
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            CancelOrder(
+                                                                orderId: order[
+                                                                    "order_id"])),
+                                                  );
+                                              },
+                                              child: Text("CANCEL",
+                                                  style: GoogleFonts.poppins(
+                                                      color: blue,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 8)))),
                                     ]))
                               ]))
                     ]))));

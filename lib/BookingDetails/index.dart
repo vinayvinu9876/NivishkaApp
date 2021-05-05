@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nivishka_android/util/index.dart';
 import 'package:provider/provider.dart';
+import 'package:nivishka_android/cancelOrder/index.dart';
 import 'BookingDetailsModel.dart';
 
 class BookingDetails extends StatefulWidget {
@@ -43,11 +44,77 @@ class _BookingDetails extends State<BookingDetails> {
                 Visibility(
                     visible: bookingDetailsModel.partnerData != null,
                     child: partnerDetails()),
-                Visibility(
-                    visible: bookingDetailsModel.paymentData != null,
-                    child: paymentDetails()),
+                Container(
+                    child: Row(children: [
+                  Expanded(
+                    flex: 1,
+                    child: Visibility(
+                        visible: bookingDetailsModel.paymentData != null,
+                        child: paymentDetails()),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Visibility(
+                        visible: bookingDetailsModel.refundData != null,
+                        child: refundDetails()),
+                  )
+                ])),
               ]),
             )));
+  }
+
+  Widget refundDetails() {
+    Widget keyValue({@required String key, @required String value}) {
+      return Container(
+          padding: EdgeInsets.only(top: 3, bottom: 3),
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("$key",
+                    style: GoogleFonts.poppins(
+                        color: Colors.grey[500], fontSize: 10)),
+                SizedBox(height: 1),
+                Text("$value",
+                    style: GoogleFonts.poppins(
+                        color: Colors.black,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w500))
+              ]));
+    }
+
+    var bookingDetailsModel = Provider.of<BookingDetailsModel>(context);
+
+    int amount = 0;
+    String status = "";
+    String speed = "";
+
+    if (bookingDetailsModel.refundData != null) {
+      amount = (bookingDetailsModel.refundData["amount"] / 100).toInt();
+      status = bookingDetailsModel.refundData["status"];
+      speed = bookingDetailsModel.refundData["speed_processed"] == "normal"
+          ? "Within 4-5days"
+          : "Instant";
+    }
+
+    return Container(
+        padding: EdgeInsets.all(
+          10,
+        ),
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Refund Details",
+                  style: GoogleFonts.poppins(
+                      fontSize: 12,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600)),
+              SizedBox(height: 10),
+              keyValue(key: "Refund Amount", value: "₹ $amount"),
+              keyValue(key: "Refund Status", value: "$status"),
+              keyValue(key: "Refund Speed", value: "$speed"),
+            ]));
   }
 
   Widget paymentDetails() {
@@ -77,14 +144,22 @@ class _BookingDetails extends State<BookingDetails> {
     String paymentAmount = "";
     String paymentMethod = "";
     String status = "";
+    String paymentDetails = "";
 
     if (paymentData != null) {
       paymentAmount = (paymentData["payment_amount"] / 100).toString();
       paymentMethod = paymentData["payment_method"];
       status = paymentData["status"];
+      if (paymentData["bank"] != null) {
+        paymentDetails = paymentData["bank"];
+      } else if (paymentData["card_id"] != null) {
+        paymentDetails = paymentData["card_id"];
+      } else if (paymentData["vpa"] != null) {
+        paymentDetails = paymentData["vpa"];
+      } else if (paymentData["wallet"] != null) {
+        paymentDetails = paymentData["wallet"];
+      }
     }
-
-    if (paymentData != null) {}
 
     return Container(
         padding: EdgeInsets.all(
@@ -101,34 +176,54 @@ class _BookingDetails extends State<BookingDetails> {
                       fontWeight: FontWeight.w600)),
               SizedBox(height: 10),
               keyValue(key: "Payment Amount", value: "₹ $paymentAmount"),
-              keyValue(key: "Payment Method", value: "$paymentMethod"),
+              keyValue(
+                  key: "Payment Method",
+                  value: "$paymentMethod $paymentDetails"),
               keyValue(key: "Payment Status", value: "$status"),
             ]));
   }
 
   Widget bottomNavBar() {
     double width = MediaQuery.of(context).size.width;
+
+    bool isCancelButton = false;
+
+    if ((["paid", "partner_alloted"].contains(widget.orderDetails["status"]))) {
+      isCancelButton = true;
+    }
+
     return Container(
         width: width,
         padding: EdgeInsets.all(15),
         child: Row(children: [
           Expanded(
               flex: 5,
-              child: Container(
-                  height: 40,
-                  padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topRight,
-                        end: Alignment.topCenter,
-                        colors: gradient,
-                      ),
-                      borderRadius: BorderRadius.all(Radius.circular(5))),
-                  child: Center(
-                      child: Text("Rate Service",
-                          style: GoogleFonts.poppins(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500))))),
+              child: InkWell(
+                  onTap: () {
+                    if (isCancelButton)
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CancelOrder(
+                                orderId: widget.orderDetails["order_id"])),
+                      );
+                  },
+                  child: Container(
+                      height: 40,
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topRight,
+                            end: Alignment.topCenter,
+                            colors: gradient,
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(5))),
+                      child: Center(
+                          child: Text(
+                              isCancelButton ? "Cancel" : "Rate Service",
+                              style: GoogleFonts.poppins(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500)))))),
           SizedBox(width: 10),
           Expanded(
               flex: 5,

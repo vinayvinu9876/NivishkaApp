@@ -24,7 +24,7 @@ class BookingHistoryModel extends ChangeNotifier {
   bool get isCancelledLoading => _isCancelledLoading;
 
   void getPendingOrderData() {
-    List<String> status = ["paid"];
+    List<String> status = ["partner_alloted", "paid"];
     print("Getting pending orders");
     if (_pendingOrders.length == 0) {
       getOrdersData(status);
@@ -64,7 +64,8 @@ class BookingHistoryModel extends ChangeNotifier {
     Query query = firestore
         .collection("Order")
         .where("uid", isEqualTo: uid)
-        .where("status", whereIn: status);
+        .where("status", whereIn: status)
+        .orderBy("create_date", descending: true);
 
     query.snapshots().listen((event) {
       List<Map<String, dynamic>> temp = [];

@@ -18,10 +18,15 @@ class _Message extends State<Message> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.pushNamed(context, "/home");
+          },
+          child: Icon(Icons.home, color: Colors.white),
+        ),
         body: Container(
             height: height,
             width: width,
-            decoration: BoxDecoration(),
             child: Container(
                 height: height,
                 width: width,
@@ -40,11 +45,12 @@ class _Message extends State<Message> {
                             ))),
                     SizedBox(height: 20),
                     Text("$message",
+                        textAlign: TextAlign.center,
                         style: GoogleFonts.poppins(
                           color: Colors.black,
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                        ))
+                        )),
                   ],
                 ))));
   }
