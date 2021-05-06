@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nivishka_android/util/index.dart';
 import 'package:styled_text/styled_text.dart';
+import 'PromoListModel.dart';
+import 'package:provider/provider.dart';
+import 'package:nivishka_android/PromoDescription/index.dart';
 
 class PromoList extends StatefulWidget {
   @override
@@ -9,9 +12,18 @@ class PromoList extends StatefulWidget {
 
 class _PromoList extends State<PromoList> {
   @override
+  void initState() {
+    super.initState();
+    var promoDescModel = Provider.of<PromoListModel>(context, listen: false);
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => promoDescModel.getPromoList());
+  }
+
+  @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+    var promoDescModel = Provider.of<PromoListModel>(context);
     return SafeArea(
         top: true,
         bottom: true,
@@ -36,27 +48,49 @@ class _PromoList extends State<PromoList> {
                 height: height,
                 width: width,
                 padding: EdgeInsets.only(left: 10, right: 10),
-                child: ListView(children: [
-                  SizedBox(height: 10),
-                  promoWidget(
-                      offerText: "₹ 1500",
-                      desc: "on food and drinks | Max discount \$400",
-                      couponCode: "NEARBUY25PSFOOD",
-                      validTill: "1 Jan 2021"),
-                  promoWidget(
-                      offerText: "45%",
-                      desc: "on first time booking | Max discount ₹1000",
-                      couponCode: "FIRST45",
-                      validTill: "1 Apr 2021"),
+                child: Column(children: [
+                  Visibility(
+                      visible: (promoDescModel.errorMessage != null),
+                      child: Container(
+                          padding: EdgeInsets.all(10),
+                          height: 100,
+                          width: width,
+                          child: Text("${promoDescModel.errorMessage}",
+                              style: GoogleFonts.poppins(
+                                  color: Colors.red, fontSize: 12)))),
+                  Visibility(
+                      visible: (promoDescModel.isLoading),
+                      child: Expanded(
+                          child: Container(
+                              child:
+                                  Center(child: CircularProgressIndicator())))),
+                  Visibility(
+                      visible: (!promoDescModel.isLoading),
+                      child: Expanded(
+                          child: ListView(children: [
+                        SizedBox(height: 10),
+                        for (var i in promoDescModel.promoList)
+                          promoWidget(
+                              offerText: "₹ ${i["max_discount_rupees"]}",
+                              desc: "${i["promo_name"]}",
+                              promoId: i["promo_id"],
+                              couponCode: "${i["promo_code"]}",
+                              validTill: i["end_date"].toDate()),
+                      ])))
                 ]))));
   }
 
   Widget promoWidget({
     @override String offerText,
+    @override int promoId,
     @override String desc,
     @override String couponCode,
-    @override String validTill,
+    @override DateTime validTill,
   }) {
+    String date = "";
+
+    date = "${validTill.day}-${validTill.month + 1}-${validTill.year}";
+
     return Container(
         height: 160,
         margin: EdgeInsets.only(top: 7, bottom: 7),
@@ -112,8 +146,19 @@ class _PromoList extends State<PromoList> {
                                       )),
                                 ])),
                         Expanded(
-                            child: Container(
-                                child: Icon(Icons.chevron_right, color: blue)))
+                            child: InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => PromoDescription(
+                                              promoId: promoId,
+                                            )),
+                                  );
+                                },
+                                child: Container(
+                                    child: Icon(Icons.chevron_right,
+                                        color: blue))))
                       ]))),
           Expanded(
               flex: 3,
@@ -129,7 +174,7 @@ class _PromoList extends State<PromoList> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         StyledText(
-                            text: "<all>Valid till <b>$validTill</b></all>",
+                            text: "<all>Valid till <b>$date</b></all>",
                             styles: {
                               "all": GoogleFonts.poppins(
                                 color: Colors.white,
@@ -138,15 +183,25 @@ class _PromoList extends State<PromoList> {
                               "b": GoogleFonts.poppins(
                                   fontWeight: FontWeight.bold)
                             }),
-                        Container(
-                            child: Row(children: [
-                          Text("Details",
-                              style: GoogleFonts.poppins(
-                                  color: Colors.white, fontSize: 12)),
-                          SizedBox(width: 5),
-                          Icon(Icons.keyboard_arrow_down,
-                              size: 20, color: Colors.white)
-                        ]))
+                        InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => PromoDescription(
+                                          promoId: promoId,
+                                        )),
+                              );
+                            },
+                            child: Container(
+                                child: Row(children: [
+                              Text("Details",
+                                  style: GoogleFonts.poppins(
+                                      color: Colors.white, fontSize: 12)),
+                              SizedBox(width: 5),
+                              Icon(Icons.keyboard_arrow_down,
+                                  size: 20, color: Colors.white)
+                            ])))
                       ])))
         ]));
   }

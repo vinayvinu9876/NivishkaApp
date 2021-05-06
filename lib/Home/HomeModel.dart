@@ -86,13 +86,21 @@ class HomeModel extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     });
+
+    userSubscription.onError((e) {
+      print(e);
+      _isLoading = false;
+      notifyListeners();
+    });
   }
 
   void getPromos(Map<String, dynamic> userData) async {
+    DateTime currentDate = new DateTime.now();
     Query query = firestore
         .collection("Promo")
         .where("status", isEqualTo: "active")
         .where("cities", arrayContains: userData["city_code"])
+        .where("end_date", isGreaterThan: currentDate)
         .limit(6);
 
     Stream<QuerySnapshot> promoQuery = query.snapshots();
@@ -102,8 +110,12 @@ class HomeModel extends ChangeNotifier {
       snap.docs.forEach((DocumentSnapshot element) {
         _promoData.add(element.data());
       });
-
+      print("Promo code size = ${snap.size}");
       notifyListeners();
+    });
+
+    promoSubscription.onError((e) {
+      print(e);
     });
   }
 
@@ -126,6 +138,10 @@ class HomeModel extends ChangeNotifier {
         _categoryData.add(doc.data());
       });
       notifyListeners();
+    });
+
+    categorySubscription.onError((e) {
+      print(e);
     });
   }
 }

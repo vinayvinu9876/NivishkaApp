@@ -97,7 +97,8 @@ class _Signup extends State<Signup> {
                                 child: field(
                                     fieldName: "Code",
                                     placeholder: "Ex:91 (india)",
-                                    inputType: TextInputType.number,
+                                    inputType: TextInputType.numberWithOptions(
+                                        signed: false, decimal: false),
                                     value: signupModel.countryCode,
                                     textLimit: 2,
                                     onChange: (countryCode) {
@@ -110,7 +111,8 @@ class _Signup extends State<Signup> {
                                     fieldName: "Phone",
                                     placeholder: "Ex: 9108205639",
                                     value: signupModel.phone,
-                                    inputType: TextInputType.number,
+                                    inputType: TextInputType.numberWithOptions(
+                                        signed: false, decimal: false),
                                     onChange: (phone) {
                                       signupModel.setPhone(phone);
                                     },

@@ -3,6 +3,7 @@ import 'package:nivishka_android/util/index.dart';
 import 'package:nivishka_android/CategoryDescription/index.dart';
 import 'package:styled_text/styled_text.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
+import 'package:nivishka_android/PromoDescription/index.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
 import "CustomDrawer.dart";
@@ -428,6 +429,7 @@ class _Home extends State<Home> {
 
   Widget promo() {
     var homeModel = Provider.of<HomeModel>(context);
+
     return Container(
         padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10),
         height: 120,
@@ -469,6 +471,7 @@ class _Home extends State<Home> {
                                       fontSize: 8)))),
                       for (var item in homeModel.promoData)
                         promoBox(
+                          promoId: item["promo_id"],
                           imgurl: "${item["imgUrl"]}",
                           heading: "${item["promo_name"]}",
                           bigText: item["isPercentDiscount"]
@@ -487,10 +490,17 @@ class _Home extends State<Home> {
       @required String heading,
       @required String bigText,
       @required String smallText,
+      @required int promoId,
       @required buttonName}) {
     return InkWell(
         onTap: () {
-          Navigator.pushNamed(context, "/promoDesc");
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => PromoDescription(
+                      promoId: promoId,
+                    )),
+          );
         },
         child: Container(
             height: 70,

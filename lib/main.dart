@@ -7,7 +7,6 @@ import 'package:nivishka_android/Login/EnterPhone.dart';
 import 'package:nivishka_android/Home/index.dart';
 import 'package:nivishka_android/AllCategories/index.dart';
 import 'package:nivishka_android/PromoList/index.dart';
-import 'package:nivishka_android/PromoDescription/index.dart';
 import 'package:nivishka_android/BestPicks/index.dart';
 import 'package:nivishka_android/FlashSale/index.dart';
 import 'package:nivishka_android/ServiceLocationSelect/index.dart';
@@ -45,6 +44,11 @@ import 'package:nivishka_android/BookingDetails/BookingDetailsModel.dart';
 import 'package:nivishka_android/cancelOrder/CancelOrderModel.dart';
 import 'package:nivishka_android/Wallet/WalletModel.dart';
 import 'package:nivishka_android/TopUpWallet/TopUpWalletModel.dart';
+import 'package:nivishka_android/PromoDescription/PromoDescriptionModel.dart';
+import 'package:nivishka_android/PromoList/PromoListModel.dart';
+import 'package:nivishka_android/AllCategories/AllCategoryModel.dart';
+import 'package:nivishka_android/Profile/ProfileModel.dart';
+import 'package:nivishka_android/SendReport/SendReportModel.dart';
 
 import 'AppServices/NavigatorService.dart';
 import 'AppServices/services.dart';
@@ -100,7 +104,12 @@ class _MaterialAppCopy extends State<MaterialAppCopy> {
           ChangeNotifierProvider(create: (context) => BookingDetailsModel()),
           ChangeNotifierProvider(create: (context) => CancelOrderModel()),
           ChangeNotifierProvider(create: (context) => WalletModel()),
-          ChangeNotifierProvider(create: (context) => TopUpWalletModel())
+          ChangeNotifierProvider(create: (context) => TopUpWalletModel()),
+          ChangeNotifierProvider(create: (context) => PromoDescriptionModel()),
+          ChangeNotifierProvider(create: (context) => PromoListModel()),
+          ChangeNotifierProvider(create: (context) => AllCategoryModel()),
+          ChangeNotifierProvider(create: (context) => ProfileModel()),
+          ChangeNotifierProvider(create: (context) => SendReportModel()),
         ],
         child: MaterialApp(
           title: 'Nivishka',
@@ -123,7 +132,6 @@ class _MaterialAppCopy extends State<MaterialAppCopy> {
             "/allCategories": (context) => AllCategories(),
             "/about": (context) => About(),
             "/promoList": (context) => PromoList(),
-            "/promoDesc": (context) => PromoDescription(),
             "/bestPicks": (context) => BestPicks(),
             "/flashSale": (context) => FlashSale(),
             "/serviceLocationSelect": (context) => ServiceLocationSelect(),

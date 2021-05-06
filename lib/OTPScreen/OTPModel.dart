@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:nivishka_android/util/isEmpty.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:nivishka_android/AppServices/NavigatorService.dart';
+import 'package:nivishka_android/AppServices/services.dart';
 import "dart:async";
 
 class OTPModel extends ChangeNotifier {
@@ -127,15 +129,16 @@ class OTPModel extends ChangeNotifier {
 
     var status = results.data;
 
+    _isLoading = false;
+    notifyListeners();
+
     if (status["status"] == "success") {
       print("Succesfully Logged In");
       await auth.signInWithCustomToken(status["token"]);
+      await getIt<NavigationService>().navigateTo("/home");
     } else {
       _errorMessage = status["message"];
       print("Error $_errorMessage");
     }
-
-    _isLoading = false;
-    notifyListeners();
   }
 }

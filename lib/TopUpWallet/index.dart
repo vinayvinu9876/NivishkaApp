@@ -116,7 +116,8 @@ class _TopUpWallet extends State<TopUpWallet> {
                   child: TextField(
                       controller: input,
                       onChanged: onChange,
-                      keyboardType: TextInputType.number,
+                      keyboardType: TextInputType.numberWithOptions(
+                          signed: false, decimal: false),
                       decoration: InputDecoration(
                           errorText: topUpWalletModel.errorMessage,
                           hintText: "₹ 0.00",

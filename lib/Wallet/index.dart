@@ -152,19 +152,19 @@ class _Wallet extends State<Wallet> {
       Container(
           padding: EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 5),
           child: Container(
-              height: 200,
+              height: 150,
               decoration: BoxDecoration(
                   color: Colors.green.withOpacity(0.4),
                   borderRadius: BorderRadius.circular(20)))),
       Container(
           padding: EdgeInsets.only(top: 20, left: 45, right: 45, bottom: 5),
           child: Container(
-              height: 200,
+              height: 150,
               decoration: BoxDecoration(
                   color: Colors.green.withOpacity(0.4),
                   borderRadius: BorderRadius.circular(20)))),
       Container(
-          height: 200,
+          height: 150,
           width: width,
           padding: EdgeInsets.all(15),
           decoration: BoxDecoration(
@@ -249,29 +249,6 @@ class _Wallet extends State<Wallet> {
                                                         color: Colors.white)))),
                                       ])))
                         ])),
-                SizedBox(height: 25),
-                Container(
-                    decoration: BoxDecoration(
-                      color: Colors.green[500],
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    padding: EdgeInsets.all(10),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text("Gift a Card",
-                              style: GoogleFonts.poppins(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 12,
-                              )),
-                          Icon(
-                            Icons.chevron_right,
-                            size: 20,
-                            color: Colors.white,
-                          )
-                        ]))
               ]))),
     ]));
   }

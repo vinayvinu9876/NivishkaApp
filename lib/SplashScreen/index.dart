@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
 import "../AuthListener.dart";
 import 'package:provider/provider.dart';
 
@@ -9,8 +8,16 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreen extends State<SplashScreen> {
-  final threeSec = const Duration(seconds: 3);
+  @override
+  void initState() {
+    super.initState();
+    var authModel = Provider.of<AuthListener>(context, listen: false);
+    authModel.listen();
+  }
 
+  /*
+  final threeSec = const Duration(seconds: 3);
+  
   @override
   void initState() {
     super.initState();
@@ -20,7 +27,7 @@ class _SplashScreen extends State<SplashScreen> {
       Navigator.pushNamed(context, "/chooseLoginSignup");
       t.cancel();
     });
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {

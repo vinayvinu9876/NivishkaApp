@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'ProfileModel.dart';
 import 'package:nivishka_android/util/index.dart';
 
 class Profile extends StatefulWidget {
@@ -8,9 +10,28 @@ class Profile extends StatefulWidget {
 
 class _Profile extends State<Profile> {
   @override
+  void initState() {
+    super.initState();
+    var profileModel = Provider.of<ProfileModel>(context, listen: false);
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => profileModel.getUserData());
+  }
+
+  @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+    var profileModel = Provider.of<ProfileModel>(context);
+
+    String name = "", phone = "", email = "";
+
+    if (profileModel.userData != null) {
+      name =
+          profileModel.userData["fname"] + " " + profileModel.userData["lname"];
+      phone = profileModel.userData["phone"];
+      email = profileModel.userData["email"];
+    }
+
     return SafeArea(
         top: true,
         bottom: true,
@@ -40,15 +61,16 @@ class _Profile extends State<Profile> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Vinay P",
+                            Text(
+                                "${profileModel.isLoading ? "Loading.." : name}",
                                 style: GoogleFonts.poppins(
                                   color: Colors.black,
                                   fontSize: 12,
                                 )),
-                            Text("vvinu9876@gmail.com",
+                            Text("$email",
                                 style: GoogleFonts.poppins(
                                     color: Colors.grey[600], fontSize: 10)),
-                            Text("+91 9019301344",
+                            Text("+91 $phone",
                                 style: GoogleFonts.poppins(
                                     color: Colors.grey[600], fontSize: 10)),
                           ])),
@@ -104,11 +126,11 @@ class _Profile extends State<Profile> {
                                 text: "Refer and Earn",
                                 ontap: () => Navigator.pushNamed(
                                     context, "/referAndEarn")),
-                            iconText(
+                            /*iconText(
                                 icon: Icons.card_giftcard,
                                 text: "My Gift Cards",
                                 ontap: () =>
-                                    Navigator.pushNamed(context, "/giftCard")),
+                                    Navigator.pushNamed(context, "/giftCard")),*/
                             iconText(
                                 icon: Icons.account_balance_wallet,
                                 text: "My Wallet",
@@ -122,14 +144,18 @@ class _Profile extends State<Profile> {
                             iconText(icon: Icons.star, text: "Rate Nivishka"),
                           ])),
                   SizedBox(height: 10),
-                  Container(
-                      child: Center(
-                          child: Text("Logout",
-                              style: GoogleFonts.poppins(
-                                color: Colors.red,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                              )))),
+                  InkWell(
+                      onTap: () {
+                        profileModel.logout();
+                      },
+                      child: Container(
+                          child: Center(
+                              child: Text("Logout",
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.red,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                  ))))),
                   SizedBox(height: 15),
                 ]))));
   }
