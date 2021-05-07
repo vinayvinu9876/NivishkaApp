@@ -95,7 +95,7 @@ class ReceiptModel extends ChangeNotifier {
     print("Destructing ondispose");
     _isLoading = false;
     _promoCode = null;
-    _selectedPromoCodeData = null;
+    _selectedPromoCodeData.clear();
     if (_chargesSubscription != null) {
       _chargesSubscription.cancel();
       _chargesSubscription = null;
@@ -167,14 +167,14 @@ class ReceiptModel extends ChangeNotifier {
 
   void setPromoCode(int selectedPromoCodeId) {
     _isPromoLoading = true;
-    _selectedPromoCodeData = null;
+    _selectedPromoCodeData.clear();
     _errorMessage = null;
     notifyListeners();
     User user = auth.currentUser;
     String uid = user.uid;
 
     var funcRef = func.httpsCallable("checkIfPromoApplicable");
-    funcRef({"promoCodeDocId": selectedPromoCodeId, "uid": uid})
+    funcRef({"promoId": selectedPromoCodeId, "uid": uid})
         .then((HttpsCallableResult value) {
       if (value.data["status"] == "success") {
         _promoData.forEach((Map<String, dynamic> promoCodeData) {

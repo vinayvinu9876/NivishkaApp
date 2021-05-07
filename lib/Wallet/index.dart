@@ -41,8 +41,31 @@ class _Wallet extends State<Wallet> {
                             SizedBox(height: 5),
                             for (DateTime key
                                 in walletModel.dividedTransactionsData.keys)
-                              transactionList(
-                                  key, walletModel.dividedTransactionsData[key])
+                              transactionList(key,
+                                  walletModel.dividedTransactionsData[key]),
+                            Visibility(
+                                visible: walletModel
+                                        .dividedTransactionsData.keys.length ==
+                                    0,
+                                child: Container(
+                                    width: width,
+                                    child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          SizedBox(
+                                            height: 40,
+                                          ),
+                                          Icon(
+                                            Icons.inbox,
+                                            color: Colors.grey[400],
+                                            size: 40,
+                                          ),
+                                          SizedBox(height: 10),
+                                          Text("No Transactions found")
+                                        ])))
                           ]))
                 ]))));
   }
@@ -73,11 +96,12 @@ class _Wallet extends State<Wallet> {
                 transaction(
                     imgUrl:
                         "https://m.economictimes.com/thumb/msid-57371236,width-1200,height-900,resizemode-4,imgsize-9448/paytm-wallet-reaches-200-million-users.jpg",
-                    title: "Top Up using ${trans["payment_method"]}",
+                    title:
+                        "Top Up using ${trans["payment_method"]} ${trans["payment_details"]}",
                     time:
-                        "${trans["createDate"].toDate().hour.toString() + " : " + trans["createDate"].toDate().minute.toString()}",
+                        "${trans["date"].toDate().hour.toString() + " : " + trans["date"].toDate().minute.toString()}",
                     isPositive: true,
-                    cost: "${trans["payment_amount"] / 100}"),
+                    cost: "${trans["amount"] / 100}"),
             ]));
   }
 

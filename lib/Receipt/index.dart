@@ -155,46 +155,36 @@ class _Receipt extends State<Receipt> {
                   Container(height: 15, color: Colors.grey[100]),
                   promoCodeLinkWidget(),
                   Container(height: 15, color: Colors.grey[100]),
-                  Visibility(
-                      visible: receiptModel.isLoading,
-                      child: Container(
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [CircularProgressIndicator()]))),
-                  Visibility(
-                      visible: !receiptModel.isLoading,
-                      child: Container(
-                          padding: EdgeInsets.all(15),
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                itemPriceList(
-                                    name: "Item Total",
-                                    price: "${getCartValue()}"),
-                                itemPriceList(
-                                    name: "Convenience & other charges [+]",
-                                    price: "${receiptModel.charges}"),
-                                Visibility(
-                                    visible: receiptModel
-                                            .selectedPromoCodeData.keys.length >
-                                        0,
-                                    child: itemPriceList(
-                                        name: "Promo discount",
-                                        price: "${getDiscountInString()}")),
-                                SizedBox(height: 10),
-                                Container(
-                                  height: 2,
-                                  width: width,
-                                  color: Colors.grey[100],
-                                ),
-                                itemPriceList(
-                                    name: "Total",
-                                    price:
-                                        "${getCartValue() - (getDiscountValue()) + receiptModel.charges}",
-                                    isTotal: true),
-                              ])))
+                  Container(
+                      padding: EdgeInsets.all(15),
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            itemPriceList(
+                                name: "Item Total", price: "${getCartValue()}"),
+                            itemPriceList(
+                                name: "Convenience & other charges [+]",
+                                price: "${receiptModel.charges}"),
+                            Visibility(
+                                visible: receiptModel
+                                        .selectedPromoCodeData.keys.length >
+                                    0,
+                                child: itemPriceList(
+                                    name: "Promo discount",
+                                    price: "${getDiscountInString()}")),
+                            SizedBox(height: 10),
+                            Container(
+                              height: 2,
+                              width: width,
+                              color: Colors.grey[100],
+                            ),
+                            itemPriceList(
+                                name: "Total",
+                                price:
+                                    "${getCartValue() - (getDiscountValue()) + receiptModel.charges}",
+                                isTotal: true),
+                          ]))
                 ]))));
   }
 
@@ -277,8 +267,8 @@ class _Receipt extends State<Receipt> {
                               color: Colors.red, fontSize: 12)))),
               InkWell(
                   onTap: () {
-                    if (receiptModel.cartData.length > 0)
-                      receiptModel.createOrder();
+                    if ((receiptModel.cartData.length > 0) &&
+                        (!receiptModel.isLoading)) receiptModel.createOrder();
                   },
                   child: Container(
                       height: receiptModel.errorMessage == null ? 50 : 64,
@@ -296,20 +286,22 @@ class _Receipt extends State<Receipt> {
                                     MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Container(
-                                      child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                        SizedBox(width: 10),
-                                        Text(
-                                            "₹ ${getCartValue() - (getDiscountValue()) + receiptModel.charges}",
-                                            style: GoogleFonts.roboto(
-                                              color: Colors.white,
-                                            ))
-                                      ])),
+                                  Visibility(
+                                      visible: (!receiptModel.isLoading),
+                                      child: Container(
+                                          child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                            SizedBox(width: 10),
+                                            Text(
+                                                "₹ ${getCartValue() - (getDiscountValue()) + receiptModel.charges}",
+                                                style: GoogleFonts.roboto(
+                                                  color: Colors.white,
+                                                ))
+                                          ]))),
                                   Container(
                                       child: Row(
                                           mainAxisAlignment:
@@ -317,13 +309,19 @@ class _Receipt extends State<Receipt> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                        Text("Continue",
+                                        Text(
+                                            receiptModel.isLoading
+                                                ? "Processing..."
+                                                : "Continue",
                                             style: GoogleFonts.poppins(
                                               fontSize: 14,
                                               color: Colors.white,
                                             )),
-                                        Icon(Icons.keyboard_arrow_right,
-                                            color: Colors.white)
+                                        Visibility(
+                                            visible: (!receiptModel.isLoading),
+                                            child: Icon(
+                                                Icons.keyboard_arrow_right,
+                                                color: Colors.white))
                                       ]))
                                 ])
                           ])))

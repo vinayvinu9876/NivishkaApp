@@ -61,11 +61,9 @@ class WalletModel extends ChangeNotifier {
     }
 
     Query query = firestore
-        .collection("Payments")
+        .collection("WalletTransaction")
         .where("uid", isEqualTo: uid)
-        .where("entity", isEqualTo: "wallet")
-        .where("status", isEqualTo: "captured")
-        .orderBy("createDate", descending: true);
+        .orderBy("date", descending: true);
     transactionSubscription = query.snapshots().listen((QuerySnapshot snap) {
       _walletTransactions.clear();
       _dividedTransactionsData.clear();
@@ -73,7 +71,7 @@ class WalletModel extends ChangeNotifier {
         Map<String, dynamic> data = element.data();
         _walletTransactions.add(data);
 
-        DateTime key = data["createDate"].toDate();
+        DateTime key = data["date"].toDate();
         var temp = key.toLocal();
         key = new DateTime(temp.year, temp.month, temp.day, 0, 0, 0, 0);
         if (_dividedTransactionsData.containsKey(key)) {
