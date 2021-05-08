@@ -191,7 +191,7 @@ class ReceiptModel extends ChangeNotifier {
         notifyListeners();
       }
     }).onError((error, stackTrace) {
-      print(error);
+      print(error.message);
       _errorMessage = error.message;
       _isPromoLoading = false;
       notifyListeners();

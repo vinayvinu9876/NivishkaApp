@@ -49,6 +49,8 @@ import 'package:nivishka_android/PromoList/PromoListModel.dart';
 import 'package:nivishka_android/AllCategories/AllCategoryModel.dart';
 import 'package:nivishka_android/Profile/ProfileModel.dart';
 import 'package:nivishka_android/SendReport/SendReportModel.dart';
+import 'package:nivishka_android/ReferAndEarn/ReferAndEarnModel.dart';
+import 'package:nivishka_android/Search/SearchModel.dart';
 
 import 'AppServices/NavigatorService.dart';
 import 'AppServices/services.dart';
@@ -110,6 +112,8 @@ class _MaterialAppCopy extends State<MaterialAppCopy> {
           ChangeNotifierProvider(create: (context) => AllCategoryModel()),
           ChangeNotifierProvider(create: (context) => ProfileModel()),
           ChangeNotifierProvider(create: (context) => SendReportModel()),
+          ChangeNotifierProvider(create: (context) => ReferAndEarnModel()),
+          ChangeNotifierProvider(create:(context)=>SearchModel())
         ],
         child: MaterialApp(
           title: 'Nivishka',

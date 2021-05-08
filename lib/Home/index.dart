@@ -5,6 +5,7 @@ import 'package:styled_text/styled_text.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 import 'package:nivishka_android/PromoDescription/index.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:nivishka_android/ServiceListing/index.dart';
 import 'package:provider/provider.dart';
 import "CustomDrawer.dart";
 import "HomeModel.dart";
@@ -21,7 +22,10 @@ class _Home extends State<Home> {
   void initState() {
     super.initState();
     var homeModel = Provider.of<HomeModel>(context, listen: false);
-    WidgetsBinding.instance.addPostFrameCallback((_) => homeModel.getAllData());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      print("At init home calling getAllData");
+      homeModel.getAllData();
+    });
   }
 
   @override
@@ -60,10 +64,12 @@ class _Home extends State<Home> {
                       (homeModel.categoryData.length > 0),
                   child: category()),
               SizedBox(height: 10),
-              Visibility(visible: !homeModel.isLoading, child: bestPicks()),
-              SizedBox(height: 10),
-              Visibility(visible: !homeModel.isLoading, child: flashSale()),
-              SizedBox(height: 5),
+              Visibility(
+                  visible: ((!homeModel.isLoading) &&
+                      (homeModel.bestPicksData.length > 0)),
+                  child: bestPicks()),
+              //Visibility(visible: !homeModel.isLoading, child: flashSale()),
+              //SizedBox(height: 5),
               Visibility(
                   visible: homeModel.isLoading,
                   child: Container(
@@ -199,6 +205,7 @@ class _Home extends State<Home> {
 
   Widget bestPicks() {
     double width = MediaQuery.of(context).size.width;
+    var homeModel = Provider.of<HomeModel>(context);
     return Container(
         height: 250,
         width: width,
@@ -226,16 +233,6 @@ class _Home extends State<Home> {
                             color: Colors.white,
                             fontSize: 14,
                             fontWeight: FontWeight.bold)),
-                    InkWell(
-                        onTap: () {
-                          Navigator.pushNamed(context, "/bestPicks");
-                        },
-                        child: Text("See All",
-                            style: GoogleFonts.poppins(
-                              color: Colors.green[800],
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                            )))
                   ])),
           Container(
               height: 180,
@@ -245,29 +242,17 @@ class _Home extends State<Home> {
                 left: 5,
               ),
               child: ListView(scrollDirection: Axis.horizontal, children: [
-                bestPickWidget(
-                  imgUrl:
-                      "https://de927adv5b23k.cloudfront.net/wp-content/uploads/2019/03/27192455/salon-hygiene-checklist.png",
-                  description:
-                      "Massage Services at your home with full features",
-                  price: "10,000",
-                  rating: 4,
-                ),
-                bestPickWidget(
-                  imgUrl:
-                      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMCvgKB2KLCgfjE1f4dtb9gIKrZYenPwfLZQ&usqp=CAU",
-                  description:
-                      "Plumbing Services at your home before you start facing problems",
-                  price: "5,000",
-                  rating: 5,
-                ),
-                bestPickWidget(
-                  imgUrl:
-                      "https://res.cloudinary.com/urbanclap/image/upload/q_auto,f_auto,fl_progressive:steep,w_617/t_high_res_template,q_auto:low,f_auto/categories/category_v2/category_ba329560.png",
-                  description: "Lazy to clean ? Call me right now",
-                  price: "2,000",
-                  rating: 5,
-                ),
+                for (var bestPick in homeModel.bestPicksData)
+                  bestPickWidget(
+                    imgUrl: "${bestPick["imageUrl"]}",
+                    catId: bestPick["cat_id"],
+                    serviceName: bestPick["name"],
+                    description:
+                        "${bestPick["service_name"]} : ${bestPick["service_description"].length > 0 ? bestPick["service_description"][0] : ""}",
+                    price:
+                        "${bestPick["charges"] + bestPick["partner_cost"]}  ${bestPick["discount"] > 0 ? "-" + bestPick["discount"].toString() + "% Discount" : ""}",
+                    rating: bestPick["ratings"].toDouble(),
+                  ),
               ]))
         ]));
   }
@@ -276,9 +261,21 @@ class _Home extends State<Home> {
       {@required String imgUrl,
       @required String description,
       @required String price,
+      @required String catId,
+      @required String serviceName,
       @required double rating}) {
     return InkWell(
-        onTap: () {},
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ServiceListing(
+                      categoryID: catId,
+                      catName: serviceName,
+                      scrollToSubCatId: int.parse(catId),
+                    )),
+          );
+        },
         child: Container(
             height: 130,
             width: 140,

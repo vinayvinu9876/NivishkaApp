@@ -135,7 +135,7 @@ class OTPModel extends ChangeNotifier {
     if (status["status"] == "success") {
       print("Succesfully Logged In");
       await auth.signInWithCustomToken(status["token"]);
-      await getIt<NavigationService>().navigateTo("/home");
+      await getIt<NavigationService>().navigateTo("/selectCity");
     } else {
       _errorMessage = status["message"];
       print("Error $_errorMessage");

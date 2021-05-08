@@ -52,14 +52,11 @@ class _ServiceListing extends State<ServiceListing> {
         axis: scrollDirection);
   }
 
-  /*@override
-  @protected
-  void dispose() {
-    super.dispose();
+  void killAll() {
     var serviceListModel =
         Provider.of<ServiceListingModel>(context, listen: false);
     serviceListModel.killAllSubscriptions();
-  }*/
+  }
 
   double getServiceCost(Map<String, dynamic> serviceData) {
     int total = serviceData["partner_cost"] + serviceData["charges"];
@@ -92,6 +89,7 @@ class _ServiceListing extends State<ServiceListing> {
                 centerTitle: true,
                 leading: InkWell(
                     onTap: () {
+                      killAll();
                       Navigator.pop(context);
                     },
                     child: Icon(
@@ -168,13 +166,10 @@ class _ServiceListing extends State<ServiceListing> {
         padding: EdgeInsets.all(15),
         child: InkWell(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => Receipt(
-                        categoryName: catName,
-                        cartData: serviceListModel.cartData)),
-              );
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return Receipt(
+                    categoryName: catName, cartData: serviceListModel.cartData);
+              }));
             },
             child: Container(
                 height: 50,

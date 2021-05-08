@@ -34,7 +34,7 @@ class ServiceListingModel extends ChangeNotifier {
       _errorMessage = null;
       notifyListeners();
     }).onError((error, stackTrace) {
-      print(error);
+      print(error.message);
     });
   }
 

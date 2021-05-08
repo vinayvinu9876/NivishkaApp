@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nivishka_android/util/index.dart';
 import 'package:provider/provider.dart';
-import 'package:nivishka_android/AuthListener.dart';
 import 'CategoryDescriptionModel.dart';
 import 'package:nivishka_android/ServiceListing/index.dart';
 
@@ -35,7 +34,6 @@ class _CategoryDescription extends State<CategoryDescription> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     var catDescModel = Provider.of<CategoryDescriptionModel>(context);
-    var authModel = Provider.of<AuthListener>(context);
     return SafeArea(
         top: true,
         bottom: true,
@@ -146,7 +144,7 @@ class _CategoryDescription extends State<CategoryDescription> {
                                 subtitle:
                                     "Our professionals will get in touch with you one hour before the service"),
                           ])),
-                  Container(
+                  /*Container(
                     height: 3,
                     width: width,
                     color: Colors.grey[300],
@@ -357,7 +355,7 @@ class _CategoryDescription extends State<CategoryDescription> {
                                                 ]))
                                           ]))
                                 ])),
-                          ])),
+                          ])),*/
                   SizedBox(height: 20),
                 ]))));
   }

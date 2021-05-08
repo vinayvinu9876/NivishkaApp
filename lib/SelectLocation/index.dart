@@ -284,7 +284,16 @@ class MapSampleState extends State<MapSample> {
   static const LatLng _center = const LatLng(12.9716, 77.5946);
 
   Future<void> _onMapCreated(GoogleMapController controller) async {
-    Position position = await _determinePosition();
+    var locationModel =
+        Provider.of<SelectLocationModel>(context, listen: false);
+    await Future.delayed(const Duration(seconds: 2), () {});
+    Position position;
+    if (locationModel.currentPosition == null) {
+      position = await _determinePosition();
+    } else {
+      print("Current position is taken from location model");
+      position = locationModel.currentPosition;
+    }
     print("Position = $position");
     _add(position);
     print("Position added");

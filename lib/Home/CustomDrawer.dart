@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nivishka_android/util/index.dart';
+import 'package:provider/provider.dart';
+import 'package:nivishka_android/Profile/ProfileModel.dart';
+import 'HomeModel.dart';
 
 class CustomDrawer extends StatefulWidget {
   @override
@@ -9,6 +12,8 @@ class CustomDrawer extends StatefulWidget {
 class _CustomDrawer extends State<CustomDrawer> {
   @override
   Widget build(BuildContext context) {
+    var homeModel = Provider.of<HomeModel>(context);
+    var profileModel = Provider.of<ProfileModel>(context);
     return Drawer(
       child: Container(
           padding: EdgeInsets.only(top: 25, bottom: 10, left: 15, right: 15),
@@ -17,14 +22,14 @@ class _CustomDrawer extends State<CustomDrawer> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               const CircleAvatar(
-                  radius: 30,
-                  backgroundImage: NetworkImage(
-                      "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500")),
+                  radius: 30, backgroundImage: AssetImage("images/logo.png")),
               SizedBox(height: 20),
-              Text("Ana Skulji",
+              Text(
+                  "${homeModel.userData == null ? "Loading..." : homeModel.userData["fname"] + " " + homeModel.userData["lname"]}",
                   style: GoogleFonts.poppins(
                       color: Colors.black, fontWeight: FontWeight.bold)),
-              Text("9019301344",
+              Text(
+                  "${homeModel.userData == null ? "Loading..." : homeModel.userData["phone"]}",
                   style: GoogleFonts.poppins(
                     fontSize: 12,
                     color: Colors.grey[600],
@@ -58,14 +63,12 @@ class _CustomDrawer extends State<CustomDrawer> {
                         icon: Icons.list,
                         text: "Categories",
                         ontap: () {
-                          Navigator.pushNamed(context, "/categoryDescription");
+                          Navigator.pushNamed(context, "/allCategories");
                         }),
                     iconText(
-                        icon: Icons.card_giftcard,
-                        text: "Gift Cards",
-                        ontap: () {
-                          Navigator.pushNamed(context, "/giftCard");
-                        }),
+                        icon: Icons.group,
+                        text: "Register as Partner",
+                        ontap: () {}),
                   ])),
               Divider(),
               SizedBox(height: 10),
@@ -82,7 +85,13 @@ class _CustomDrawer extends State<CustomDrawer> {
                     Navigator.pushNamed(context, "/about");
                   }),
               Divider(),
-              iconText(icon: Icons.logout, text: "Logout"),
+              iconText(
+                  icon: Icons.logout,
+                  text: "Logout",
+                  ontap: () {
+                    profileModel.logout();
+                    Navigator.pushNamed(context, '/splashScreen');
+                  }),
             ],
           )),
     );

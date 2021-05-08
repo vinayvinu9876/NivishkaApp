@@ -30,7 +30,7 @@ class AuthListener extends ChangeNotifier {
 
   void listen() async {
     cancelListeners();
-    authListen();
+    cityCodeListen();
   }
 
   Future<void> cityCodeListen() async {
@@ -41,6 +41,7 @@ class AuthListener extends ChangeNotifier {
     }
 
     if (user == null) {
+      authListen();
       return;
     }
 
@@ -52,6 +53,9 @@ class AuthListener extends ChangeNotifier {
       _cityCode = data["city_code"];
       if (data["city_code"] == null) {
         await getIt<NavigationService>().navigateTo("/selectCity");
+        userListener.cancel();
+      } else {
+        authListen();
       }
     });
   }
@@ -60,11 +64,12 @@ class AuthListener extends ChangeNotifier {
     Stream<User> userStream = auth.authStateChanges();
     subscription = userStream.listen((User fireUser) async {
       if (fireUser != null) {
-        cityCodeListen();
         await getIt<NavigationService>().navigateTo("/home");
+        subscription.cancel();
       } else {
         print("No User forwaring to loginsignup");
         await getIt<NavigationService>().navigateTo("/chooseLoginSignup");
+        subscription.cancel();
       }
     });
   }

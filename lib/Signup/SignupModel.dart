@@ -59,8 +59,6 @@ class SignupModel extends ChangeNotifier {
       _errorMessage = "Email cannot be empty";
     } else if (isEmpty(_phone)) {
       _errorMessage = "Phone cannot be empty";
-    } else if (isEmpty(_referalCode)) {
-      _errorMessage = "Referal code Cannot be empty";
     } else if (isEmpty(_countryCode)) {
       _errorMessage = "Country Code cannot be empty";
     } else if (_phone.length < 10) {
@@ -91,7 +89,19 @@ class SignupModel extends ChangeNotifier {
       "countryCode": _countryCode,
     };
 
-    final results = await callable(userData);
+    bool failed = false;
+
+    final results = await callable(userData).catchError((e) {
+      print(e);
+      _errorMessage = "Failed to signup";
+      _isLoading = false;
+      notifyListeners();
+      failed = true;
+    });
+
+    if (failed) {
+      return;
+    }
 
     var status = results.data;
 

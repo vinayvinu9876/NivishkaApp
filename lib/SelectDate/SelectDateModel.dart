@@ -88,7 +88,7 @@ class SelectDateModel extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }).onError((error, stackTrace) {
-      print(error);
+      print(error.message);
       _errorMessage = error.message;
       _isLoading = false;
       notifyListeners();

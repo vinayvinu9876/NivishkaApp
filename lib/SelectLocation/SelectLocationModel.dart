@@ -35,7 +35,15 @@ class SelectLocationModel extends ChangeNotifier {
     List<Address> addresses =
         await Geocoder.local.findAddressesFromCoordinates(coordinates);
     _placeName = addresses.first.addressLine;
-    _currentPosition = position;
+    _currentPosition = Position(
+        latitude: position.latitude,
+        longitude: position.longitude,
+        accuracy: 10,
+        speed: 10,
+        speedAccuracy: 10,
+        timestamp: DateTime.now(),
+        altitude: 10,
+        heading: 10);
     notifyListeners();
   }
 

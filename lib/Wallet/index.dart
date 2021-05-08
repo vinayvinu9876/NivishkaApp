@@ -80,7 +80,7 @@ class _Wallet extends State<Wallet> {
     else if (today.difference(date).compareTo(Duration(days: 2)) < 0)
       label = "Yesterday";
     else
-      label = "${date.day}-${date.month}-${date.year}";
+      label = "${date.day} / ${date.month} / ${date.year}";
 
     return Container(
         margin: EdgeInsets.only(top: 5, bottom: 5),
@@ -94,20 +94,17 @@ class _Wallet extends State<Wallet> {
               SizedBox(height: 5),
               for (Map<String, dynamic> trans in dataList)
                 transaction(
-                    imgUrl:
-                        "https://m.economictimes.com/thumb/msid-57371236,width-1200,height-900,resizemode-4,imgsize-9448/paytm-wallet-reaches-200-million-users.jpg",
                     title:
                         "Top Up using ${trans["payment_method"]} ${trans["payment_details"]}",
                     time:
                         "${trans["date"].toDate().hour.toString() + " : " + trans["date"].toDate().minute.toString()}",
-                    isPositive: true,
+                    isPositive: trans["type"] == "credit",
                     cost: "${trans["amount"] / 100}"),
             ]));
   }
 
   Widget transaction(
-      {@required String imgUrl,
-      @required String title,
+      {@required String title,
       @required String time,
       @required bool isPositive,
       @required String cost}) {
@@ -128,16 +125,17 @@ class _Wallet extends State<Wallet> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(
-                      flex: 2,
+                      flex: 1,
                       child: Container(
                           height: 45,
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  fit: BoxFit.contain,
-                                  image: NetworkImage("$imgUrl"))))),
+                          child: Icon(
+                              isPositive
+                                  ? Icons.attach_money
+                                  : Icons.money_off_rounded,
+                              color: isPositive ? Colors.green : Colors.red))),
                   SizedBox(width: 20),
                   Expanded(
-                      flex: 6,
+                      flex: 7,
                       child: Container(
                           child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,

@@ -97,7 +97,7 @@ class _PromoList extends State<PromoList> {
                                 flex: 3,
                                 child: StyledText(
                                     text:
-                                        "<big>${promoData["isPercentDiscount"] ? promoData["percentageDiscount"].toString() + "%" : "₹" + promoData["max_discount_rupees"].toString()}</big> <sup>OFF</sup>",
+                                        "<big>${promoData == null ? "" : promoData["isPercentDiscount"] ? promoData["percentageDiscount"].toString() + "%" : "₹" + promoData["max_discount_rupees"].toString()}</big> <sup>OFF</sup>",
                                     styles: {
                                       "big": GoogleFonts.poppins(
                                           fontSize: 16,
@@ -114,7 +114,8 @@ class _PromoList extends State<PromoList> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text("${promoData["promo_name"]}",
+                                      Text(
+                                          "${promoData == null ? "" : promoData["promo_name"]}",
                                           style: GoogleFonts.poppins(
                                               color: Colors.black,
                                               fontSize: 12)),
@@ -125,7 +126,7 @@ class _PromoList extends State<PromoList> {
                                             fontSize: 10,
                                           )),
                                       Text(
-                                          "#${promoData["promo_code"].toUpperCase()}",
+                                          "#${promoData == null ? "" : promoData["promo_code"].toUpperCase()}",
                                           style: GoogleFonts.poppins(
                                             color: Colors.greenAccent[700],
                                             fontSize: 10,
@@ -152,7 +153,7 @@ class _PromoList extends State<PromoList> {
                           children: [
                             StyledText(
                                 text:
-                                    "<all>Valid till <b>${promoData["end_date"].toDate().day.toString() + "-" + promoData["end_date"].toDate().month.toString() + "-" + promoData["end_date"].toDate().year.toString()}</b></all>",
+                                    "<all>Valid till <b>${promoData == null ? "" : (promoData["end_date"].toDate().day.toString() + "-" + promoData["end_date"].toDate().month.toString() + "-" + promoData["end_date"].toDate().year.toString())}</b></all>",
                                 styles: {
                                   "all": GoogleFonts.poppins(
                                     color: Colors.white,

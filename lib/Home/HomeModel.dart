@@ -12,6 +12,7 @@ class HomeModel extends ChangeNotifier {
   Map<String, dynamic> _userData;
   List<Map<String, dynamic>> _promoData = [];
   List<Map<String, dynamic>> _categoryData = [];
+  List<Map<String, dynamic>> _bestPicksData = [];
   bool _calledOnce = false;
   StreamSubscription<DocumentSnapshot> userSubscription;
   StreamSubscription<QuerySnapshot> promoSubscription;
@@ -22,6 +23,7 @@ class HomeModel extends ChangeNotifier {
   bool get isLoading => _isLoading;
   List<Map<String, dynamic>> get promoData => _promoData;
   List<Map<String, dynamic>> get categoryData => _categoryData;
+  List<Map<String, dynamic>> get bestPicksData => _bestPicksData;
 
   void cancelSubscriptions() {
     if (userSubscription != null) {
@@ -45,23 +47,54 @@ class HomeModel extends ChangeNotifier {
       return;
     }
     _calledOnce = true;
+    checkCityCode();
     getUserDetails();
   }
 
+  void checkCityCode() async {
+    User user = FirebaseAuth.instance.currentUser;
+
+    if (user == null) {
+      return;
+    }
+
+    String uid = user.uid;
+    DocumentReference docRef = firestore.collection("Users").doc(uid);
+    docRef.get().then((DocumentSnapshot doc) async {
+      Map<String, dynamic> data = doc.data();
+      if (data["city_code"] == null) {
+        await getIt<NavigationService>().navigateTo("/selectCity");
+      }
+    }).onError((error, stackTrace) {
+      print(error.message);
+    });
+  }
+
   void getUserDetails() async {
+    print("getUserDetails() started");
     _currentUser = FirebaseAuth.instance.currentUser;
     String uid;
-
     _isLoading = true;
     notifyListeners();
 
+    try {
+      print("current user = $_currentUser");
+    } catch (e) {
+      print(e);
+    }
+
     if (_currentUser != null) {
-      print("User uid = ${_currentUser.uid}");
-      uid = _currentUser.uid;
+      try {
+        print("User uid = ${_currentUser.uid}");
+        uid = _currentUser.uid;
+      } catch (e) {
+        print(e);
+      }
     } else {
-      await getIt<NavigationService>().navigateTo("/chooseLoginSignup");
+      cancelSubscriptions();
       _isLoading = false;
       notifyListeners();
+      await getIt<NavigationService>().navigateTo("/chooseLoginSignup");
       return;
     }
 
@@ -81,6 +114,7 @@ class HomeModel extends ChangeNotifier {
       _userData = doc.data();
       getPromos(_userData);
       getCategories(_userData);
+      getBestPicksData();
 
       print(_userData);
       _isLoading = false;
@@ -143,5 +177,28 @@ class HomeModel extends ChangeNotifier {
     categorySubscription.onError((e) {
       print(e);
     });
+  }
+
+  void getBestPicksData() {
+    DocumentReference doc = firestore.collection("BestPicks").doc("best_picks");
+    CollectionReference ref = firestore.collection("Service");
+
+    doc.get().then((DocumentSnapshot doc) {
+      if (!doc.exists) {
+        return;
+      }
+      _bestPicksData.clear();
+      doc.data()["service_id"].forEach((serId) {
+        DocumentReference serRef = ref.doc(serId);
+        serRef.get().then((DocumentSnapshot doc) {
+          if (!doc.exists) return;
+          var serData = doc.data();
+          if (serData["cities"].contains(_userData["city_code"])) {
+            _bestPicksData.add(doc.data());
+          }
+          notifyListeners();
+        }).onError((error, stackTrace) => null);
+      });
+    }).onError((error, stackTrace) => null);
   }
 }

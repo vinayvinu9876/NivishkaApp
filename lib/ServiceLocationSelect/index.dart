@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nivishka_android/util/index.dart';
+import 'package:google_maps_place_picker/google_maps_place_picker.dart';
+import 'package:provider/provider.dart';
+import 'package:nivishka_android/SelectLocation/SelectLocationModel.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class ServiceLocationSelect extends StatefulWidget {
   @override
@@ -11,6 +15,8 @@ class _ServiceLocationSelect extends State<ServiceLocationSelect> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    var selectLocationModel =
+        Provider.of<SelectLocationModel>(context, listen: false);
     return SafeArea(
         top: true,
         bottom: true,
@@ -73,8 +79,25 @@ class _ServiceLocationSelect extends State<ServiceLocationSelect> {
                       SizedBox(height: 20),
                       InkWell(
                           onTap: () {
-                            Navigator.pushNamed(
-                                context, "/selectOtherLocation");
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PlacePicker(
+                                  apiKey:
+                                      "AIzaSyAAiZfeAjYpyxGyFIF82EkApRWLyDAHXrY", // Put YOUR OWN KEY here.
+                                  onPlacePicked: (PickResult result) {
+                                    print("$result");
+                                    selectLocationModel.setCurrentPosition(
+                                        LatLng(result.geometry.location.lat,
+                                            result.geometry.location.lng));
+                                    Navigator.pushNamed(
+                                        context, "/selectLocation");
+                                  },
+                                  initialPosition: LatLng(12.9716, 77.5946),
+                                  useCurrentLocation: true,
+                                ),
+                              ),
+                            );
                           },
                           child: Container(
                               padding: EdgeInsets.all(10),

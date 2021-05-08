@@ -28,13 +28,15 @@ class _Receipt extends State<Receipt> {
     });
   }
 
-  @override
-  @protected
-  void dispose() {
-    super.dispose();
+  void doDisposeAll() {
     var receiptModel = Provider.of<ReceiptModel>(context, listen: false);
-    print("Called dispose");
     receiptModel.onDispose();
+    print("Called dispose");
+  }
+
+  Future<bool> onWillPop() async {
+    doDisposeAll();
+    return true;
   }
 
   String getDiscountInString() {
@@ -49,7 +51,7 @@ class _Receipt extends State<Receipt> {
       return "0 (Min Cart Value ${receiptModel.selectedPromoCodeData["min_receipt_value"]})";
     }
     if (!receiptModel.selectedPromoCodeData["isPercentDiscount"]) {
-      return "-${receiptModel.selectedPromoCodeData["max_discount_rupees"]}";
+      return "-${receiptModel.selectedPromoCodeData["max_discount_rupees"].toInt().toString()}";
     } else {
       double percentValue = cartValue *
           (receiptModel.selectedPromoCodeData["percentageDiscount"] / 100);
@@ -60,11 +62,11 @@ class _Receipt extends State<Receipt> {
       } else {
         deducted = percentValue;
       }
-      return "- $deducted";
+      return "- ${deducted.toInt()}";
     }
   }
 
-  dynamic getDiscountValue() {
+  int getDiscountValue() {
     var receiptModel = Provider.of<ReceiptModel>(context, listen: false);
     if (receiptModel.selectedPromoCodeData == null ||
         receiptModel.selectedPromoCodeData.keys.length == 0) {
@@ -88,7 +90,7 @@ class _Receipt extends State<Receipt> {
       } else {
         deducted = percentValue;
       }
-      return deducted;
+      return deducted.toInt();
     }
   }
 
@@ -114,78 +116,82 @@ class _Receipt extends State<Receipt> {
     return SafeArea(
         top: true,
         bottom: true,
-        child: Scaffold(
-            backgroundColor: Colors.white,
-            bottomNavigationBar: checkoutButton(),
-            appBar: AppBar(
+        child: new WillPopScope(
+            onWillPop: onWillPop,
+            child: Scaffold(
                 backgroundColor: Colors.white,
-                centerTitle: true,
-                elevation: 3,
-                leading: InkWell(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child:
-                        Icon(Icons.arrow_back, color: Colors.black, size: 16)),
-                title: Text("$categoryName",
-                    style: GoogleFonts.poppins(
-                        color: Colors.black, fontSize: 14))),
-            body: Container(
-                height: height,
-                width: width,
-                child: ListView(children: [
-                  Container(
-                      child: Column(children: [
-                    for (var key in receiptModel.cartData.keys)
+                bottomNavigationBar: checkoutButton(),
+                appBar: AppBar(
+                    backgroundColor: Colors.white,
+                    centerTitle: true,
+                    elevation: 3,
+                    leading: InkWell(
+                        onTap: () {
+                          doDisposeAll();
+                          Navigator.pop(context);
+                        },
+                        child: Icon(Icons.arrow_back,
+                            color: Colors.black, size: 16)),
+                    title: Text("$categoryName",
+                        style: GoogleFonts.poppins(
+                            color: Colors.black, fontSize: 14))),
+                body: Container(
+                    height: height,
+                    width: width,
+                    child: ListView(children: [
                       Container(
                           child: Column(children: [
-                        itemPrice(itemData: cartData[key]),
-                        Container(
-                            padding: EdgeInsets.only(
-                                top: 5, bottom: 0, left: 15, right: 15),
-                            child: Container(
-                              height: 1,
-                              width: width,
-                              decoration: BoxDecoration(
-                                color: Colors.grey[200],
-                              ),
-                            ))
-                      ])),
-                  ])),
-                  Container(height: 15, color: Colors.grey[100]),
-                  promoCodeLinkWidget(),
-                  Container(height: 15, color: Colors.grey[100]),
-                  Container(
-                      padding: EdgeInsets.all(15),
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            itemPriceList(
-                                name: "Item Total", price: "${getCartValue()}"),
-                            itemPriceList(
-                                name: "Convenience & other charges [+]",
-                                price: "${receiptModel.charges}"),
-                            Visibility(
-                                visible: receiptModel
-                                        .selectedPromoCodeData.keys.length >
-                                    0,
-                                child: itemPriceList(
-                                    name: "Promo discount",
-                                    price: "${getDiscountInString()}")),
-                            SizedBox(height: 10),
+                        for (var key in receiptModel.cartData.keys)
+                          Container(
+                              child: Column(children: [
+                            itemPrice(itemData: cartData[key]),
                             Container(
-                              height: 2,
-                              width: width,
-                              color: Colors.grey[100],
-                            ),
-                            itemPriceList(
-                                name: "Total",
-                                price:
-                                    "${getCartValue() - (getDiscountValue()) + receiptModel.charges}",
-                                isTotal: true),
-                          ]))
-                ]))));
+                                padding: EdgeInsets.only(
+                                    top: 5, bottom: 0, left: 15, right: 15),
+                                child: Container(
+                                  height: 1,
+                                  width: width,
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[200],
+                                  ),
+                                ))
+                          ])),
+                      ])),
+                      Container(height: 15, color: Colors.grey[100]),
+                      promoCodeLinkWidget(),
+                      Container(height: 15, color: Colors.grey[100]),
+                      Container(
+                          padding: EdgeInsets.all(15),
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                itemPriceList(
+                                    name: "Item Total",
+                                    price: "${getCartValue()}"),
+                                itemPriceList(
+                                    name: "Convenience & other charges [+]",
+                                    price: "${receiptModel.charges}"),
+                                Visibility(
+                                    visible: receiptModel
+                                            .selectedPromoCodeData.keys.length >
+                                        0,
+                                    child: itemPriceList(
+                                        name: "Promo discount",
+                                        price: "${getDiscountInString()}")),
+                                SizedBox(height: 10),
+                                Container(
+                                  height: 2,
+                                  width: width,
+                                  color: Colors.grey[100],
+                                ),
+                                itemPriceList(
+                                    name: "Total",
+                                    price:
+                                        "${getCartValue() - (getDiscountValue()) + receiptModel.charges}",
+                                    isTotal: true),
+                              ]))
+                    ])))));
   }
 
   Widget promoCodeLinkWidget() {
