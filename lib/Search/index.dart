@@ -147,6 +147,7 @@ class _Search extends State<Search> {
                 builder: (context) => ServiceListing(
                       categoryID: catId,
                       catName: name,
+                      scrollToSubCatId: int.parse(catId),
                     )),
           );
         },

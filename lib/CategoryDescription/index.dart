@@ -3,6 +3,7 @@ import 'package:nivishka_android/util/index.dart';
 import 'package:provider/provider.dart';
 import 'CategoryDescriptionModel.dart';
 import 'package:nivishka_android/ServiceListing/index.dart';
+import 'package:nivishka_android/StatisticsModel.dart';
 
 class CategoryDescription extends StatefulWidget {
   final Map<String, dynamic> categoryData;
@@ -21,12 +22,14 @@ class _CategoryDescription extends State<CategoryDescription> {
     super.initState();
     var catDescModel =
         Provider.of<CategoryDescriptionModel>(context, listen: false);
+    var statModel = Provider.of<StatisticsModel>(context, listen: false);
     print(
         "Category Description cat id =  ${categoryData["cat_id"]} and name = ${categoryData["catName"]}");
-    WidgetsBinding.instance.addPostFrameCallback((_) => {
-          catDescModel.getCategoryData(
-              categoryData["catName"], categoryData["cat_id"].toString())
-        });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      catDescModel.getCategoryData(
+          categoryData["catName"], categoryData["cat_id"].toString());
+      statModel.updateCatOpenedStats(categoryData["cat_id"]);
+    });
   }
 
   @override

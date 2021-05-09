@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import "../AuthListener.dart";
 import 'package:provider/provider.dart';
+import '../StatisticsModel.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -12,6 +13,9 @@ class _SplashScreen extends State<SplashScreen> {
   void initState() {
     super.initState();
     var authModel = Provider.of<AuthListener>(context, listen: false);
+    var statModel = Provider.of<StatisticsModel>(context, listen: false);
+    print("initstate splashscreen");
+    statModel.updateOpenedRef();
     authModel.listen();
   }
 

@@ -51,6 +51,7 @@ import 'package:nivishka_android/Profile/ProfileModel.dart';
 import 'package:nivishka_android/SendReport/SendReportModel.dart';
 import 'package:nivishka_android/ReferAndEarn/ReferAndEarnModel.dart';
 import 'package:nivishka_android/Search/SearchModel.dart';
+import 'StatisticsModel.dart';
 
 import 'AppServices/NavigatorService.dart';
 import 'AppServices/services.dart';
@@ -113,7 +114,8 @@ class _MaterialAppCopy extends State<MaterialAppCopy> {
           ChangeNotifierProvider(create: (context) => ProfileModel()),
           ChangeNotifierProvider(create: (context) => SendReportModel()),
           ChangeNotifierProvider(create: (context) => ReferAndEarnModel()),
-          ChangeNotifierProvider(create:(context)=>SearchModel())
+          ChangeNotifierProvider(create: (context) => SearchModel()),
+          ChangeNotifierProvider(create: (context) => StatisticsModel())
         ],
         child: MaterialApp(
           title: 'Nivishka',
@@ -125,7 +127,7 @@ class _MaterialAppCopy extends State<MaterialAppCopy> {
             primarySwatch: Colors.blue,
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
-          initialRoute: "/home",
+          initialRoute: "/splashScreen",
           //home: Message(message: "Succesfully Cancelled", icon: Icons.done),
           routes: {
             "/splashScreen": (context) => SplashScreen(),
