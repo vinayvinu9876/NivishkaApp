@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nivishka_android/util/index.dart';
 import 'package:nivishka_android/BookingDetails/index.dart';
 import 'package:intl/intl.dart';
+import 'package:nivishka_android/RateService/index.dart';
 import 'package:nivishka_android/cancelOrder/index.dart';
 
 class Bookings extends StatefulWidget {
@@ -173,6 +174,28 @@ class _Bookings extends State<Bookings> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
+                                      SizedBox(width: 10),
+                                      Visibility(
+                                          visible: (widget.type == "completed"),
+                                          child: InkWell(
+                                              onTap: () {
+                                                if (widget.type == "completed")
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            RateService(
+                                                                orderId: order[
+                                                                    "order_id"])),
+                                                  );
+                                              },
+                                              child: Text("Rate Service",
+                                                  style: GoogleFonts.poppins(
+                                                      color: blue,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 8)))),
+                                      SizedBox(width: 10),
                                       InkWell(
                                           onTap: () {
                                             Navigator.push(

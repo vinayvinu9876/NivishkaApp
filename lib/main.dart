@@ -24,6 +24,7 @@ import 'package:nivishka_android/GiftCard/VoucherCode.dart';
 import 'package:nivishka_android/SendReport/index.dart';
 import 'package:nivishka_android/Search/index.dart';
 import 'package:nivishka_android/SelectCity/index.dart';
+import 'package:nivishka_android/RateService/index.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -51,6 +52,7 @@ import 'package:nivishka_android/Profile/ProfileModel.dart';
 import 'package:nivishka_android/SendReport/SendReportModel.dart';
 import 'package:nivishka_android/ReferAndEarn/ReferAndEarnModel.dart';
 import 'package:nivishka_android/Search/SearchModel.dart';
+import 'package:nivishka_android/RateService/RatingModel.dart';
 import 'StatisticsModel.dart';
 
 import 'AppServices/NavigatorService.dart';
@@ -115,7 +117,8 @@ class _MaterialAppCopy extends State<MaterialAppCopy> {
           ChangeNotifierProvider(create: (context) => SendReportModel()),
           ChangeNotifierProvider(create: (context) => ReferAndEarnModel()),
           ChangeNotifierProvider(create: (context) => SearchModel()),
-          ChangeNotifierProvider(create: (context) => StatisticsModel())
+          ChangeNotifierProvider(create: (context) => StatisticsModel()),
+          ChangeNotifierProvider(create: (context) => RatingModel()),
         ],
         child: MaterialApp(
           title: 'Nivishka',
@@ -154,6 +157,7 @@ class _MaterialAppCopy extends State<MaterialAppCopy> {
             "/sendReport": (context) => SendReport(),
             "/search": (context) => Search(),
             "/selectCity": (context) => SelectCity(),
+            "/ratingService": (context) => RateService()
           },
         ));
   }
