@@ -63,6 +63,7 @@ class WalletModel extends ChangeNotifier {
     Query query = firestore
         .collection("WalletTransaction")
         .where("uid", isEqualTo: uid)
+        .where("status", isEqualTo: "paid")
         .orderBy("date", descending: true);
     transactionSubscription = query.snapshots().listen((QuerySnapshot snap) {
       _walletTransactions.clear();
@@ -86,6 +87,7 @@ class WalletModel extends ChangeNotifier {
     });
 
     transactionSubscription.onError((e) {
+      print(e.message);
       print(e);
       _isLoading = false;
       notifyListeners();

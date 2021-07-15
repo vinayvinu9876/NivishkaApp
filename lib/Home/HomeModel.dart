@@ -63,7 +63,8 @@ class HomeModel extends ChangeNotifier {
     docRef.get().then((DocumentSnapshot doc) async {
       Map<String, dynamic> data = doc.data();
       if (data["city_code"] == null) {
-        await getIt<NavigationService>().navigateTo("/selectCity");
+        await getIt<NavigationService>()
+            .navigateToAndRemoveUntill("/selectCity");
       }
     }).onError((error, stackTrace) {
       print(error.message);
@@ -94,7 +95,8 @@ class HomeModel extends ChangeNotifier {
       cancelSubscriptions();
       _isLoading = false;
       notifyListeners();
-      await getIt<NavigationService>().navigateTo("/chooseLoginSignup");
+      await getIt<NavigationService>()
+          .navigateToAndRemoveUntill("/chooseLoginSignup");
       return;
     }
 

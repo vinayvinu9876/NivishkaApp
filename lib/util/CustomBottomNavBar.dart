@@ -58,7 +58,8 @@ class _CustomBottomNavBar extends State<CustomBottomNavBar> {
                 }
                 switch (index) {
                   case 0:
-                    Navigator.pushNamed(context, "/home");
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, "/home", (Route<dynamic> route) => false);
                     break;
                   case 1:
                     Navigator.pushNamed(context, "/bookingHistory");

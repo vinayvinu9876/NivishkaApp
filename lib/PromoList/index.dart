@@ -36,7 +36,8 @@ class _PromoList extends State<PromoList> {
                 centerTitle: true,
                 leading: InkWell(
                     onTap: () {
-                      Navigator.pushNamed(context, "/home");
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, "/home", (Route<dynamic> route) => false);
                     },
                     child: Icon(Icons.arrow_back, color: Colors.green[800])),
                 title: Text("Promos",

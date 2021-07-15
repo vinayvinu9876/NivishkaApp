@@ -90,7 +90,8 @@ class _CustomDrawer extends State<CustomDrawer> {
                   text: "Logout",
                   ontap: () {
                     profileModel.logout();
-                    Navigator.pushNamed(context, '/splashScreen');
+                    Navigator.pushNamedAndRemoveUntil(context, '/splashScreen',
+                        (Route<dynamic> route) => false);
                   }),
             ],
           )),

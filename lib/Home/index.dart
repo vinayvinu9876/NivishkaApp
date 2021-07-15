@@ -7,6 +7,7 @@ import 'package:nivishka_android/PromoDescription/index.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:nivishka_android/ServiceListing/index.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/services.dart';
 import "CustomDrawer.dart";
 import "HomeModel.dart";
 
@@ -39,46 +40,70 @@ class _Home extends State<Home> {
     _scaffoldKey.currentState.openDrawer();
   }
 
+  Future<bool> _onWillPop() async {
+    return (await showDialog(
+          context: context,
+          builder: (context) => new AlertDialog(
+            title: new Text('Are you sure?'),
+            content: new Text('Do you want to exit an App'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: new Text('No'),
+              ),
+              TextButton(
+                onPressed: () => SystemChannels.platform
+                    .invokeMethod<void>('SystemNavigator.pop'),
+                child: new Text('Yes'),
+              ),
+            ],
+          ),
+        )) ??
+        false;
+  }
+
   @override
   Widget build(BuildContext context) {
     var homeModel = Provider.of<HomeModel>(context);
     print(
         "isLoading = ${homeModel.isLoading} and length of promo = ${homeModel.promoData.length}");
-    return SafeArea(
-        top: true,
-        bottom: true,
-        child: Scaffold(
-            key: _scaffoldKey,
-            drawer: CustomDrawer(),
-            bottomNavigationBar: CustomBottomNavBar(selectedIndex: 0),
-            body: Container(
-                child: ListView(children: [
-              topAppBar(),
-              SizedBox(height: 10),
-              Visibility(
-                  visible: (!homeModel.isLoading) &&
-                      (homeModel.promoData.length > 0),
-                  child: promo()),
-              Visibility(
-                  visible: (!homeModel.isLoading) &&
-                      (homeModel.categoryData.length > 0),
-                  child: category()),
-              SizedBox(height: 10),
-              Visibility(
-                  visible: ((!homeModel.isLoading) &&
-                      (homeModel.bestPicksData.length > 0)),
-                  child: bestPicks()),
-              //Visibility(visible: !homeModel.isLoading, child: flashSale()),
-              //SizedBox(height: 5),
-              Visibility(
-                  visible: homeModel.isLoading,
-                  child: Container(
-                      height: 100,
-                      width: 100,
-                      child: Center(
-                        child: CircularProgressIndicator(),
-                      )))
-            ]))));
+    return WillPopScope(
+        onWillPop: _onWillPop,
+        child: SafeArea(
+            top: true,
+            bottom: true,
+            child: Scaffold(
+                key: _scaffoldKey,
+                drawer: CustomDrawer(),
+                bottomNavigationBar: CustomBottomNavBar(selectedIndex: 0),
+                body: Container(
+                    child: ListView(children: [
+                  topAppBar(),
+                  SizedBox(height: 10),
+                  Visibility(
+                      visible: (!homeModel.isLoading) &&
+                          (homeModel.promoData.length > 0),
+                      child: promo()),
+                  Visibility(
+                      visible: (!homeModel.isLoading) &&
+                          (homeModel.categoryData.length > 0),
+                      child: category()),
+                  SizedBox(height: 10),
+                  Visibility(
+                      visible: ((!homeModel.isLoading) &&
+                          (homeModel.bestPicksData.length > 0)),
+                      child: bestPicks()),
+                  //Visibility(visible: !homeModel.isLoading, child: flashSale()),
+                  //SizedBox(height: 5),
+                  Visibility(
+                      visible: homeModel.isLoading,
+                      child: Container(
+                          height: 100,
+                          width: 100,
+                          child: Center(
+                            child: CircularProgressIndicator(),
+                          )))
+                ])))));
   }
 
   Widget flashSale() {

@@ -20,6 +20,15 @@ class TopUpWalletModel extends ChangeNotifier {
   FirebaseAuth auth = FirebaseAuth.instance;
 
   void setTopUpValue(int value) {
+    if (value > (1000 * 10)) {
+      return;
+    }
+    if (value == null) {
+      _topUpValue = 0;
+      notifyListeners();
+      return;
+    }
+
     _topUpValue = value;
     notifyListeners();
   }

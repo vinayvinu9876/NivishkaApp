@@ -12,6 +12,16 @@ class NavigationService {
         .push(MaterialPageRoute(builder: (context) => widget));
   }
 
+  Future<dynamic> navigateToAndRemoveUntill(String routeName) {
+    return navigatorKey.currentState
+        .pushNamedAndRemoveUntil(routeName, (route) => false);
+  }
+
+  Future<dynamic> navigateAndRemoveUntill(Widget widget) {
+    return navigatorKey.currentState.pushAndRemoveUntil(
+        (MaterialPageRoute(builder: (context) => widget)), (route) => false);
+  }
+
   void pop() {
     return navigatorKey.currentState.pop();
   }

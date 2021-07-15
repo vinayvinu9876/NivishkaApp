@@ -28,7 +28,7 @@ class SearchModel extends ChangeNotifier {
       if (!doc.exists) {
         _isLoading = false;
         notifyListeners();
-        await getIt<NavigationService>().navigateTo("/home");
+        await getIt<NavigationService>().navigateToAndRemoveUntill("/home");
         return;
       }
       var userData = doc.data();

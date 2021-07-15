@@ -38,7 +38,8 @@ class _FlashSale extends State<FlashSale> {
                           children: [
                             InkWell(
                                 onTap: () {
-                                  Navigator.pushNamed(context, "/home");
+                                  Navigator.pushNamedAndRemoveUntil(context,
+                                      "/home", (Route<dynamic> route) => false);
                                 },
                                 child: Icon(
                                   Icons.chevron_left,

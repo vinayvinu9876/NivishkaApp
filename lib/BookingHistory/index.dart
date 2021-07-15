@@ -31,7 +31,8 @@ class _BookingHistory extends State<BookingHistory> {
             length: 3,
             child: WillPopScope(
                 onWillPop: () async {
-                  Navigator.pushNamed(context, "/home");
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, "/home", (Route<dynamic> route) => false);
                   return false;
                 },
                 child: Scaffold(
@@ -40,7 +41,8 @@ class _BookingHistory extends State<BookingHistory> {
                       backgroundColor: primaryColor,
                       leading: InkWell(
                           onTap: () {
-                            Navigator.pushNamed(context, "/home");
+                            Navigator.pushNamedAndRemoveUntil(context, "/home",
+                                (Route<dynamic> route) => false);
                           },
                           child: Icon(Icons.arrow_back,
                               color: Colors.black, size: 20)),

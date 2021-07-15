@@ -26,7 +26,8 @@ class _Message extends State<Message> {
               Navigator.pop(context);
               return;
             }
-            Navigator.pushNamed(context, "/home");
+            Navigator.pushNamedAndRemoveUntil(
+                context, "/home", (Route<dynamic> route) => false);
           },
           child: widget.backActive
               ? Icon(Icons.arrow_back, color: Colors.white)

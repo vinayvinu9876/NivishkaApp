@@ -24,7 +24,6 @@ import 'package:nivishka_android/GiftCard/VoucherCode.dart';
 import 'package:nivishka_android/SendReport/index.dart';
 import 'package:nivishka_android/Search/index.dart';
 import 'package:nivishka_android/SelectCity/index.dart';
-import 'package:nivishka_android/RateService/index.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -157,7 +156,6 @@ class _MaterialAppCopy extends State<MaterialAppCopy> {
             "/sendReport": (context) => SendReport(),
             "/search": (context) => Search(),
             "/selectCity": (context) => SelectCity(),
-            "/ratingService": (context) => RateService()
           },
         ));
   }

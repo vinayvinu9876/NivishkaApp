@@ -16,6 +16,10 @@ class _About extends State<About> {
         bottom: true,
         child: Scaffold(
             appBar: AppBar(
+              leading: InkWell(
+                  onTap: () => Navigator.pushNamedAndRemoveUntil(
+                      context, "/home", (Route<dynamic> route) => false),
+                  child: Icon(Icons.arrow_back, color: Colors.white)),
               backgroundColor: Colors.green[500],
               title: Text("About Nivishka",
                   style:
@@ -28,7 +32,7 @@ class _About extends State<About> {
                 padding: EdgeInsets.all(15),
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Center(
                           child: Image(
@@ -52,7 +56,8 @@ class _About extends State<About> {
                       SizedBox(height: 25),
                       InkWell(
                           onTap: () {
-                            Navigator.pop(context);
+                            Navigator.pushNamedAndRemoveUntil(context, "/home",
+                                (Route<dynamic> route) => false);
                           },
                           child: Text("Back",
                               style: GoogleFonts.poppins(

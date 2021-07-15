@@ -59,7 +59,8 @@ class ProfileModel extends ChangeNotifier {
 
   void logout() {
     auth.signOut().then((value) async {
-      await getIt<NavigationService>().navigateTo("/chooseLoginSignup");
+      await getIt<NavigationService>()
+          .navigateToAndRemoveUntill("/chooseLoginSignup");
     }).catchError((e) {
       showSignoutErrorMessage(e.message);
     });

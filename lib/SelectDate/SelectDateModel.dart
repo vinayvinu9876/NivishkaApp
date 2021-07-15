@@ -107,7 +107,8 @@ class SelectDateModel extends ChangeNotifier {
   void _handlePaymentSuccess(PaymentSuccessResponse response) async {
     // Do something when payment succeeds
     print("Success");
-    await getIt<NavigationService>().navigateTo("/bookingHistory");
+    await getIt<NavigationService>()
+        .navigateToAndRemoveUntill("/bookingHistory");
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {

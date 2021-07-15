@@ -20,7 +20,8 @@ class _BestPicks extends State<BestPicks> {
                 backgroundColor: primaryColor,
                 leading: InkWell(
                     onTap: () {
-                      Navigator.pop(context);
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, "/home", (Route<dynamic> route) => false);
                     },
                     child:
                         Icon(Icons.arrow_back, color: Colors.black, size: 20)),

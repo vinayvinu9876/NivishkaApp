@@ -69,7 +69,7 @@ class SelectCityModel extends ChangeNotifier {
     doc.update({"city_code": _selectedCityCode}).then((value) async {
       _isLoading = false;
       notifyListeners();
-      await getIt<NavigationService>().navigateTo("/home");
+      await getIt<NavigationService>().navigateToAndRemoveUntill("/home");
     }).onError((error, stackTrace) {
       _errorMessage = error.message;
       _isLoading = false;

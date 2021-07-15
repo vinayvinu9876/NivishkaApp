@@ -128,11 +128,16 @@ class _Wallet extends State<Wallet> {
                       flex: 1,
                       child: Container(
                           height: 45,
-                          child: Icon(
+                          child: Text("₹",
+                              style: GoogleFonts.poppins(
+                                  color: isPositive ? Colors.green : Colors.red,
+                                  fontSize: 25))
+                          /*Icon(
                               isPositive
                                   ? Icons.attach_money
                                   : Icons.money_off_rounded,
-                              color: isPositive ? Colors.green : Colors.red))),
+                              color: isPositive ? Colors.green : Colors.red)*/
+                          )),
                   SizedBox(width: 20),
                   Expanded(
                       flex: 7,
